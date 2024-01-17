@@ -1,10 +1,9 @@
 <script setup lang="ts">
+import Header from '@/components/Header.vue'
 </script>
 
 <template>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+  <Header class="text-base"></Header>
 </template>
 
 <style scoped>
