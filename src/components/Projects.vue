@@ -1,10 +1,5 @@
 <script setup lang="ts">
 import Project from "@/components/Project.vue";
-import Sudoku from "@/components/Sudoku.vue";
-/* eslint-disable */
-//@ts-ignore
-import SpaceInvaders from "@/components/SpaceInvaders.vue";
-/* eslint-enable */
 
 const projects = [
   {
@@ -32,10 +27,6 @@ const projects = [
 
 <template>
   <section id="projects" class="bg-purple-100 pb-14 pt-32">
-    <div class="flex flex-wrap items-center justify-around pl-24 pr-24">
-      <SpaceInvaders></SpaceInvaders>
-      <Sudoku></Sudoku>
-    </div>
     <div class="masonry sm:masonry-sm md:masonry-md pl-24 pr-24">
       <Project
         class="p-4 break-inside"

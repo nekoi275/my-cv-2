@@ -409,7 +409,7 @@ button {
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
   border: none;
-  background-color: #665a6a;
+  background-color: #98a565;
   color: #402e37;
   padding: 20px;
   border-radius: 20px;
@@ -420,7 +420,7 @@ button {
 }
 
 button:hover {
-  color: #665a6a;
-  background-color: #402e37;
+  color: #dae2e2;
+  background-color: #414d08;
 }
 </style>

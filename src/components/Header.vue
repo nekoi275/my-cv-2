@@ -1,21 +1,25 @@
 <script setup lang="ts">
 const menuItems = [
   {
-    scrollId: "about",
-    name: "About me",
+    scrollId: 'about',
+    name: 'About me',
   },
   {
-    scrollId: "cv",
-    name: "My CV",
+    scrollId: 'cv',
+    name: 'My CV',
   },
   {
-    scrollId: "projects",
-    name: "Projects",
+    scrollId: 'games',
+    name: 'Games',
+  },
+  {
+    scrollId: 'projects',
+    name: 'Projects',
   },
 ];
 
 function scrollTo(id: string) {
-  document.getElementById(id)!.scrollIntoView({ behavior: "smooth" });
+  document.getElementById(id)!.scrollIntoView({ behavior: 'smooth' });
 }
 </script>
 

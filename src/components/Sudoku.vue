@@ -588,7 +588,7 @@ span {
 button {
   margin: 10px;
   border: none;
-  background-color: #665a6a;
+  background-color: #98a565;
   color: #402e37;
   padding: 10px;
   border-radius: 20px;
@@ -599,8 +599,8 @@ button {
 }
 
 button:hover {
-  color: #665a6a;
-  background-color: #402e37;
+  color: #dae2e2;
+  background-color: #414d08;
 }
 
 @media (max-width: 845px) {
