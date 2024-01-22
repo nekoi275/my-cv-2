@@ -4,6 +4,7 @@ import About from '@/components/About.vue'
 import CV from '@/components/CV.vue'
 import Projects from '@/components/Projects.vue'
 import Games from '@/components/Games.vue'
+import Footer from '@/components/Footer.vue'
 </script>
 
 <template>
@@ -12,6 +13,7 @@ import Games from '@/components/Games.vue'
   <CV></CV>
   <Games></Games>
   <Projects></Projects>
+  <Footer></Footer>
 </template>
 
 <style scoped>
