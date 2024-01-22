@@ -46,11 +46,6 @@ function scrollTo(id: string) {
         </li>
       </ul>
     </nav>
-    <button
-      class="ml-2 bg-purple-50 text-purple-100 hover:bg-purple-100 hover:text-purple-50 p-2 rounded-3xl cursor-pointer font-light"
-    >
-      Change theme
-    </button>
   </header>
 </template>
 
