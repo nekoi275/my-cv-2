@@ -1,12 +1,12 @@
 <script setup lang="ts">
 interface projectInfo {
-  href: string;
-  img: string;
-  text: string;
+  href: string
+  img: string
+  text: string
 }
 defineProps<{
-  projectInfo: projectInfo;
-}>();
+  projectInfo: projectInfo
+}>()
 
 function getImageUrl(img: string) {
   return String(new URL(img, import.meta.url)) 

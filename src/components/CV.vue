@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import Flipcard from "@/components/FlipCard.vue";
+import Flipcard from '@/components/FlipCard.vue';
 
 const cards = [
   {
-    heading: "Technologies",
-    data: ["HTML", "CSS", "JavaScript", "Vue.js", "Node.js", "Express.js"],
+    heading: 'Technologies',
+    data: ['HTML', 'CSS', 'JavaScript', 'Vue.js', 'Node.js', 'Express.js'],
   },
   {
-    heading: "Education",
+    heading: 'Education',
     data: [
-      "2020 - OSF Academy JavaScript course",
-      "2019 - Odessa National Polytechnic University, training course “Front-end development. JavaScript”",
-      "2010-2015 - National University “Odessa law academy”",
+      '2020 - OSF Academy JavaScript course',
+      '2019 - Odessa National Polytechnic University, training course “Front-end development. JavaScript”',
+      '2010-2015 - National University “Odessa law academy”',
     ],
   },
   {
-    heading: "Experience",
+    heading: 'Experience',
     data: [
-      "04.2020 - 12.2022 Front-end / JavaScript developer at Peoly",
-      "07.2019 - 09.2019 Part-time front-end developer at AVE Startups",
+      '04.2020 - 12.2022 Front-end / JavaScript developer at Peoly',
+      '07.2019 - 09.2019 Part-time front-end developer at AVE Startups',
     ],
   },
-];
+]
 </script>
 
 <template>

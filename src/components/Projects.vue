@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Project from '@/components/Project.vue';
-import Sudoku from '@/components/Sudoku.vue';
-import SpaceInvaders from '@/components/SpaceInvaders.vue';
+import Project from '@/components/Project.vue'
+import Sudoku from '@/components/Sudoku.vue'
+import SpaceInvaders from '@/components/SpaceInvaders.vue'
 
 const projects = [
   {
@@ -24,7 +24,7 @@ const projects = [
     img: '../assets/project_4.webp',
     text: 'Telegram posts scheduler for AI generated images public group. Allows to set / edit / preview posts before posting into Telegram. Made with Vite - Vue (Composition API) - TS.'
   }
-];
+]
 </script>
 
 <template>
