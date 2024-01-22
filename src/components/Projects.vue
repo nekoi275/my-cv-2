@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import Project from '@/components/Project.vue'
 import Sudoku from '@/components/Sudoku.vue'
+/* eslint-disable */
+//@ts-ignore
 import SpaceInvaders from '@/components/SpaceInvaders.vue'
+/* eslint-enable */
 
 const projects = [
   {
