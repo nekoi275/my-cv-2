@@ -11,7 +11,7 @@ const cards = [
     data: [
       '2020 - OSF Academy JavaScript course',
       '2019 - Odessa National Polytechnic University, training course “Front-end development. JavaScript”',
-      '2010-2015 - National University “Odessa law academy”',
+      '2010-2015 - Odessa law academy',
     ],
   },
   {

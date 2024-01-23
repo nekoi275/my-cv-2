@@ -9,7 +9,7 @@
       class="min-[846px]:h-screen min-[846px]:w-2/3 opacity-50 z-0 max-[845px]:w-full max-[845px]:h-full"
       src="../assets/top-section-photo.jpg"
     />
-    <ul class="w-1/3 p-5 pl-9 leading-10">
+    <ul class="min-[846px]:w-1/3 max-[845px]:w-full p-5 pl-9 leading-10">
       <li>Name: Drozdova Valeria</li>
       <li>Nickname: Nekoi</li>
       <li>Birthday: 04.01.1993</li>
