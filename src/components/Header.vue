@@ -25,7 +25,7 @@ function scrollTo(id: string) {
 
 <template>
   <header
-    class="bg-green-50 flex items-center justify-end text-purple-50 lg:p-6 lg:pr-6 sm:pr-5 md:pr-5 font-black fixed top-0 left-0 right-0 z-10"
+    class="bg-green-50 flex items-center justify-end text-purple-50 min-[846px]:p-6 min-[846px]:pr-6 max-[845px]:pr-5 font-black fixed top-0 left-0 right-0 z-10"
   >
     <div class="max-w-36 cursor-pointer text-center absolute top-5 left-5">
       <h3
@@ -38,7 +38,7 @@ function scrollTo(id: string) {
     <nav>
       <ul>
         <li
-          class="lg:inline-block lg:m-3 cursor-pointer hover:text-purple-100 md:block md:text-center sm:block sm:text-center"
+          class="min-[846px]:inline-block min-[846px]:m-3 cursor-pointer hover:text-purple-100 max-[845px]:block max-[845px]:text-center"
           v-for="item in menuItems"
           @click="scrollTo(item.scrollId)"
         >

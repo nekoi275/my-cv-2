@@ -32,7 +32,7 @@ const projects = [
         class="p-4 break-inside"
         v-for="project in projects"
         :projectInfo="project"
-        :key="project"
+        :key="project.href"
       ></Project>
     </div>
   </section>
