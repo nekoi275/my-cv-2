@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import Sudoku from "@/components/Sudoku.vue";
 /* eslint-disable */
 //@ts-ignore
 import SpaceInvaders from "@/components/SpaceInvaders.vue";
-import { computed } from "vue";
 /* eslint-enable */
 const isDesktop = computed(() => {
   return window.innerWidth >= 1000
