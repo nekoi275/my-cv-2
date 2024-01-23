@@ -13,7 +13,7 @@ const isDesktop = computed(() => {
 <template>
   <section
     id="games"
-    class="bg-purple-50 h-screen flex flex-wrap items-center justify-around pl-24 pr-24 pt-24"
+    class="bg-purple-50 lg:h-screen flex flex-wrap items-center justify-around lg:pb-0 pl-24 pr-24 lg:pt-24 md:h-full sm:h-full md:pt-32 sm:pt-32 md:pb-12 sm:pb-12"
   >
     <SpaceInvaders v-show="isDesktop"></SpaceInvaders>
     <Sudoku></Sudoku>

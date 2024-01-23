@@ -607,7 +607,7 @@ button:hover {
   .game-container {
     width: 350px;
     margin: auto;
-    height: 550px;
+    height: 470px;
     padding: 5px;
     margin-bottom: 10px;
   }

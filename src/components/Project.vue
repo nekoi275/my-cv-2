@@ -18,7 +18,7 @@ function getImageUrl(img: string) {
     <a
       :href="projectInfo.href"
       target="_blank"
-      class="p-4 border-2 border-purple-50 text-white-50 block text-center hover:border-green-100 shadow-lg shadow-purple-50"
+      class="p-4 border-2 border-purple-50 text-white-50 block text-center hover:border-green-100 shadow-lg shadow-purple-50 hover:shadow-green-100"
     >
       <img class="mb-4"
         :src="getImageUrl(projectInfo.img)"
