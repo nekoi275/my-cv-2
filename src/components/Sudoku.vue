@@ -12,24 +12,24 @@ const puzzle = ref([
   [null, null, null, null, null, null, null, null, null],
   [null, null, null, null, null, null, null, null, null],
 ] as any)
-let isPuzzleValid = ref(true)
+const isPuzzleValid = ref(true)
 const isPuzzleSolved = ref(false)
-let noSolution = ref(false)
+const noSolution = ref(false)
 
-/* function validatePuzzle() {
+function validatePuzzle() {
   outer_loop: for (let i = 0; i < puzzle.value.length; i++) {
     for (let j = 0; j < puzzle.value[i].length; j++) {
       if (
         ![null, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9].includes(Number(puzzle.value[i][j]))
       ) {
-        isPuzzleValid = false
+        isPuzzleValid.value = false
         break outer_loop
       } else {
-        isPuzzleValid = true
+        isPuzzleValid.value = true
       }
     }
   }
-  if (isPuzzleValid) {
+  if (isPuzzleValid.value) {
     preparePuzzle()
     returnSolved()
   }
@@ -46,13 +46,13 @@ function clearPuzzle() {
     [null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null],
   ]
-  isPuzzleSolved = false
-  isPuzzleValid = true
-  noSolution = false
+  isPuzzleSolved.value = false
+  isPuzzleValid.value = true
+  noSolution.value = false
 }
 function returnSolved() {
   if (solvePuzzle()) {
-    isPuzzleSolved = true
+    isPuzzleSolved.value = true
   } else {
     puzzle.value = [
       [null, null, null, null, null, null, null, null, null],
@@ -65,8 +65,8 @@ function returnSolved() {
       [null, null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null, null],
     ]
-    isPuzzleSolved = true
-    noSolution = true
+    isPuzzleSolved.value = true
+    noSolution.value = true
   }
 }
 function addExample() {
@@ -89,14 +89,14 @@ function preparePuzzle() {
     }
   }
 }
-function isNumberValid(puzzle: any, row: number, col: number, val: number) {
+function isNumberValid(p: any, row: number, col: number, val: number) {
   for (let i = 0; i < 9; i++) {
-    if (puzzle[row][i] === val) {
+    if (p[row][i] === val) {
       return false
     }
   }
   for (let i = 0; i < 9; i++) {
-    if (puzzle[i][col] === val) {
+    if (p[i][col] === val) {
       return false
     }
   }
@@ -104,26 +104,26 @@ function isNumberValid(puzzle: any, row: number, col: number, val: number) {
   let squareCol = Math.floor(col / 3) * 3
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      if (puzzle[squareRow + i][squareCol + j] === val) return false
+      if (p[squareRow + i][squareCol + j] === val) return false
     }
   }
   return true
 }
-function findEmptyCell(puzzle: any) {
+function findEmptyCell(p: any) {
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {
-      if (puzzle[row][col] === 0 || puzzle[row][col] === null) {
+      if (p[row][col] === 0 || p[row][col] === null) {
         return [row, col]
       }
     }
   }
 }
 function solvePuzzle() {
-  let empty = findEmptyCell(puzzle)
+  let empty = findEmptyCell(puzzle.value)
   if (empty) {
     let [row, col] = empty
     for (let num = 1; num <= 9; num++) {
-      if (isNumberValid(puzzle, row, col, num)) {
+      if (isNumberValid(puzzle.value, row, col, num)) {
         puzzle.value[row][col] = num
         let result: any = solvePuzzle()
         if (result) {
@@ -136,7 +136,7 @@ function solvePuzzle() {
     return
   }
   return puzzle
-} */
+}
 </script>
 
 <template>
@@ -149,13 +149,13 @@ function solvePuzzle() {
         </td>
       </tr>
     </table>
-    <button v-show="!isPuzzleSolved && isPuzzleValid">
+    <button v-show="!isPuzzleSolved && isPuzzleValid" @click="validatePuzzle">
       Solve
     </button>
-    <button v-show="!isPuzzleSolved && isPuzzleValid">
+    <button v-show="!isPuzzleSolved && isPuzzleValid" @click="addExample">
       Try example
     </button>
-    <button v-show="isPuzzleSolved || !isPuzzleValid">
+    <button v-show="isPuzzleSolved || !isPuzzleValid" @click="clearPuzzle">
       Try again
     </button>
     <p v-show="!isPuzzleValid">
@@ -166,7 +166,7 @@ function solvePuzzle() {
       <a href="https://en.wikipedia.org/wiki/Sudoku" target="_blank">Sudoku</a>
       by the provided "clues".
     </p>
-    <p v-show="noSolution">This sudoku has not solution</p>
+    <p v-show="noSolution">This sudoku has no solution</p>
   </div>
 </template>
 
