@@ -1,24 +1,26 @@
 <script setup lang="ts">
-let puzzle: any = [
-  [null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null],
-  [null, null, null, null, null, null, null, null, null],
-]
-let isPuzzleValid = true
-let isPuzzleSolved = false
-let noSolution = false
+import { ref } from 'vue';
 
-function validatePuzzle() {
-  outer_loop: for (let i = 0; i < puzzle.length; i++) {
-    for (let j = 0; j < puzzle[i].length; j++) {
+const puzzle = ref([
+  [null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null],
+] as any)
+let isPuzzleValid = ref(true)
+const isPuzzleSolved = ref(false)
+let noSolution = ref(false)
+
+/* function validatePuzzle() {
+  outer_loop: for (let i = 0; i < puzzle.value.length; i++) {
+    for (let j = 0; j < puzzle.value[i].length; j++) {
       if (
-        ![null, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9].includes(Number(puzzle[i][j]))
+        ![null, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9].includes(Number(puzzle.value[i][j]))
       ) {
         isPuzzleValid = false
         break outer_loop
@@ -33,7 +35,7 @@ function validatePuzzle() {
   }
 }
 function clearPuzzle() {
-  puzzle = [
+  puzzle.value = [
     [null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null],
@@ -49,10 +51,10 @@ function clearPuzzle() {
   noSolution = false
 }
 function returnSolved() {
-  if (solvePuzzle(puzzle)) {
+  if (solvePuzzle()) {
     isPuzzleSolved = true
   } else {
-    puzzle = [
+    puzzle.value = [
       [null, null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null, null, null],
@@ -68,7 +70,7 @@ function returnSolved() {
   }
 }
 function addExample() {
-  puzzle = [
+  puzzle.value = [
     [null, null, '3', null, null, '1', null, null, null],
     ['7', null, null, '8', null, null, '5', '2', null],
     ['8', null, '4', null, null, null, '6', null, '3'],
@@ -81,9 +83,9 @@ function addExample() {
   ]
 }
 function preparePuzzle() {
-  for (let i = 0; i < puzzle.length; i++) {
-    for (let j = 0; j < puzzle[i].length; j++) {
-      puzzle[i][j] = Number(puzzle[i][j])
+  for (let i = 0; i < puzzle.value.length; i++) {
+    for (let j = 0; j < puzzle.value[i].length; j++) {
+      puzzle.value[i][j] = Number(puzzle.value[i][j])
     }
   }
 }
@@ -116,400 +118,44 @@ function findEmptyCell(puzzle: any) {
     }
   }
 }
-function solvePuzzle(puzzle: any) {
+function solvePuzzle() {
   let empty = findEmptyCell(puzzle)
   if (empty) {
     let [row, col] = empty
     for (let num = 1; num <= 9; num++) {
       if (isNumberValid(puzzle, row, col, num)) {
-        puzzle[row][col] = num
-        let result: any = solvePuzzle(puzzle)
+        puzzle.value[row][col] = num
+        let result: any = solvePuzzle()
         if (result) {
           return result
         } else {
-          puzzle[row][col] = 0
+          puzzle.value[row][col] = 0
         }
       }
     }
     return
   }
   return puzzle
-}
+} */
 </script>
 
 <template>
   <div class="game-container">
-    <table v-show="!isPuzzleSolved">
-      <tr>
-        <td><input v-model="puzzle[0][0]" /></td>
-        <td><input v-model="puzzle[0][1]" /></td>
-        <td><input v-model="puzzle[0][2]" /></td>
-        <td><input v-model="puzzle[0][3]" /></td>
-        <td><input v-model="puzzle[0][4]" /></td>
-        <td><input v-model="puzzle[0][5]" /></td>
-        <td><input v-model="puzzle[0][6]" /></td>
-        <td><input v-model="puzzle[0][7]" /></td>
-        <td><input v-model="puzzle[0][8]" /></td>
-      </tr>
-      <tr>
-        <td><input v-model="puzzle[1][0]" /></td>
-        <td><input v-model="puzzle[1][1]" /></td>
-        <td><input v-model="puzzle[1][2]" /></td>
-        <td><input v-model="puzzle[1][3]" /></td>
-        <td><input v-model="puzzle[1][4]" /></td>
-        <td><input v-model="puzzle[1][5]" /></td>
-        <td><input v-model="puzzle[1][6]" /></td>
-        <td><input v-model="puzzle[1][7]" /></td>
-        <td><input v-model="puzzle[1][8]" /></td>
-      </tr>
-      <tr>
-        <td><input v-model="puzzle[2][0]" /></td>
-        <td><input v-model="puzzle[2][1]" /></td>
-        <td><input v-model="puzzle[2][2]" /></td>
-        <td><input v-model="puzzle[2][3]" /></td>
-        <td><input v-model="puzzle[2][4]" /></td>
-        <td><input v-model="puzzle[2][5]" /></td>
-        <td><input v-model="puzzle[2][6]" /></td>
-        <td><input v-model="puzzle[2][7]" /></td>
-        <td><input v-model="puzzle[2][8]" /></td>
-      </tr>
-      <tr>
-        <td><input v-model="puzzle[3][0]" /></td>
-        <td><input v-model="puzzle[3][1]" /></td>
-        <td><input v-model="puzzle[3][2]" /></td>
-        <td><input v-model="puzzle[3][3]" /></td>
-        <td><input v-model="puzzle[3][4]" /></td>
-        <td><input v-model="puzzle[3][5]" /></td>
-        <td><input v-model="puzzle[3][6]" /></td>
-        <td><input v-model="puzzle[3][7]" /></td>
-        <td><input v-model="puzzle[3][8]" /></td>
-      </tr>
-      <tr>
-        <td><input v-model="puzzle[4][0]" /></td>
-        <td><input v-model="puzzle[4][1]" /></td>
-        <td><input v-model="puzzle[4][2]" /></td>
-        <td><input v-model="puzzle[4][3]" /></td>
-        <td><input v-model="puzzle[4][4]" /></td>
-        <td><input v-model="puzzle[4][5]" /></td>
-        <td><input v-model="puzzle[4][6]" /></td>
-        <td><input v-model="puzzle[4][7]" /></td>
-        <td><input v-model="puzzle[4][8]" /></td>
-      </tr>
-      <tr>
-        <td><input v-model="puzzle[5][0]" /></td>
-        <td><input v-model="puzzle[5][1]" /></td>
-        <td><input v-model="puzzle[5][2]" /></td>
-        <td><input v-model="puzzle[5][3]" /></td>
-        <td><input v-model="puzzle[5][4]" /></td>
-        <td><input v-model="puzzle[5][5]" /></td>
-        <td><input v-model="puzzle[5][6]" /></td>
-        <td><input v-model="puzzle[5][7]" /></td>
-        <td><input v-model="puzzle[5][8]" /></td>
-      </tr>
-      <tr>
-        <td><input v-model="puzzle[6][0]" /></td>
-        <td><input v-model="puzzle[6][1]" /></td>
-        <td><input v-model="puzzle[6][2]" /></td>
-        <td><input v-model="puzzle[6][3]" /></td>
-        <td><input v-model="puzzle[6][4]" /></td>
-        <td><input v-model="puzzle[6][5]" /></td>
-        <td><input v-model="puzzle[6][6]" /></td>
-        <td><input v-model="puzzle[6][7]" /></td>
-        <td><input v-model="puzzle[6][8]" /></td>
-      </tr>
-      <tr>
-        <td><input v-model="puzzle[7][0]" /></td>
-        <td><input v-model="puzzle[7][1]" /></td>
-        <td><input v-model="puzzle[7][2]" /></td>
-        <td><input v-model="puzzle[7][3]" /></td>
-        <td><input v-model="puzzle[7][4]" /></td>
-        <td><input v-model="puzzle[7][5]" /></td>
-        <td><input v-model="puzzle[7][6]" /></td>
-        <td><input v-model="puzzle[7][7]" /></td>
-        <td><input v-model="puzzle[7][8]" /></td>
-      </tr>
-      <tr>
-        <td><input v-model="puzzle[8][0]" /></td>
-        <td><input v-model="puzzle[8][1]" /></td>
-        <td><input v-model="puzzle[8][2]" /></td>
-        <td><input v-model="puzzle[8][3]" /></td>
-        <td><input v-model="puzzle[8][4]" /></td>
-        <td><input v-model="puzzle[8][5]" /></td>
-        <td><input v-model="puzzle[8][6]" /></td>
-        <td><input v-model="puzzle[8][7]" /></td>
-        <td><input v-model="puzzle[8][8]" /></td>
-      </tr>
-    </table>
-    <table v-show="isPuzzleSolved">
-      <tr>
-        <td>
-          <span>{{ puzzle[0][0] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[0][1] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[0][2] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[0][3] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[0][4] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[0][5] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[0][6] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[0][7] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[0][8] }}</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <span>{{ puzzle[1][0] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[1][1] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[1][2] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[1][3] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[1][4] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[1][5] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[1][6] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[1][7] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[1][8] }}</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <span>{{ puzzle[2][0] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[2][1] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[2][2] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[2][3] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[2][4] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[2][5] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[2][6] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[2][7] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[2][8] }}</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <span>{{ puzzle[3][0] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[3][1] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[3][2] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[3][3] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[3][4] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[3][5] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[3][6] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[3][7] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[3][8] }}</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <span>{{ puzzle[4][0] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[4][1] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[4][2] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[4][3] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[4][4] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[4][5] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[4][6] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[4][7] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[4][8] }}</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <span>{{ puzzle[5][0] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[5][1] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[5][2] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[5][3] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[5][4] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[5][5] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[5][6] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[5][7] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[5][8] }}</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <span>{{ puzzle[6][0] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[6][1] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[6][2] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[6][3] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[6][4] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[6][5] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[6][6] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[6][7] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[6][8] }}</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <span>{{ puzzle[7][0] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[7][1] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[7][2] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[7][3] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[7][4] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[7][5] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[7][6] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[7][7] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[7][8] }}</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <span>{{ puzzle[8][0] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[8][1] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[8][2] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[8][3] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[8][4] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[8][5] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[8][6] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[8][7] }}</span>
-        </td>
-        <td>
-          <span>{{ puzzle[8][8] }}</span>
+    <table>
+      <tr v-for="(row, rowIndex) in puzzle">
+        <td v-for="(_, cellIndex) in row">
+          <input v-show="!isPuzzleSolved" v-model="puzzle[rowIndex][cellIndex]"/>
+          <span v-show="isPuzzleSolved">{{ puzzle[rowIndex][cellIndex] }}</span>
         </td>
       </tr>
     </table>
-    <button v-show="!isPuzzleSolved && isPuzzleValid" @click="validatePuzzle()">
+    <button v-show="!isPuzzleSolved && isPuzzleValid">
       Solve
     </button>
-    <button v-show="!isPuzzleSolved && isPuzzleValid" @click="addExample()">
+    <button v-show="!isPuzzleSolved && isPuzzleValid">
       Try example
     </button>
-    <button v-show="isPuzzleSolved || !isPuzzleValid" @click="clearPuzzle()">
+    <button v-show="isPuzzleSolved || !isPuzzleValid">
       Try again
     </button>
     <p v-show="!isPuzzleValid">
