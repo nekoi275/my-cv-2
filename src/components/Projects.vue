@@ -22,6 +22,11 @@ const projects = [
     img: "../assets/project_4.webp",
     text: "Telegram posts scheduler for AI generated images public group. Allows to set / edit / preview posts before posting into Telegram. Made with Vite - Vue (Composition API) - TS.",
   },
+  {
+    href: "https://t.me/ai_inspire_test_bot",
+    img: "../assets/project_5.webp",
+    text: "Telegram bot help and description webapp. Made with Vite - Vue (Composition API) - TS.",
+  },
 ];
 </script>
 
