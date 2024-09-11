@@ -4,14 +4,13 @@ import Flipcard from '@/components/FlipCard.vue';
 const cards = [
   {
     heading: 'Technologies',
-    data: ['HTML', 'CSS', 'JavaScript', 'Vue.js', 'Node.js', 'Express.js'],
+    data: ['HTML', 'CSS (SCSS/Less/Tailwindcss)', 'JavaScript / Typescript', 'Vue.js', 'Node.js', 'Express.js'],
   },
   {
     heading: 'Education',
     data: [
       '2020 - OSF Academy JavaScript course',
-      '2019 - Odessa National Polytechnic University, training course “Front-end development. JavaScript”',
-      '2010-2015 - Odessa law academy',
+      '2019 - Odessa National Polytechnic University, training course “Front-end development. JavaScript”'
     ],
   },
   {
