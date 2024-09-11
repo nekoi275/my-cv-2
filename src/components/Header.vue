@@ -13,6 +13,10 @@ const menuItems = [
     name: 'Games',
   },
   {
+    scrollId: 'csspixels',
+    name: 'CSS Pixels',
+  },
+  {
     scrollId: 'projects',
     name: 'Projects',
   },
