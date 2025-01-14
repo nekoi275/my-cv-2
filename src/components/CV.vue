@@ -30,7 +30,7 @@ const cards = [
   >
     <Flipcard v-for="card in cards" :cardInfo="card" :key="card.heading" class="min-[846px]:m-0 max-[845px]:m-5"></Flipcard>
     <a
-      href="https://docs.google.com/document/d/1j-dj_t1xP2WtxRUuSa1_PIdmVqCPjOpgnDapOhp-24I/edit?usp=sharing"
+      href="https://docs.google.com/document/d/1xcALkYF9U2flC6naGoAQtBuERRoRbpLxqMtDjlvRV4g/edit?usp=sharing"
       target="_blank"
       class="w-72 h-72 block bg-purple-50 text-white-50 text-center p-2 box-content min-[846px]:m-0 max-[845px]:m-5"
       ><span class="pt-32 block text-2xl">Google doc CV</span></a

@@ -4,7 +4,6 @@ import About from '@/components/About.vue'
 import CV from '@/components/CV.vue'
 import Projects from '@/components/Projects.vue'
 import Games from '@/components/Games.vue'
-import CSSPixels from '@/components/CSSPixels.vue'
 import Footer from '@/components/Footer.vue'
 </script>
 
@@ -13,7 +12,6 @@ import Footer from '@/components/Footer.vue'
   <About></About>
   <CV></CV>
   <Games></Games>
-  <CSSPixels></CSSPixels>
   <Projects></Projects>
   <Footer></Footer>
 </template>
