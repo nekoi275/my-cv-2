@@ -5,15 +5,18 @@ export default {
     extend: {
       colors: {
         green: {
-          50: "#98a565",
-          100: "#414d08",
+          50: "#cde2bd",
+          100: "#a7c191",
         },
         white: {
           50: "#dae2e2",
         },
+        dark: {
+          50: "#491212"
+        },
         purple: {
-          50: "#665a6a",
-          100: "#402e37",
+          50: "#eadbdc",
+          100: "#e4cbce",
         },
       },
       keyframes: {
