@@ -1,20 +1,13 @@
 <script setup lang="ts">
-import Teapot from '@/components/Teapot.vue'
+import Teapot from "@/components/Teapot.vue";
 </script>
 
 <template>
   <section
     id="about"
-    class="bg-purple-100 text-dark-50 min-[846px]:h-screen flex flex-wrap items-center justify-between max-[845px]:h-full max-[845px]:pt-24 min-[846px]:pt-0"
+    class="bg-purple-100 text-dark-50 min-[846px]:h-screen text-center"
   >
-    <ul class="min-[846px]:w-1/3 max-[845px]:w-full p-5 pl-9 leading-10 hidden">
-      <li>
-        <h3
-          class="text-6xl bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent animate-change-color"
-        >
-          福
-        </h3>
-      </li>
+<!--     <ul class="p-5 pl-9 leading-10">
       <li>Name: Drozdova Valeria</li>
       <li>Nickname: Nekoi</li>
       <li>
@@ -33,8 +26,9 @@ import Teapot from '@/components/Teapot.vue'
           >My CV</a
         >
       </li>
-    </ul>
-    <Teapot class="m-auto animate-pour-tea"></Teapot>
+    </ul> -->
+    <Teapot class="absolute animate-pour-tea top-[30%] left-[30%]"></Teapot>
+    <p class="block w-2/5 text-xl m-auto">Hi, I’m Valeria (a.k.a Nekoi), a junior front-end developer with a passion for crafting interactive and visually appealing websites. <br> I love experimenting with creative effects and animations to bring designs to life. <br> When I’m not coding, you’ll find me sketching or capturing moments through photography—two hobbies that fuel my creativity and attention to detail. <br> I enjoy blending technical skills with artistic expression to build unique digital experiences.</p>
   </section>
 </template>
 

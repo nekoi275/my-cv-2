@@ -37,7 +37,7 @@ export default {
       animation: {
         "change-color": "changeColor 5s infinite linear",
         wheel: "wheel 1.6s ease infinite",
-        "pour-tea": "pourTea 2s ease"
+        "pour-tea": "pourTea 3s ease forwards"
       },
     },
   },
