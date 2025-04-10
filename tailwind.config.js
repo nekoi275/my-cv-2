@@ -29,10 +29,15 @@ export default {
           "30%": { opacity: 1 },
           "100%": { transform: "translateY(5px)", opacity: 0 },
         },
+        pourTea: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(-50deg) translate(600px,-200px)" },
+        }
       },
       animation: {
         "change-color": "changeColor 5s infinite linear",
-        wheel: "wheel 1.6s ease infinite"
+        wheel: "wheel 1.6s ease infinite",
+        "pour-tea": "pourTea 2s ease"
       },
     },
   },

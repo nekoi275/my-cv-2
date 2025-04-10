@@ -5,7 +5,7 @@
     id="teapot-body"
     class="bg-amber-950 w-[565px] h-[320px] rounded-full relative shadow-xl shadow-black cursor-pointer"
   >
-    <button class="bg-green-50 rounded-full w-[180px] h-[50px] top-[40%] left-[34%] absolute text-xl">Pour some tea</button>
+    <!-- <button class="bg-green-50 rounded-full w-[180px] h-[50px] top-[40%] left-[35%] absolute text-xl">Pour some tea</button> -->
     <div
       id="teapot-handle"
       class="border-[40px] border-amber-950 w-[200px] h-[200px] rounded-full absolute top-[55px] right-[-95px]"
