@@ -24,20 +24,23 @@ export default {
           from: { filter: "hue-rotate(0deg)" },
           to: { filter: "hue-rotate(-360deg)" },
         },
-        wheel: {
-          "0%": { transform: "translateY(2px)", opacity: 0 },
-          "30%": { opacity: 1 },
-          "100%": { transform: "translateY(5px)", opacity: 0 },
-        },
-        pourTea: {
-          "0%": { transform: "rotate(0deg)" },
+        moveTeapot: {
           "100%": { transform: "rotate(-50deg) translate(600px,-200px)" },
+        },
+        grow: {
+          "0%": { opacity: 0.5, height: 0 },
+          "100%": { opacity: 1, height: "65%" }
+        },
+        pour: {
+          "0%": { height: 0 },
+          "100%": { height: "100%", opacity: 0 }
         }
       },
       animation: {
         "change-color": "changeColor 5s infinite linear",
-        wheel: "wheel 1.6s ease infinite",
-        "pour-tea": "pourTea 3s ease forwards"
+        "move-teapot": "moveTeapot 3s ease forwards",
+        grow: "grow 3s ease forwards 2s",
+        pour: "pour 2s linear forwards 2s"
       },
     },
   },
