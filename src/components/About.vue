@@ -8,88 +8,66 @@ import Teapot from "@/components/Teapot.vue";
     class="bg-purple-100 text-dark-50 min-[846px]:h-screen text-center"
   >
     <Teapot
-      class="absolute animate-move-teapot top-[30%] left-[30%] z-20"
+      class="absolute animate-move-teapot top-[30%] left-[33%] z-20"
     ></Teapot>
     <div
       id="tea-pouring"
-      class="absolute rounded-full bg-green-100 w-24 left-[43%] top-[10px] z-20 animate-pour"
+      class="absolute rounded-full bg-green-100 left-[47%] top-[10px] z-0 animate-pour"
     ></div>
-    <p class="block w-2/5 text-xl m-auto z-10 relative hidden">
-      <span>Hi,</span>
-      <span> I’m</span>
-      <span> Valeria</span>
-      <span> (a.k.a</span>
-      <span> Nekoi),</span>
-      <span> a</span>
-      <span> junior</span>
-      <span> front-end</span>
-      <span> developer</span>
-      <span> with</span>
-      <span> a</span>
-      <span> passion</span>
-      <span> for</span>
-      <span> crafting</span>
-      <span> interactive</span>
-      <span> and</span>
-      <span> visually</span>
-      <span> appealing</span>
-      <span> websites.</span>
+    <p class="block w-2/5 text-xl m-auto z-10 relative animate-grow-text">
+      <span class="inline-block opacity-0 animate-words1">Hi,<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words1">I’m<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words1">Valeria<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words1">(a.k.a Nekoi),<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words1">a junior<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words1">front-end<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words1">developer<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words1">with a passion<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words1">for crafting<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words1">interactive and<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words1">visually<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words1">appealing<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words1">websites.</span>
       <br />
-      <span>I</span>
-      <span> love</span>
-      <span> experimenting</span>
-      <span> with</span>
-      <span> creative</span>
-      <span> effects</span>
-      <span> and</span>
-      <span> animations</span>
-      <span> to</span>
-      <span> bring</span>
-      <span> designs</span>
-      <span> to</span>
-      <span> life.</span>
+      <span class="inline-block opacity-0 animate-words2">I love<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words2">experimenting with<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words2">creative<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words2">effects and<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words2">animations<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words2">to bring<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words2">designs<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words2">to life.</span>
       <br />
-      <span>When</span>
-      <span> I’m</span>
-      <span> not</span>
-      <span> coding,</span>
-      <span> you’ll</span>
-      <span> find</span>
-      <span> me</span>
-      <span> drawing</span>
-      <span> or</span>
-      <span> capturing</span>
-      <span> moments</span>
-      <span> through</span>
-      <span> photography—</span>
-      <span> two</span>
-      <span> hobbies</span>
-      <span> that</span>
-      <span> fuel</span>
-      <span> my</span>
-      <span> creativity</span>
-      <span> and</span>
-      <span> attention</span>
-      <span> to</span>
-      <span> detail.</span>
+      <span class="inline-block opacity-0 animate-words3">When<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">I’m not<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">coding,<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">you’ll<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">find me<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">drawing or<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">capturing<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">moments<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">through<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">photography —<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">two hobbies<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">that fuel<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">my creativity<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">and attention<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words3">to detail.</span>
       <br />
-      <span>I</span>
-      <span> enjoy</span>
-      <span> blending</span>
-      <span> technical</span>
-      <span> skills</span>
-      <span> with</span>
-      <span> artistic</span>
-      <span> expression</span>
-      <span> to</span>
-      <span> build</span>
-      <span> unique</span>
-      <span> digital</span>
-      <span> experiences.</span>
+      <span class="inline-block opacity-0 animate-words4">I enjoy<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words4">blending<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words4">technical<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words4">skills with<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words4">artistic<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words4">expression<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words4">to build<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words4">unique<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words4">digital<span>&nbsp;</span></span>
+      <span class="inline-block opacity-0 animate-words4">experiences.</span>
     </p>
     <div
       id="tea-poured"
-      class="absolute bg-green-50 left-0 right-0 bottom-0 z-0 animate-grow"
+      class="absolute bg-green-100 left-0 right-0 bottom-0 z-0 animate-grow"
     ></div>
   </section>
 </template>
