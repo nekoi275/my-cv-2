@@ -5,7 +5,7 @@ const projects = [
   {
     href: "https://nekoi275.github.io/aframe-test/",
     img: "../assets/project_1.webp",
-    text: "Web VR website based on Aframe framework.",
+    text: "Web VR website made with Aframe framework.",
   },
   {
     href: "https://nekoi275.github.io/nice-shop-layout/#",
@@ -15,17 +15,22 @@ const projects = [
   {
     href: "https://wardrobe.pages.dev/clothes",
     img: "../assets/project_3.webp",
-    text: "Personal wardrobe manager app with ability to add/edit/delete your clothes and accessories with photos and descriptions. Made with Vite - Vue (Composition API) - TS. Test user credentials: test / test12345.",
+    text: "Personal wardrobe manager app with ability to add/edit/delete your clothes and accessories with photos and descriptions. Made with Vue 3. Test user credentials: test / test12345.",
   },
   {
     href: "https://telegram-schedule.pages.dev/login",
     img: "../assets/project_4.webp",
-    text: "Telegram posts scheduler for AI generated images public group. Allows to set / edit / preview posts before posting into Telegram. Made with Vite - Vue (Composition API) - TS.",
+    text: "Telegram posts scheduler for AI generated images public group. Allows to set / edit / preview posts before posting into Telegram. Made with Vue 3.",
   },
   {
     href: "https://t.me/ai_inspire_test_bot",
     img: "../assets/project_5.webp",
-    text: "Telegram bot help and description webapp. Made with Vite - Vue (Composition API) - TS.",
+    text: "Telegram bot help and description webapp. Made with Vue 3.",
+  },
+  {
+    href: "https://nekoi275.github.io/",
+    img: "../assets/project_6.webp",
+    text: "Previous version of my website. Made with Vue 3.",
   },
 ];
 </script>

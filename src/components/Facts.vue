@@ -26,7 +26,7 @@ const cards = [
 <template>
   <section
     id="cv"
-    class="bg-white-50 text-white-50 min-[846px]:h-screen flex flex-wrap items-center justify-around min-[846px]:pt-24 max-[845px]:h-full max-[845px]:pt-32 max-[845px]:pb-12 min-[846px]:pb-0"
+    class="bg-purple-50 min-[846px]:h-screen flex flex-wrap items-center justify-around min-[846px]:pt-24 max-[845px]:h-full max-[845px]:pt-32 max-[845px]:pb-12 min-[846px]:pb-0"
   >
     <Flipcard v-for="card in cards" :cardInfo="card" :key="card.heading" class="min-[846px]:m-0 max-[845px]:m-5"></Flipcard>
     <a
