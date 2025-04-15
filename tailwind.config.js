@@ -25,7 +25,7 @@ export default {
           to: { filter: "hue-rotate(-360deg)" },
         },
         moveTeapot: {
-          "100%": { transform: "rotate(-50deg) translate(624px,-200px)" },
+          "100%": { transform: "rotate(-50deg) translate(550px, -150px)" },
         },
         grow: {
           "0%": { opacity: 0.5, height: 0 },
@@ -34,9 +34,9 @@ export default {
         },
         pour: {
           "0%": { height: 0, width: "5%" },
-          "50%": { height: "100%", width: "5%" },
-          "75%": { height: "100%", width: "5%" },
-          "100%": { height: "100%", width: "0" },
+          "50%": { height: "95%", width: "5%" },
+          "75%": { height: "95%", width: "5%" },
+          "100%": { height: "95%", width: "0" },
         },
         growText: {
           "0%": { transform: "scale(0.1, 2)", color: "#a7c191" },
@@ -45,9 +45,9 @@ export default {
         },
         words1: {
           "0%": {
-            transform: "rotate(90deg) translate(-300px, -50px)",
+            transform: "rotate(90deg) translate(-300px)",
             filter: "blur(10px)",
-            opacity: 0.5
+            opacity: 0
           },
           "70%": { transform: "rotate(90deg)"},
           "100%": { transform: "none", opacity: 1 },
@@ -56,7 +56,7 @@ export default {
           "0%": {
             transform: "rotate(90deg) translate(-250px)",
             filter: "blur(10px)",
-            opacity: 0.5
+            opacity: 0
           },
           "70%": { transform: "rotate(90deg)"},
           "100%": { transform: "none", opacity: 1 },
@@ -65,7 +65,7 @@ export default {
           "0%": {
             transform: "rotate(-90deg) translate(250px)",
             filter: "blur(10px)",
-            opacity: 0.5
+            opacity: 0
           },
           "70%": { transform: "rotate(-90deg)"},
           "100%": { transform: "none", opacity: 1 },
@@ -74,7 +74,7 @@ export default {
           "0%": {
             transform: "rotate(-90deg) translate(200px)",
             filter: "blur(10px)",
-            opacity: 0.5
+            opacity: 0
           },
           "70%": { transform: "rotate(-90deg)"},
           "100%": { transform: "none", opacity: 1 },
@@ -93,5 +93,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: []
 };

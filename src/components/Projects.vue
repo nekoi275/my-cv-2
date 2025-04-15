@@ -46,12 +46,6 @@ const projects = [
         :projectInfo="project"
         :key="project.href"
       ></Project>
-      <div class="p-4 mt-4 border-2 border-purple-50 text-dark-50 block text-center shadow-lg shadow-purple-50 h-64 break-inside">
-        <p class="mb-5">
-          Pixel art drawn purely with CSS: 1px x 1px div + box-shadow property.
-        </p>
-        <div class="pixel-art ml-28"></div>
-      </div>
     </div>
   </section>
 </template>
