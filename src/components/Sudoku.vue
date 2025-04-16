@@ -173,7 +173,7 @@ function solvePuzzle() {
 <style scoped>
 .game-container {
   position: relative;
-  background-color: #dae2e2;
+  background-color: #eadbdc;
   width: 500px;
   margin: 0px;
   padding: 20px;
@@ -184,8 +184,8 @@ function solvePuzzle() {
 
 p {
   padding: 10px;
-  color: #402e37;
-  border: 2px solid #414d08;
+  color: #491212;
+  border: 2px solid #a7c191;
   text-align: center;
   margin: 10px;
 }
@@ -199,25 +199,25 @@ td {
   width: 30px;
   height: 30px;
   text-align: center;
-  border-left: 2px solid #98a565;
-  border-right: 2px solid #98a565;
-  border-bottom: 2px solid #98a565;
+  border-left: 2px solid #a7c191;
+  border-right: 2px solid #a7c191;
+  border-bottom: 2px solid #a7c191;
 }
 
 td:first-child {
-  border-left: 2px solid #402e37;
+  border-left: 2px solid #491212;
 }
 
 td:nth-child(3n) {
-  border-right: 2px solid #402e37;
+  border-right: 2px solid #491212;
 }
 
 tr:first-child {
-  border-top: 2px solid #402e37;
+  border-top: 2px solid #491212;
 }
 
 tr:nth-child(3n) td {
-  border-bottom: 2px solid #402e37;
+  border-bottom: 2px solid #491212;
 }
 
 input {
@@ -235,8 +235,8 @@ span {
 button {
   margin: 10px;
   border: none;
-  background-color: #98a565;
-  color: #402e37;
+  background-color: #cde2bd;
+  color: #491212;
   padding: 10px;
   border-radius: 20px;
   cursor: pointer;
@@ -247,7 +247,7 @@ button {
 
 button:hover {
   color: #dae2e2;
-  background-color: #414d08;
+  background-color: #a7c191;
 }
 
 @media (max-width: 845px) {
