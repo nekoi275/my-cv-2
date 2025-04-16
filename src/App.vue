@@ -4,7 +4,6 @@ import Projects from '@/components/Projects.vue'
 import Games from '@/components/Games.vue'
 import Footer from '@/components/Footer.vue'
 import Facts from '@/components/Facts.vue'
-
 </script>
 
 <template>

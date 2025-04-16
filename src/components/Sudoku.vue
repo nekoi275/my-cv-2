@@ -179,6 +179,7 @@ function solvePuzzle() {
   padding: 20px;
   box-sizing: border-box;
   text-align: center;
+  border-radius: 15px;
 }
 
 p {

@@ -401,6 +401,7 @@ export default {
 
 canvas {
   background-color: #000000;
+  border-radius: 15px;
 }
 
 button {
