@@ -12,7 +12,7 @@ import Teapot from "@/components/Teapot.vue";
     ></Teapot>
     <div
       id="tea-pouring"
-      class="absolute rounded-full bg-green-100 left-[47%] top-[5%] z-0 animate-pour"
+      class="absolute rounded-full bg-green-100 left-[47%] top-[8%] z-0 animate-pour"
     ></div>
     <p class="block min-[846px]:w-2/5 min-[845px]:p-0 text-xl m-auto z-10 relative max-[845px]:p-5 animate-grow-text">
       <span class="inline-block opacity-0 animate-words1">Hi,<span>&nbsp;</span></span>

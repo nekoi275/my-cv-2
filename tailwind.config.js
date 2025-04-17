@@ -25,7 +25,7 @@ export default {
           to: { filter: "hue-rotate(-360deg)" },
         },
         moveTeapot: {
-          "100%": { transform: "rotate(-50deg) translate(550px, -150px)" },
+          "100%": { transform: "rotate(-50deg) translate(530px, -150px)" },
         },
         grow: {
           "0%": { opacity: 0.5, height: 0 },
@@ -34,9 +34,9 @@ export default {
         },
         pour: {
           "0%": { height: 0, width: "4%" },
-          "50%": { height: "95%", width: "4%" },
-          "75%": { height: "95%", width: "4%" },
-          "100%": { height: "95%", width: "0" },
+          "50%": { height: "90%", width: "4%" },
+          "75%": { height: "90%", width: "4%" },
+          "100%": { height: "90%", width: "0" },
         },
         growText: {
           "0%": { transform: "scale(0.1, 2)", color: "#a7c191" },
