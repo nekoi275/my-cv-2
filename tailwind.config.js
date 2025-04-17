@@ -33,9 +33,9 @@ export default {
           "100%": { opacity: 1, height: "65%" },
         },
         pour: {
-          "0%": { height: 0, width: "5%" },
-          "50%": { height: "95%", width: "5%" },
-          "75%": { height: "95%", width: "5%" },
+          "0%": { height: 0, width: "4%" },
+          "50%": { height: "95%", width: "4%" },
+          "75%": { height: "95%", width: "4%" },
           "100%": { height: "95%", width: "0" },
         },
         growText: {
