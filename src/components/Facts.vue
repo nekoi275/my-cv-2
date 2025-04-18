@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import Flipcard from '@/components/FlipCard.vue';
+interface cardInfo {
+  heading: string;
+  data?: string;
+  linkName?: string;
+  link?: string;
+  img?: string;
+  pixelArt?: boolean;
+}
 
-const cards = [
+const cards: Array<cardInfo> = [
   {
     heading: 'My CV',
     data: 'Exploring the world of code with passion! Check out my CV — I’m eager to learn, grow, and contribute to your team with fresh ideas and enthusiasm.',
