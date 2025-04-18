@@ -16,7 +16,7 @@
     ></div>
     <div
       id="teapot-nose"
-      class="border-b-[6vw] border-amber-950 w-[25%] h-[45%] rounded-full absolute top-0 left-[-10%]"
+      class="max-[360px]:border-b-[15vw] max-[580px]:border-b-[11vw] border-b-[6vw] border-amber-950 w-[25%] h-[45%] rounded-full absolute top-0 left-[-10%]"
     ></div>
     <div
       id="teapot-top"

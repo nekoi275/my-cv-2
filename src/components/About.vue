@@ -3,9 +3,9 @@ import Teapot from "@/components/Teapot.vue";
 </script>
 
 <template>
-  <section id="about" class="bg-purple-100 text-dark-50 h-screen text-center relative">
+  <section id="about" class="bg-purple-100 text-dark-50 h-screen text-center relative overflow-x-hidden">
     <Teapot
-      class="absolute animate-move-teapot top-[30%] left-[33%] z-20"
+      class="absolute animate-move-teapot max-[480px]:top-0% min-[768px]:top-[30%] left-[33%] z-20"
     ></Teapot>
     <div
       id="tea-pouring"
@@ -16,7 +16,7 @@ import Teapot from "@/components/Teapot.vue";
       class="absolute bg-green-100 left-0 right-0 bottom-0 z-0 animate-grow"
     ></div>
     <p
-      class="block absolute max-[480px]:bottom-[12%] max-[768px]:bottom-[20%] max-[1024px]:bottom-[25%] bottom-[30%] text-xl m-auto z-10 animate-grow-text"
+      class="block absolute max-[480px]:bottom-[0%] max-[768px]:bottom-[20%] max-[1024px]:bottom-[25%] bottom-[30%] text-xl m-auto z-10 animate-grow-text"
     >
       <span class="inline-block opacity-0 animate-words1"
         >Hi,<span>&nbsp;</span></span
