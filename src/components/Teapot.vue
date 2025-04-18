@@ -3,20 +3,20 @@
 <template>
   <div
     id="teapot-body"
-    class="bg-amber-950 w-[565px] h-[320px] rounded-full relative shadow-xl shadow-black"
+    class="bg-amber-950 w-[35vw] max-w-[565px] min-w-[300px] h-[20vw] max-h-[320px] min-h-[180px] rounded-full relative shadow-xl shadow-black text-center"
   >
     <h3
-      class="text-[750%] bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent animate-change-color absolute left-[39%] top-[18%] block"
+      class="text-[10vw] bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent animate-change-color top-[25%] block"
     >
       福
     </h3>
     <div
       id="teapot-handle"
-      class="border-[40px] border-amber-950 w-[40%] h-[60%] rounded-full absolute top-[15%] right-[-17%]"
+      class="border-[3vw] border-amber-950 w-[40%] h-[60%] rounded-full absolute top-[15%] right-[-17%]"
     ></div>
     <div
-      id="teapot-nose-2"
-      class="border-b-[80px] border-amber-950 w-[25%] h-[45%] rounded-full absolute top-0 left-[-10%]"
+      id="teapot-nose"
+      class="border-b-[6vw] border-amber-950 w-[25%] h-[45%] rounded-full absolute top-0 left-[-10%]"
     ></div>
     <div
       id="teapot-top"
