@@ -25,7 +25,7 @@ export default {
           to: { filter: "hue-rotate(-360deg)" },
         },
         moveTeapot: {
-          "100%": { transform: "rotate(-50deg) translate(515px, -150px)" },
+          "100%": { transform: "rotate(-50deg) translate(33.9vw, -9.87vw)" },
         },
         grow: {
           "0%": { opacity: 0.5, height: 0 },
