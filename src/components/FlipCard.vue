@@ -1,11 +1,11 @@
 <script setup lang="ts">
-interface cardInfo {
+ export interface cardInfo {
   heading: string;
-  data: Array<string>;
-  linkName: string;
-  link: string;
-  img: string;
-  pixelArt: boolean;
+  data?: string;
+  linkName?: string;
+  link?: string;
+  img?: string;
+  pixelArt?: boolean;
 }
 defineProps<{
   cardInfo: cardInfo;
