@@ -15,12 +15,8 @@
       class="border-[40px] border-amber-950 w-[40%] h-[60%] rounded-full absolute top-[15%] right-[-17%]"
     ></div>
     <div
-      id="teapot-nose-1"
-      class="bg-amber-950 w-[15%] h-[33%] rounded-full absolute top-[21%] left-[-4%] shadow-xl shadow-black"
-    ></div>
-    <div
       id="teapot-nose-2"
-      class="border-t-[80px] border-amber-950 w-[25%] h-[45%] rounded-full absolute top-[10%] left-[-15%] rotate-[30deg]"
+      class="border-b-[80px] border-amber-950 w-[25%] h-[45%] rounded-full absolute top-0 left-[-10%]"
     ></div>
     <div
       id="teapot-top"

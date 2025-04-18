@@ -5,14 +5,14 @@ import Teapot from "@/components/Teapot.vue";
 <template>
   <section
     id="about"
-    class="bg-purple-100 text-dark-50 min-[845px]:h-screen max-[845px]:h-full  max-[845px]:pb-12 text-center"
+    class="bg-purple-100 text-dark-50 min-[845px]:h-screen max-[845px]:h-full max-[845px]:pb-12 text-center"
   >
     <Teapot
       class="absolute animate-move-teapot top-[30%] left-[33%] z-20"
     ></Teapot>
     <div
       id="tea-pouring"
-      class="absolute rounded-full bg-green-100 left-[47%] top-[8%] z-0 animate-pour"
+      class="absolute rounded-full bg-green-100 left-[47%] top-[11%] z-0 animate-pour"
     ></div>
     <p class="block min-[846px]:w-2/5 min-[845px]:p-0 text-xl m-auto z-10 relative max-[845px]:p-5 animate-grow-text">
       <span class="inline-block opacity-0 animate-words1">Hi,<span>&nbsp;</span></span>

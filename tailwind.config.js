@@ -25,7 +25,7 @@ export default {
           to: { filter: "hue-rotate(-360deg)" },
         },
         moveTeapot: {
-          "100%": { transform: "rotate(-50deg) translate(530px, -150px)" },
+          "100%": { transform: "rotate(-50deg) translate(515px, -150px)" },
         },
         grow: {
           "0%": { opacity: 0.5, height: 0 },
@@ -33,10 +33,12 @@ export default {
           "100%": { opacity: 1, height: "65%" },
         },
         pour: {
-          "0%": { height: 0, width: "4%" },
-          "50%": { height: "90%", width: "4%" },
-          "75%": { height: "90%", width: "4%" },
-          "100%": { height: "90%", width: "0" },
+          "0%": { height: 0, width: "0%" },
+          "25%": { height: "90%", width: "2%" },
+          "40%": { height: "90%", width: "3%" },
+          "60%": { height: "90%", width: "3%" },
+          "75%": { height: "90%", width: "2%" },
+          "100%": { height: "90%", width: "0%" },
         },
         growText: {
           "0%": { transform: "scale(0.1, 2)", color: "#a7c191" },
@@ -84,7 +86,7 @@ export default {
         "change-color": "changeColor 5s infinite linear",
         "move-teapot": "moveTeapot 3s ease forwards",
         grow: "grow 2s linear forwards 4s",
-        pour: "pour 4s linear forwards 2s",
+        pour: "pour 4s linear forwards 2.5s",
         words1: "words1 4s linear forwards 2.5s",
         words2: "words2 4s linear forwards 2.5s",
         words3: "words3 4s linear forwards 2.5s",
