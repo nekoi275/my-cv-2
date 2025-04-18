@@ -1,36 +1,42 @@
 <script setup lang="ts">
 import Project from "@/components/Project.vue";
 import projectsBg from '@/assets/projects_bg.webp';
+import project1 from '@/assets/project_1.webp';
+import project2 from '@/assets/project_2.webp';
+import project3 from '@/assets/project_3.webp';
+import project4 from '@/assets/project_4.webp';
+import project5 from '@/assets/project_5.webp';
+import project6 from '@/assets/project_6.webp';
 
 const projects = [
   {
     href: "https://nekoi275.github.io/aframe-test/",
-    img: "../assets/project_1.webp",
+    img: project1,
     text: "Web VR website made with Aframe framework.",
   },
   {
     href: "https://nekoi275.github.io/nice-shop-layout/#",
-    img: "../assets/project_2.webp",
+    img: project2,
     text: "E-commerce website layout sample.",
   },
   {
     href: "https://wardrobe.pages.dev/clothes",
-    img: "../assets/project_3.webp",
+    img: project3,
     text: "Personal wardrobe manager app with ability to add/edit/delete your clothes and accessories with photos and descriptions. Made with Vue 3. Test user credentials: test / test12345.",
   },
   {
     href: "https://telegram-schedule.pages.dev/login",
-    img: "../assets/project_4.webp",
+    img: project4,
     text: "Telegram posts scheduler for AI generated images public group. Allows to set / edit / preview posts before posting into Telegram. Made with Vue 3.",
   },
   {
     href: "https://t.me/ai_inspire_test_bot",
-    img: "../assets/project_5.webp",
+    img: project5,
     text: "Telegram bot help and description webapp. Made with Vue 3.",
   },
   {
     href: "https://nekoi275.github.io/",
-    img: "../assets/project_6.webp",
+    img: project6,
     text: "Previous version of my website. Made with Vue 3.",
   },
 ];

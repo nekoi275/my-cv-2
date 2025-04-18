@@ -1,16 +1,12 @@
 <script setup lang="ts">
 interface projectInfo {
   href: string;
-  img: string;
+  img: any;
   text: string;
 }
 defineProps<{
   projectInfo: projectInfo;
 }>();
-
-function getImageUrl(img: string) {
-  return String(new URL(img, import.meta.url));
-}
 </script>
 
 <template>
@@ -21,7 +17,7 @@ function getImageUrl(img: string) {
   >
     <img
       class="mb-4"
-      :src="getImageUrl(projectInfo.img)"
+      :src="projectInfo.img"
       alt="project screenshot"
     />
     {{ projectInfo.text }}

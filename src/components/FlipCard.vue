@@ -4,16 +4,12 @@
   data?: string;
   linkName?: string;
   link?: string;
-  img?: string;
-  pixelArt?: boolean;
+  img?: any;
+  isPixelArt?: boolean;
 }
 defineProps<{
   cardInfo: cardInfo;
 }>();
-
-function getImageUrl(img: string) {
-  return String(new URL(img, import.meta.url));
-}
 </script>
 
 <template>
@@ -32,11 +28,11 @@ function getImageUrl(img: string) {
           >{{ cardInfo.linkName
           }}<img
             v-if="cardInfo.img"
-            :src="getImageUrl(cardInfo.img)"
+            :src="cardInfo.img"
             alt="fact image"
             class="max-width-[200px] max-height-[200px] m-auto pt-2"
         /></a>
-        <div v-if="cardInfo.pixelArt" class="pixel-art ml-12"></div>
+        <div v-if="cardInfo.isPixelArt" class="pixel-art ml-12"></div>
       </div>
     </div>
   </div>
