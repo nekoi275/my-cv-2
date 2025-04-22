@@ -10,20 +10,16 @@ import Teapot from "@/components/Teapot.vue";
     <Teapot
       class="absolute animate-move-teapot max-[480px]:top-0% min-[768px]:top-[30%] left-[33%] z-20"
     ></Teapot>
-<!--     <div
-      id="tea-pouring"
-      class="absolute rounded-full bg-green-100 left-[46%] z-0 h-[100%] opacity-1 w-[3%] min-[1920px]:top-[-0.87vh] min-[1680px]:top-[8.1vh] min-[1600px]:top-[11.1vh] min-[1536px]:top-[11.2vh] min-[1520px]:top-[11.2vh] min-[1440px]:top-[12.3vh] min-[1366px]:top-[12vh] min-[1280px]:top-[12vh]"
-    ></div> -->
     <div
       id="tea-pouring"
-      class="absolute rounded-full bg-green-100 left-[46%] min-[1920px]:top-[-0.87vh] min-[1680px]:top-[8.1vh] min-[1600px]:top-[11.1vh] min-[1536px]:top-[11.2vh] min-[1520px]:top-[11.2vh] min-[1440px]:top-[12.3vh] min-[1366px]:top-[12vh] min-[1280px]:top-[12vh] z-0 animate-pour"
+      class="absolute rounded-full bg-green-100 left-[46%] min-[1920px]:top-[-0.87vh] min-[1680px]:top-[8.1vh] min-[1600px]:top-[11.1vh] min-[1536px]:top-[11.2vh] min-[1520px]:top-[11.2vh] min-[1440px]:top-[12.3vh] min-[1366px]:top-[12vh] min-[1280px]:top-[12vh] min-[1024px]:top-[15.2vh] min-[800px]:top-[25vh] min-[768px]:top-[25vh] min-[428px]:top-[6vh] min-[412px]:top-[6.2vh] min-[390px]:top-[8vh] z-0 animate-pour"
     ></div>
     <div
       id="tea-poured"
       class="absolute bg-green-100 left-0 right-0 bottom-0 z-0 animate-grow"
     ></div>
     <p
-      class="block absolute min-[1280px]:p-3 min-[1300px]:p-6 p-6 z-10 animate-grow-text"
+      class="block absolute bottom-0 max-[800px]:bottom-[13rem] max-[1024px]:pt-12 min-[1280px]:p-3 min-[1300px]:p-6 p-6 z-10 animate-grow-text"
     >
       <span class="inline-block opacity-0 animate-words1"
         >Hi,<span>&nbsp;</span></span

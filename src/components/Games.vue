@@ -11,7 +11,7 @@ import SpaceInvaders from "@/components/SpaceInvaders.vue";
     id="games"
     class="bg-green-50 flex flex-wrap items-center justify-around h-screen min-[1280px]:h-full min-[1280px]:p-3 min-[1400px]:h-screen max-[1400px]:p-0"
   >
-    <SpaceInvaders class="min-[768px]:block min-[846px]:mb-10 max-[768px]:hidden"></SpaceInvaders>
+    <SpaceInvaders class="min-[1280px]:block max-[1280px]:hidden"></SpaceInvaders>
     <Sudoku></Sudoku>
   </section>
 </template>
