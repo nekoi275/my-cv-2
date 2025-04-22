@@ -5,11 +5,6 @@
     id="teapot-body"
     class="bg-amber-950 w-[35vw] max-w-[565px] min-w-[300px] h-[20vw] max-h-[320px] min-h-[180px] rounded-full relative shadow-xl shadow-black text-center"
   >
-    <h3
-      class="text-[10vw] bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent animate-change-color top-[25%] block"
-    >
-      福
-    </h3>
     <div
       id="teapot-handle"
       class="border-[3vw] border-amber-950 w-[40%] h-[60%] rounded-full absolute top-[15%] right-[-17%]"

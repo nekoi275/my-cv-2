@@ -174,20 +174,19 @@ function solvePuzzle() {
 .game-container {
   position: relative;
   background-color: #eadbdc;
-  width: 500px;
+  width: 30rem;
   margin: 0px;
-  padding: 20px;
   box-sizing: border-box;
   text-align: center;
   border-radius: 15px;
 }
 
 p {
-  padding: 10px;
+  padding: 1rem;
   color: #491212;
   border: 2px solid #a7c191;
   text-align: center;
-  margin: 10px;
+  margin: 1rem;
 }
 
 table {
@@ -196,8 +195,8 @@ table {
 }
 
 td {
-  width: 30px;
-  height: 30px;
+  width: 2rem;
+  height: 2rem;
   text-align: center;
   border-left: 2px solid #a7c191;
   border-right: 2px solid #a7c191;
@@ -225,7 +224,7 @@ input {
   background-color: transparent;
   text-align: center;
   outline: none;
-  width: 15px;
+  width: 1rem
 }
 
 span {
@@ -233,11 +232,11 @@ span {
 }
 
 button {
-  margin: 10px;
+  margin: 0.5rem;
   border: none;
   background-color: #cde2bd;
   color: #491212;
-  padding: 10px;
+  padding: 0.5rem;
   border-radius: 20px;
   cursor: pointer;
   letter-spacing: 2px;
@@ -248,15 +247,5 @@ button {
 button:hover {
   color: #dae2e2;
   background-color: #a7c191;
-}
-
-@media (max-width: 845px) {
-  .game-container {
-    width: 350px;
-    margin: auto;
-    height: 470px;
-    padding: 5px;
-    margin-bottom: 10px;
-  }
 }
 </style>

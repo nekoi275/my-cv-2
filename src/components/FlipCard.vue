@@ -30,7 +30,7 @@ defineProps<{
             v-if="cardInfo.img"
             :src="cardInfo.img"
             alt="fact image"
-            class="max-width-[200px] max-height-[200px] m-auto pt-2"
+            class="max-width-[15rem] max-height-[15rem] m-auto pt-2"
         /></a>
         <div v-if="cardInfo.isPixelArt" class="pixel-art ml-12"></div>
       </div>
@@ -41,8 +41,8 @@ defineProps<{
 <style scoped>
 .flip-card {
   background-color: transparent;
-  width: 300px;
-  height: 300px;
+  width: 18rem;
+  height: 18rem;
   perspective: 1000px;
 }
 .flip-card-inner {
@@ -58,7 +58,7 @@ defineProps<{
 .flip-card-front,
 .flip-card-back {
   position: absolute;
-  padding: 20px;
+  padding: 1rem;
   box-sizing: border-box;
   width: 100%;
   height: 100%;

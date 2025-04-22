@@ -3,20 +3,30 @@ import Teapot from "@/components/Teapot.vue";
 </script>
 
 <template>
-  <section id="about" class="bg-purple-100 text-dark-50 h-screen text-center relative overflow-x-hidden">
+  <section
+    id="about"
+    class="bg-purple-100 text-dark-50 h-screen relative overflow-hidden"
+  >
     <Teapot
       class="absolute animate-move-teapot max-[480px]:top-0% min-[768px]:top-[30%] left-[33%] z-20"
     ></Teapot>
+    <!-- <div
+      id="tea-pouring"
+      class="absolute rounded-full bg-green-100 left-[46%] z-0 h-[100%] opacity-1 w-[3%] min-[1920px]:top-[-0.87vw]"
+    ></div> -->
     <div
       id="tea-pouring"
-      class="absolute rounded-full bg-green-100 left-[47%] top-[11%] z-0 animate-pour"
+      class="absolute rounded-full bg-green-100 left-[46%] min-[1920px]:top-[-0.87vw] z-0 animate-pour"
     ></div>
     <div
       id="tea-poured"
       class="absolute bg-green-100 left-0 right-0 bottom-0 z-0 animate-grow"
     ></div>
+<!--     <p
+      class="block absolute max-[480px]:bottom-[0%] max-[768px]:bottom-[20%] max-[1024px]:bottom-[25%] bottom-[30%] z-10 animate-grow-text"
+    > -->
     <p
-      class="block absolute max-[480px]:bottom-[0%] max-[768px]:bottom-[20%] max-[1024px]:bottom-[25%] bottom-[30%] text-xl m-auto z-10 animate-grow-text"
+      class="block absolute p-[6rem] z-10 animate-grow-text"
     >
       <span class="inline-block opacity-0 animate-words1"
         >Hi,<span>&nbsp;</span></span
