@@ -12,7 +12,7 @@ import Teapot from "@/components/Teapot.vue";
     ></Teapot>
     <div
       id="tea-pouring"
-      class="absolute rounded-full bg-green-100 left-[46%] min-[1920px]:top-[-0.87vh] min-[1680px]:top-[8.1vh] min-[1600px]:top-[11.1vh] min-[1536px]:top-[11.2vh] min-[1520px]:top-[11.2vh] min-[1440px]:top-[12.3vh] min-[1366px]:top-[12vh] min-[1280px]:top-[12vh] min-[1024px]:top-[15.2vh] min-[800px]:top-[25vh] min-[768px]:top-[25vh] min-[428px]:top-[6vh] min-[412px]:top-[6.2vh] min-[390px]:top-[8vh] z-0 animate-pour"
+      class="absolute rounded-full bg-green-100 left-[46%] min-[1880px]:top-[-0.87vh] max-[1920px]:top-[-0.87vh] min-[1680px]:top-[8.1vh] min-[1600px]:top-[11.1vh] min-[1536px]:top-[11.2vh] min-[1520px]:top-[11.2vh] min-[1440px]:top-[12.3vh] min-[1366px]:top-[12vh] min-[1280px]:top-[12vh] min-[1024px]:top-[15.2vh] min-[800px]:top-[25vh] min-[768px]:top-[25vh] min-[428px]:top-[6vh] min-[412px]:top-[6.2vh] max-[390px]:top-[8vh] z-0 animate-pour"
     ></div>
     <div
       id="tea-poured"
