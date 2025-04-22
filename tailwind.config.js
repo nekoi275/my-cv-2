@@ -41,14 +41,13 @@ export default {
           "100%": { height: "100%", width: "0%" },
         },
         growText: {
-          "0%": { transform: "scale(0.1, 2)", color: "#a7c191" },
-          "75%": { transform: "scale(0.1, 2)" },
-          "100%": { transform: "none", color: "#491212" },
+          "0%": { transform: "scale(0.1, 2)", filter: "blur(10px)" },
+          "75%": { transform: "scale(0.1, 2)", filter: "blur(10px)" },
+          "100%": { transform: "none", filter: "none" },
         },
         words1: {
           "0%": {
             transform: "rotate(90deg) translate(-300px)",
-            filter: "blur(10px)",
             opacity: 0,
           },
           "70%": { transform: "rotate(90deg)" },
@@ -57,7 +56,6 @@ export default {
         words2: {
           "0%": {
             transform: "rotate(90deg) translate(-250px)",
-            filter: "blur(10px)",
             opacity: 0,
           },
           "70%": { transform: "rotate(90deg)" },
@@ -66,7 +64,6 @@ export default {
         words3: {
           "0%": {
             transform: "rotate(-90deg) translate(250px)",
-            filter: "blur(10px)",
             opacity: 0,
           },
           "70%": { transform: "rotate(-90deg)" },
@@ -75,7 +72,6 @@ export default {
         words4: {
           "0%": {
             transform: "rotate(-90deg) translate(200px)",
-            filter: "blur(10px)",
             opacity: 0,
           },
           "70%": { transform: "rotate(-90deg)" },

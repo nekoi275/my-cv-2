@@ -8,7 +8,7 @@ import Teapot from "@/components/Teapot.vue";
     class="bg-purple-100 text-dark-50 h-screen relative overflow-hidden"
   >
     <Teapot
-      class="absolute animate-move-teapot max-[480px]:top-0% min-[768px]:top-[30%] left-[33%] z-20"
+      class="absolute animate-move-teapot max-[480px]:top-0% min-[768px]:top-[30%] left-[33%] z-20 will-change-transform transform-gpu"
     ></Teapot>
     <div
       id="tea-pouring"
@@ -19,7 +19,7 @@ import Teapot from "@/components/Teapot.vue";
       class="absolute bg-green-100 left-0 right-0 bottom-0 z-0 animate-grow"
     ></div>
     <p
-      class="block absolute bottom-0 max-[800px]:bottom-[13rem] max-[1024px]:pt-12 min-[1280px]:p-3 min-[1300px]:p-6 p-6 z-10 animate-grow-text"
+      class="block absolute max-[800px]:bottom-[13rem] max-[1024px]:pt-12 min-[1280px]:p-3 min-[1300px]:p-6 p-6 z-10 animate-grow-text will-change-transform"
     >
       <span class="inline-block opacity-0 animate-words1"
         >Hi,<span>&nbsp;</span></span
