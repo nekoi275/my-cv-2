@@ -12,18 +12,18 @@ import Teapot from "@/components/Teapot.vue";
     ></Teapot>
 <!--     <div
       id="tea-pouring"
-      class="absolute rounded-full bg-green-100 left-[46%] z-0 h-[100%] opacity-1 w-[3%] min-[1920px]:top-[-0.87vw] min-[1680px]:top-[4.1vw]"
+      class="absolute rounded-full bg-green-100 left-[46%] z-0 h-[100%] opacity-1 w-[3%] min-[1920px]:top-[-0.87vh] min-[1680px]:top-[8.1vh] min-[1600px]:top-[11.1vh] min-[1536px]:top-[11.2vh] min-[1520px]:top-[11.2vh] min-[1440px]:top-[12.3vh] min-[1366px]:top-[12vh] min-[1280px]:top-[12vh]"
     ></div> -->
     <div
       id="tea-pouring"
-      class="absolute rounded-full bg-green-100 left-[46%] min-[1920px]:top-[-0.87vw] min-[1680px]:top-[4.1vw] z-0 animate-pour"
+      class="absolute rounded-full bg-green-100 left-[46%] min-[1920px]:top-[-0.87vh] min-[1680px]:top-[8.1vh] min-[1600px]:top-[11.1vh] min-[1536px]:top-[11.2vh] min-[1520px]:top-[11.2vh] min-[1440px]:top-[12.3vh] min-[1366px]:top-[12vh] min-[1280px]:top-[12vh] z-0 animate-pour"
     ></div>
     <div
       id="tea-poured"
       class="absolute bg-green-100 left-0 right-0 bottom-0 z-0 animate-grow"
     ></div>
     <p
-      class="block absolute p-[6rem] z-10 animate-grow-text"
+      class="block absolute min-[1280px]:p-3 min-[1300px]:p-6 p-6 z-10 animate-grow-text"
     >
       <span class="inline-block opacity-0 animate-words1"
         >Hi,<span>&nbsp;</span></span

@@ -37,9 +37,9 @@ const cards: cardInfo[] = [
 <template>
   <section
     id="facts"
-    class="bg-purple-50 flex flex-wrap items-center justify-around h-screen"
+    class="bg-purple-50 flex flex-wrap items-center justify-around h-full p-6"
   >
-    <Flipcard v-for="card in cards" :cardInfo="card" :key="card.heading" class="min-[846px]:m-0 max-[845px]:m-5"></Flipcard>
+    <Flipcard v-for="card in cards" :cardInfo="card" :key="card.heading" class="mb-4"></Flipcard>
   </section>
 </template>
 
