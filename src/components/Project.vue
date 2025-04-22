@@ -13,7 +13,7 @@ defineProps<{
   <a
     :href="projectInfo.href"
     target="_blank"
-    class="bg-purple-50 rounded-md m-10 p-4 border-2 border-green-100 text-dark-50 block text-center hover:border-green-50 shadow-lg shadow-purple-50 hover:shadow-green-50"
+    class="bg-purple-50 rounded-md mb-4 p-4 border-2 border-green-100 text-dark-50 block text-center hover:border-green-50 shadow-lg shadow-purple-50 hover:shadow-green-50"
   >
     <img
       class="mb-4"

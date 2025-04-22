@@ -43,9 +43,9 @@ const projects = [
 </script>
 
 <template>
-  <section id="projects" class="bg-purple-100 pb-14 pt-32 relative">
+  <section id="projects" class="bg-purple-100 p-6 relative">
     <div
-      class="masonry sm:masonry-sm md:masonry-md min-[846px]:pl-24 min-[846px]:pr-24 max-[845px]:pl-5 max-[845px]:pr-5 z-20 relative"
+      class="masonry sm:masonry-sm md:masonry-md z-20 relative"
     >
       <Project
         class="p-4 break-inside"
