@@ -3,7 +3,7 @@
 <template>
   <div
     id="teapot-body"
-    class="bg-amber-950 w-[35vw] max-w-[565px] min-w-[300px] h-[20vw] max-h-[320px] min-h-[180px] rounded-full relative shadow-xl shadow-black text-center"
+    class="bg-amber-950 w-[35vw] h-[20vw] rounded-full relative shadow-xl shadow-black"
   >
     <div
       id="teapot-handle"
@@ -11,7 +11,7 @@
     ></div>
     <div
       id="teapot-nose"
-      class="max-[360px]:border-b-[15vw] max-[580px]:border-b-[11vw] border-b-[6vw] border-amber-950 w-[25%] h-[45%] rounded-full absolute top-0 left-[-10%]"
+      class="border-b-[6vw] border-amber-950 w-[25%] h-[45%] rounded-full absolute top-0 left-[-10%]"
     ></div>
     <div
       id="teapot-top"

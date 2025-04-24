@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import About from '@/components/About.vue'
 import Projects from '@/components/Projects.vue'
 import Games from '@/components/Games.vue'
 import Footer from '@/components/Footer.vue'
 import Facts from '@/components/Facts.vue'
+import TeapotSection from '@/components/TeapotSection.vue'
 </script>
 
 <template>
-  <About></About>
-  <Facts></Facts>
+  <div class="h-screen overflow-hidden">
+    <TeapotSection></TeapotSection>
+  </div>
+    <Facts></Facts>
   <Games></Games>
   <Projects></Projects>
   <Footer></Footer>

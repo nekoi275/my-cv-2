@@ -19,18 +19,15 @@ export default {
           100: "#e4cbce",
         },
       },
+      height: {
+        '2screen': '200vh',
+      },
       keyframes: {
-        changeColor: {
-          from: { filter: "hue-rotate(0deg)" },
-          to: { filter: "hue-rotate(-360deg)" },
+        moveSection: {
+          "100%": { transform: "translateY(-90vh)" },
         },
         moveTeapot: {
-          "100%": { transform: "rotate(-50deg) translate(33.9vw, -9vw)" },
-        },
-        grow: {
-          "0%": { opacity: 0.5, height: 0 },
-          "75%": { opacity: 1, height: "60%" },
-          "100%": { opacity: 1, height: "65%" },
+          "100%": { transform: "rotate(-50deg)" },
         },
         pour: {
           "0%": { height: 0, width: "0%" },
@@ -76,18 +73,17 @@ export default {
           },
           "70%": { transform: "rotate(-90deg)" },
           "100%": { transform: "none", opacity: 1 },
-        }
+        },
       },
       animation: {
-        "change-color": "changeColor 5s infinite linear",
         "move-teapot": "moveTeapot 3s ease forwards",
-        grow: "grow 2s linear forwards 4s",
         pour: "pour 4s linear forwards 2.5s",
         words1: "words1 4s linear forwards 2.5s",
         words2: "words2 4s linear forwards 2.5s",
         words3: "words3 4s linear forwards 2.5s",
         words4: "words4 4s linear forwards 2.5s",
-        "grow-text": "growText 4s linear forwards 2s"
+        "grow-text": "growText 4s linear forwards 2s",
+        "move-section": "moveSection 4s forwards 4s",
       },
     },
   },
