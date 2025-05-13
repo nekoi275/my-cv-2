@@ -4,6 +4,7 @@ import type { cardInfo } from '@/components/FlipCard.vue';
 import factCv from '@/assets/fact_cv.gif';
 import factDrawings from '@/assets/fact_drawings.webp';
 import factPhotos from '@/assets/fact_photos.webp';
+import factNFT from '@/assets/fact_nft.webp';
 
 const cards: cardInfo[] = [
   {
@@ -17,20 +18,27 @@ const cards: cardInfo[] = [
     heading: 'My drawings',
     data: 'Soft strokes, serene colors—where cats nap, birds perch, and flowers sway in quiet harmony. A touch of Zen in every sketch.',
     linkName: 'Doodle addicts',
-    link: 'https://www.doodleaddicts.com/nekoi/',
+    link: 'https://www.doodleaddicts.com/nekoi',
     img: factDrawings
   },
   {
     heading: 'My photography',
     data: 'Need high-quality, free photos? Browse my gallery and download stunning shots which may becomes great visuals for your projects!',
     linkName: 'Pexels',
-    link: 'https://www.pexels.com/ru-ru/@2148646707/gallery/',
+    link: 'https://www.pexels.com/ru-ru/@2148646707/gallery',
     img: factPhotos
   },
   {
     heading: 'Pixel art drawn purely with CSS: 1px x 1px div + box-shadow property.',
     isPixelArt: true,
-  }
+  },
+  {
+    heading: 'My NFT collection',
+    data: 'Sweet, vibrant, and full of whimsy! Meet my Fruit Animals—a playful fusion of juicy fruits and adorable creatures.',
+    linkName: 'Opensea',
+    link: 'https://opensea.io/collection/fruit-animals-2',
+    img: factNFT
+  },
 ]
 </script>
 

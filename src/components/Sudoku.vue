@@ -182,7 +182,7 @@ function solvePuzzle() {
 }
 
 p {
-  padding: 1rem;
+  padding: 0.1rem;
   color: #491212;
   border: 2px solid #a7c191;
   text-align: center;
@@ -236,7 +236,7 @@ button {
   border: none;
   background-color: #cde2bd;
   color: #491212;
-  padding: 0.5rem;
+  padding: 0.2rem;
   border-radius: 20px;
   cursor: pointer;
   letter-spacing: 2px;
