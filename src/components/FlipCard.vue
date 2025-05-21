@@ -53,7 +53,7 @@ onMounted(() => {
                 v-if="cardInfo.img"
                 :src="cardInfo.img"
                 alt="fact image"
-                class="max-width-[15rem] max-height-[15rem] m-auto pt-2"
+                class="max-w-48 max-h-48 m-auto pt-2"
               />
             </a>
           </div>
@@ -90,7 +90,7 @@ onMounted(() => {
                 v-if="cardInfo.img"
                 :src="cardInfo.img"
                 alt="fact image"
-                class="max-width-[15rem] max-height-[15rem] m-auto pt-2"
+                class="max-w-48 max-h-48 m-auto pt-2"
               />
             </a>
           </div>
