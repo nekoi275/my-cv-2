@@ -215,13 +215,13 @@ export default {
     },
     initControl: function() {
       document.addEventListener('keydown', event => {
-        this.control.left = event.keyCode == 65;
-        this.control.right = event.keyCode == 68;
+        this.control.left = event.key == 'a';
+        this.control.right = event.key == 'd';
       });
-      document.addEventListener('keyup', () => {
+      document.addEventListener('keyup', event => {
         this.control.left = false;
         this.control.right = false;
-        this.control.fire = event.keyCode == 87;
+        this.control.fire = event.key == 'w';
       });
     },
     drawSprite: function(sprite, x, y) {
@@ -301,7 +301,7 @@ export default {
         }
       }
 
-      if (isShooting) {
+      if (isShooting && this.state.aliens.shown.length > 0) {
         let randomAlien = this.state.aliens.shown[
           Math.round(Math.random() * (this.state.aliens.shown.length - 1))
         ];
