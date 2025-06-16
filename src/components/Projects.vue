@@ -8,12 +8,18 @@ import projectTgschedule from "@/assets/project_tgschedule.webp";
 import projectBothelp from "@/assets/project_bothelp.webp";
 import projectCv1 from "@/assets/project_cv1.webp";
 import projectPokemon from "@/assets/project_pokemon.webp";
+import projectSafe from "@/assets/project_safe.webp";
 
 const projects = [
   {
     href: "https://pokemon-tcg.pages.dev",
     img: projectPokemon,
     text: "Demo website based on Pokemon TCG API. Made with Vue 3.",
+  },
+  {
+    href: "https://dreamshot-test-task.pages.dev",
+    img: projectSafe,
+    text: "Pixijs and GSAP sample game. Check your browser console to find a combination to unlock the safe. Tap on left (counterclockwise) or right (clockwise) side of the handle following the combination.",
   },
   {
     href: "https://nekoi275.github.io/aframe-test",
