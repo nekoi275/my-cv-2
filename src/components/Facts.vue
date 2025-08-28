@@ -55,6 +55,16 @@ const cards: cardInfo[] = [
       "Pixel art drawn purely with CSS: 1px x 1px div + box-shadow property.",
     isPixelArt: true,
   },
+  {
+    heading: "Contact me",
+    data: "I'm currently looking for my next job or project, and I welcome any messages specifically about that. Feel free to get in touch if you have something in mind.",
+    links: [
+      { name: "E-mail", url: "mailto:valeriiadrozdova90@gmail.com" },
+      { name: "Linkedin", url: "https://www.linkedin.com/in/valeriia-drozdova-81761a380" },
+      { name: "Telegram", url: "https://t.me/nekoi275" },
+    ],
+    isEnvelope: true,
+  }
 ];
 </script>
 

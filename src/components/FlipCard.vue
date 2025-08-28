@@ -12,6 +12,7 @@ export interface cardInfo {
   links?: CardLink[];
   img?: any;
   isPixelArt?: boolean;
+  isEnvelope?: boolean;
 }
 
 const props = defineProps<{
@@ -96,7 +97,20 @@ onMounted(() => {
           </div>
         </div>
 
-        <div v-if="cardInfo.isPixelArt" class="pixel-art ml-12"></div>
+        <div v-if="cardInfo.isPixelArt" class="pixel-art ml-16 mt-16"></div>
+        <div
+          v-if="cardInfo.isEnvelope"
+          class="w-[200px] h-[160px] relative mx-auto mt-4"
+        >
+          <div class="w-full h-full relative">
+            <div
+              class="absolute w-full h-full bottom-0 bg-gray-100 rounded-sm shadow-md overflow-hidden"
+            ></div>
+            <div
+              class="absolute top-0 w-0 h-0 border-l-[100px] border-l-transparent border-r-[100px] border-r-transparent border-t-[90px] border-t-green-50 origin-top z-10"
+            ></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

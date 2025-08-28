@@ -9,6 +9,7 @@ import projectBothelp from "@/assets/project_bothelp.webp";
 import projectCv1 from "@/assets/project_cv1.webp";
 import projectPokemon from "@/assets/project_pokemon.webp";
 import projectSafe from "@/assets/project_safe.webp";
+import projectBanny from "@/assets/project_banny.webp";
 
 const projects = [
   {
@@ -39,7 +40,12 @@ const projects = [
   {
     href: "https://t.me/ai_inspire_test_bot",
     img: projectBothelp,
-    text: "Telegram bot help and description webapp. Made with Vue 3.",
+    text: "Telegram bot help and description mini app. Made with Vue 3.",
+  },
+    {
+    href: "https://t.me/banny_safe_bot",
+    img: projectBanny,
+    text: "Telegram bot help and description mini app. Made with Vue 3.",
   },
   {
     href: "https://nekoi275.github.io",

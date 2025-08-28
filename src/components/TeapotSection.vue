@@ -39,11 +39,7 @@ import Teapot from "@/components/Teapot.vue";
         >
         <span
           class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >a junior<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >front-end<span>&nbsp;</span></span
+          >a front-end<span>&nbsp;</span></span
         >
         <span
           class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
