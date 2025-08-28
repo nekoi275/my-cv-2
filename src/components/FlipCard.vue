@@ -107,7 +107,7 @@ onMounted(() => {
               class="absolute w-full h-full bottom-0 bg-gray-100 rounded-sm shadow-md overflow-hidden"
             ></div>
             <div
-              class="absolute top-0 w-0 h-0 border-l-[100px] border-l-transparent border-r-[100px] border-r-transparent border-t-[90px] border-t-green-50 origin-top z-10"
+              class="absolute top-0 w-0 h-0 border-l-[100px] border-l-transparent border-r-[100px] border-r-transparent border-t-[90px] border-t-green-50 origin-top"
             ></div>
           </div>
         </div>
