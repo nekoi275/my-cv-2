@@ -1,209 +1,119 @@
 <script setup lang="ts">
+import { onMounted, ref, onUnmounted } from "vue";
+import gsap from "gsap";
 import Teapot from "@/components/Teapot.vue";
+
+const sectionRef = ref<HTMLElement | null>(null);
+const teapotRef = ref<HTMLElement | null>(null);
+const pourRef = ref<HTMLElement | null>(null);
+const textContainerRef = ref<HTMLElement | null>(null);
+const words1Ref = ref<HTMLElement[]>([]);
+const words2Ref = ref<HTMLElement[]>([]);
+const words3Ref = ref<HTMLElement[]>([]);
+const words4Ref = ref<HTMLElement[]>([]);
+
+const addToRefs = (el: any, arr: HTMLElement[]) => {
+  if (el && !arr.includes(el)) {
+    arr.push(el);
+  }
+};
+
+let ctx: gsap.Context;
+
+onMounted(() => {
+  ctx = gsap.context(() => {
+    const tl = gsap.timeline({
+      defaults: { ease: "power1.inOut" },
+    });
+
+    tl.to(teapotRef.value, {
+      rotation: -50,
+      duration: 3,
+    }, 0);
+
+    const pourTl = gsap.timeline();
+    pourTl
+      .to(pourRef.value, { height: "100%", width: "2%", duration: 1, ease: "linear" })
+      .to(pourRef.value, { width: "3%", duration: 0.6, ease: "linear" })
+      .to(pourRef.value, { width: "3%", duration: 0.8, ease: "linear" })
+      .to(pourRef.value, { width: "2%", duration: 0.6, ease: "linear" })
+      .to(pourRef.value, { width: "0%", duration: 1, ease: "linear" });
+
+    tl.add(pourTl, 2.5);
+
+    const wordGroups = [words1Ref, words2Ref, words3Ref, words4Ref];
+
+    wordGroups.forEach((group, index) => {
+      tl.fromTo(group.value,
+        {
+          y: 50,
+          scale: 0.8,
+          opacity: 0,
+          filter: "blur(10px)"
+        },
+        {
+          y: 0,
+          scale: 1,
+          opacity: 1,
+          filter: "blur(0px)",
+          duration: 1.5,
+          stagger: 0.05,
+          ease: "power2.out"
+        },
+        6.5 + (index * 0.8)
+      );
+    });
+
+    tl.to(sectionRef.value, {
+      y: "-90vh",
+      duration: 4,
+      ease: "power1.out"
+    }, 4);
+
+  }, sectionRef.value!);
+});
+
+onUnmounted(() => {
+  ctx.revert();
+});
 </script>
 
 <template>
-  <section
-    id="teapot-section"
-    class="bg-purple-100 pt-20 relative text-dark-50 h-2screen animate-move-section"
-  >
-    <Teapot
-      class="relative left-1/2 animate-move-teapot z-20 will-change-transform transform-gpu"
-    ></Teapot>
-    <div
-      id="tea-pouring"
-      class="rounded-full bg-green-100 relative m-auto z-0 animate-pour"
-    ></div>
-    <div
-      id="tea-poured"
-      class="absolute bg-green-100 left-0 right-0 bottom-0 h-[70vh] p-6 z-0"
-    >
-      <p
-        class="block z-10 animate-grow-text will-change-transform transform-gpu"
-      >
+  <section id="teapot-section" ref="sectionRef"
+    class="bg-purple-100 pt-20 relative text-dark-50 h-2screen overflow-hidden">
+    <div ref="teapotRef" class="relative left-1/2 z-20 will-change-transform origin-center inline-block">
+      <Teapot />
+    </div>
+
+    <div id="tea-pouring" ref="pourRef" class="rounded-full bg-green-100 relative m-auto z-0 w-0 h-0"></div>
+
+    <div id="tea-poured" class="absolute bg-green-100 left-0 right-0 bottom-0 h-[70vh] p-6 z-0">
+      <p ref="textContainerRef" class="block z-10 will-change-transform transform-gpu origin-top-left">
         <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >Hi,<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >I’m<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >Valeria<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >(a.k.a Nekoi),<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >a front-end<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >developer<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >with a passion<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >for crafting<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >interactive and<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >visually<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >appealing<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words1 will-change-transform transform-gpu"
-          >websites.</span
-        >
+          v-for="(text, index) in ['Hi,', 'I’m', 'Valeria', '(a.k.a Nekoi),', 'a front-end', 'developer', 'with a passion', 'for crafting', 'interactive and', 'visually', 'appealing', 'websites.']"
+          :key="'w1-' + index" :ref="(el: any) => addToRefs(el, words1Ref)"
+          class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
+
         <br />
+
         <span
-          class="inline-block opacity-0 animate-words2 will-change-transform transform-gpu"
-          >I love<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words2 will-change-transform transform-gpu"
-          >experimenting with<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words2 will-change-transform transform-gpu"
-          >creative<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words2 will-change-transform transform-gpu"
-          >effects and<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words2 will-change-transform transform-gpu"
-          >animations<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words2 will-change-transform transform-gpu"
-          >to bring<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words2 will-change-transform transform-gpu"
-          >designs<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words2 will-change-transform transform-gpu"
-          >to life.</span
-        >
+          v-for="(text, index) in ['I love', 'experimenting with', 'creative', 'effects and', 'animations', 'to bring', 'designs', 'to life.']"
+          :key="'w2-' + index" :ref="(el: any) => addToRefs(el, words2Ref)"
+          class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
+
         <br />
+
         <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >When<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >I’m not<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >coding,<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >you’ll<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >find me<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >drawing or<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >capturing<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >moments<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >through<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >photography —<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >two hobbies<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >that fuel<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >my creativity<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >and attention<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words3 will-change-transform transform-gpu"
-          >to detail.</span
-        >
+          v-for="(text, index) in ['When', 'I’m not', 'coding,', 'you’ll', 'find me', 'drawing or', 'capturing', 'moments', 'through', 'photography —', 'two hobbies', 'that fuel', 'my creativity', 'and attention', 'to detail.']"
+          :key="'w3-' + index" :ref="(el: any) => addToRefs(el, words3Ref)"
+          class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
+
         <br />
+
         <span
-          class="inline-block opacity-0 animate-words4 will-change-transform transform-gpu"
-          >I enjoy<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words4 will-change-transform transform-gpu"
-          >blending<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words4 will-change-transform transform-gpu"
-          >technical<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words4 will-change-transform transform-gpu"
-          >skills with<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words4 will-change-transform transform-gpu"
-          >artistic<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words4 will-change-transform transform-gpu"
-          >expression<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words4 will-change-transform transform-gpu"
-          >to build<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words4 will-change-transform transform-gpu"
-          >unique<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words4 will-change-transform transform-gpu"
-          >digital<span>&nbsp;</span></span
-        >
-        <span
-          class="inline-block opacity-0 animate-words4 will-change-transform transform-gpu"
-          >experiences.</span
-        >
+          v-for="(text, index) in ['I enjoy', 'blending', 'technical', 'skills with', 'artistic', 'expression', 'to build', 'unique', 'digital', 'experiences.']"
+          :key="'w4-' + index" :ref="(el: any) => addToRefs(el, words4Ref)"
+          class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
       </p>
     </div>
   </section>
