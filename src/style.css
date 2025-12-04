@@ -1,31 +1,87 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-green-50: #cde2bd;
+  --color-green-100: #a7c191;
+  --color-white-50: #dae2e2;
+  --color-dark-50: #491212;
+  --color-purple-50: #eadbdc;
+  --color-purple-100: #e4cbce;
+
+  --height-2screen: 200vh;
+
+  --animate-move-teapot: moveTeapot 3s ease forwards;
+  --animate-pour: pour 4s linear forwards 2.5s;
+  --animate-words1: words1 4s linear forwards 2.5s;
+  --animate-words2: words2 4s linear forwards 2.5s;
+  --animate-words3: words3 4s linear forwards 2.5s;
+  --animate-words4: words4 4s linear forwards 2.5s;
+  --animate-grow-text: growText 4s linear forwards 2s;
+  --animate-move-section: moveSection 4s forwards 4s;
+
+  @keyframes moveSection {
+    100% { transform: translateY(-90vh); }
+  }
+  @keyframes moveTeapot {
+    100% { transform: rotate(-50deg); }
+  }
+  @keyframes pour {
+    0% { height: 0; width: 0%; }
+    25% { height: 100%; width: 2%; }
+    40% { height: 100%; width: 3%; }
+    60% { height: 100%; width: 3%; }
+    75% { height: 100%; width: 2%; }
+    100% { height: 100%; width: 0%; }
+  }
+  @keyframes growText {
+    0% { transform: scale(0.1, 2); filter: blur(10px); }
+    75% { transform: scale(0.1, 2); filter: blur(10px); }
+    100% { transform: none; filter: none; }
+  }
+  @keyframes words1 {
+    0% { transform: rotate(90deg) translate(-300px); opacity: 0; }
+    70% { transform: rotate(90deg); }
+    100% { transform: none; opacity: 1; }
+  }
+  @keyframes words2 {
+    0% { transform: rotate(90deg) translate(-250px); opacity: 0; }
+    70% { transform: rotate(90deg); }
+    100% { transform: none; opacity: 1; }
+  }
+  @keyframes words3 {
+    0% { transform: rotate(-90deg) translate(250px); opacity: 0; }
+    70% { transform: rotate(-90deg); }
+    100% { transform: none; opacity: 1; }
+  }
+  @keyframes words4 {
+    0% { transform: rotate(-90deg) translate(200px); opacity: 0; }
+    70% { transform: rotate(-90deg); }
+    100% { transform: none; opacity: 1; }
+  }
+}
+
+@utility masonry {
+  column-gap: 1rem;
+  column-count: 1;
+}
+
+@utility masonry-sm {
+  column-gap: 1rem;
+  column-count: 2;
+}
+
+@utility masonry-md {
+  column-gap: 1rem;
+  column-count: 3;
+}
+
+@utility break-inside {
+  break-inside: avoid;
+}
 
 @layer base {
   html {
     font-family: monospace;
-    @apply text-sm sm:text-base md:text-lg lg:text-2xl;
-  }
-}
-
-@layer utilities {
-  @variants responsive {
-      .masonry {
-          column-gap: 1rem;
-          column-count: 1;
-      }
-      .masonry-sm {
-          column-gap: 1rem;
-          column-count: 2;
-      }
-      .masonry-md {
-          column-gap: 1rem;
-          column-count: 3;
-      }
-      .break-inside {
-          break-inside: avoid;
-      }
-
+    font-size: clamp(0.875rem, 0.75rem + 2vw, 1.5rem);
   }
 }

@@ -11,6 +11,8 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.17",
     "@heroicons/vue": "^2.1.1",
+    "@tailwindcss/postcss": "^4.1.17",
+    "gsap": "^3.13.0",
     "vue": "^3.3.11"
   },
   "devDependencies": {
@@ -18,9 +20,12 @@
     "@vitejs/plugin-vue": "^4.5.2",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.33",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^4.1",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
     "vue-tsc": "^2.2.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.53.3"
   }
 }
