@@ -42,7 +42,7 @@ const projects = [
     img: projectBothelp,
     text: "Telegram bot help and description mini app. Made with Vue 3.",
   },
-    {
+  {
     href: "https://t.me/banny_safe_bot",
     img: projectBanny,
     text: "Telegram bot help and description mini app. Made with Vue 3.",
@@ -61,19 +61,13 @@ const projects = [
 </script>
 
 <template>
-  <section id="projects" class="bg-purple-100 p-6 relative">
+  <section id="projects" class="bg-pink-dark p-6 relative">
     <div class="masonry sm:masonry-sm md:masonry-md z-20 relative">
-      <Project
-        class="p-4 break-inside"
-        v-for="project in projects"
-        :projectInfo="project"
-        :key="project.href"
-      ></Project>
+      <Project class="p-4 break-inside" v-for="project in projects" :projectInfo="project" :key="project.href">
+      </Project>
     </div>
-    <div
-      :style="{ backgroundImage: `url(${projectsBg})` }"
-      class="absolute top-0 left-0 w-full h-full bg-cover opacity-25 z-0"
-    ></div>
+    <div :style="{ backgroundImage: `url(${projectsBg})` }"
+      class="absolute top-0 left-0 w-full h-full bg-cover opacity-25 z-0"></div>
   </section>
 </template>
 

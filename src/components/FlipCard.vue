@@ -34,7 +34,7 @@ onMounted(() => {
 
 <template>
   <div class="flip-card">
-    <div class="flip-card-inner shadow-lg shadow-dark-50">
+    <div class="flip-card-inner shadow-lg shadow-dark">
       <div class="flip-card-front">
         <h3 class="text-xl">{{ cardInfo.heading }}</h3>
         <p class="pt-2">{{ cardInfo.data }}</p>
@@ -49,13 +49,13 @@ onMounted(() => {
           </div>
           <div v-else class="relative">
             <button @click="showDropdown = !showDropdown"
-              class="bg-purple-100 hover:bg-green-50 px-4 py-2 rounded-md mb-2">
+              class="bg-pink-dark hover:bg-green-light px-4 py-2 rounded-md mb-2">
               {{ selectedLink?.name || "Select link" }}
               <span class="ml-1">▼</span>
             </button>
-            <div v-if="showDropdown" class="absolute z-10 bg-purple-50 shadow-md rounded-md w-full">
+            <div v-if="showDropdown" class="absolute z-10 bg-pink-light shadow-md rounded-md w-full">
               <a v-for="link in cardInfo.links" :key="link.url" :href="link.url" target="_blank"
-                @click="selectLink(link)" class="block px-4 py-2 hover:bg-green-50 cursor-pointer">
+                @click="selectLink(link)" class="block px-4 py-2 hover:bg-green-light cursor-pointer">
                 {{ link.name }}
               </a>
             </div>
@@ -101,13 +101,17 @@ onMounted(() => {
 
 .flip-card-front {
   background-color: #a7c191;
+  /* green-dark */
   color: #491212;
+  /* dark */
   text-align: center;
 }
 
 .flip-card-back {
   background-color: #e4cbce;
+  /* pink-dark */
   color: #491212;
+  /* dark */
   transform: rotateY(180deg);
   text-align: left;
 }

@@ -42,7 +42,7 @@ const cards: cardInfo[] = [
 </script>
 
 <template>
-  <section id="facts" class="bg-purple-50 flex flex-wrap items-center justify-around h-full p-6">
+  <section id="facts" class="bg-pink-light flex flex-wrap items-center justify-around h-full p-6">
     <Flipcard v-for="card in cards" :cardInfo="card" :key="card.heading" class="mb-4"></Flipcard>
   </section>
 </template>

@@ -79,15 +79,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section id="teapot-section" ref="sectionRef"
-    class="bg-purple-100 pt-20 relative text-dark-50 h-2screen overflow-hidden">
+  <section id="teapot-section" ref="sectionRef" class="bg-pink-dark pt-20 relative text-dark h-2screen overflow-hidden">
     <div ref="teapotRef" class="relative left-1/2 z-20 will-change-transform origin-center inline-block">
       <Teapot />
     </div>
 
-    <div id="tea-pouring" ref="pourRef" class="rounded-full bg-green-100 relative m-auto z-0 w-0 h-0"></div>
+    <div id="tea-pouring" ref="pourRef" class="rounded-full bg-green-dark relative m-auto z-0 w-0 h-0"></div>
 
-    <div id="tea-poured" class="absolute bg-green-100 left-0 right-0 bottom-0 h-[70vh] p-6 z-0">
+    <div id="tea-poured" class="absolute bg-green-dark left-0 right-0 bottom-0 h-[70vh] p-6 z-0">
       <p ref="textContainerRef" class="block z-10 will-change-transform transform-gpu origin-top-left">
         <span
           v-for="(text, index) in ['Hi,', 'I’m', 'Valeria', '(a.k.a Nekoi),', 'a web-developer', 'with a passion', 'for crafting', 'interactive and', 'visually', 'appealing', 'websites.']"

@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-green-50: #cde2bd;
-  --color-green-100: #a7c191;
-  --color-white-50: #dae2e2;
-  --color-dark-50: #491212;
-  --color-purple-50: #eadbdc;
-  --color-purple-100: #e4cbce;
+  --color-green-light: #cde2bd;
+  --color-green-dark: #a7c191;
+  --color-white: #dae2e2;
+  --color-dark: #491212;
+  --color-pink-light: #eadbdc;
+  --color-pink-dark: #e4cbce;
 
   --height-2screen: 200vh;
 }
