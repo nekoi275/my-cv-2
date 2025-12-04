@@ -90,29 +90,22 @@ onUnmounted(() => {
     <div id="tea-poured" class="absolute bg-green-100 left-0 right-0 bottom-0 h-[70vh] p-6 z-0">
       <p ref="textContainerRef" class="block z-10 will-change-transform transform-gpu origin-top-left">
         <span
-          v-for="(text, index) in ['Hi,', 'I’m', 'Valeria', '(a.k.a Nekoi),', 'a front-end', 'developer', 'with a passion', 'for crafting', 'interactive and', 'visually', 'appealing', 'websites.']"
+          v-for="(text, index) in ['Hi,', 'I’m', 'Valeria', '(a.k.a Nekoi),', 'a web-developer', 'with a passion', 'for crafting', 'interactive and', 'visually', 'appealing', 'websites.']"
           :key="'w1-' + index" :ref="(el: any) => addToRefs(el, words1Ref)"
           class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
 
         <br />
 
         <span
-          v-for="(text, index) in ['I love', 'experimenting with', 'creative', 'effects and', 'animations', 'to bring', 'designs', 'to life.']"
+          v-for="(text, index) in ['I enjoy', 'blending', 'technical', 'skills with', 'artistic', 'expression', 'to build', 'unique', 'digital', 'experiences.']"
           :key="'w2-' + index" :ref="(el: any) => addToRefs(el, words2Ref)"
           class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
 
         <br />
 
         <span
-          v-for="(text, index) in ['When', 'I’m not', 'coding,', 'you’ll', 'find me', 'drawing or', 'capturing', 'moments', 'through', 'photography —', 'two hobbies', 'that fuel', 'my creativity', 'and attention', 'to detail.']"
+          v-for="(text, index) in ['When', 'I’m not', 'coding,', 'you’ll', 'find me', 'drawing or', 'capturing', 'moments', 'through', 'photography —', 'two hobbies', 'that fuel', 'my creativity.']"
           :key="'w3-' + index" :ref="(el: any) => addToRefs(el, words3Ref)"
-          class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
-
-        <br />
-
-        <span
-          v-for="(text, index) in ['I enjoy', 'blending', 'technical', 'skills with', 'artistic', 'expression', 'to build', 'unique', 'digital', 'experiences.']"
-          :key="'w4-' + index" :ref="(el: any) => addToRefs(el, words4Ref)"
           class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
       </p>
     </div>
