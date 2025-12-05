@@ -2,6 +2,8 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Project from "@/components/Project.vue";
 import projectAr from "@/assets/project_ar.webp";
 import projectLayout from "@/assets/project_layout.webp";
@@ -10,6 +12,8 @@ import projectPokemon from "@/assets/project_pokemon.webp";
 import projectSafe from "@/assets/project_safe.webp";
 import projectBanny from "@/assets/project_banny.webp";
 import garden from "@/assets/3d/garden.glb";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
@@ -49,6 +53,7 @@ let scene: THREE.Scene;
 let camera: THREE.PerspectiveCamera;
 let renderer: THREE.WebGLRenderer;
 let animationId: number;
+let ctx: gsap.Context;
 
 onMounted(() => {
   if (!container.value) return;
@@ -59,11 +64,12 @@ onMounted(() => {
   const width = container.value.clientWidth;
   const height = container.value.clientHeight;
   camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-  camera.position.z = 5;
+  camera.position.set(0, 0, 5);
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(width, height);
   container.value.appendChild(renderer.domElement);
+
   const ambientLight = new THREE.AmbientLight(0xffffff, 1);
   scene.add(ambientLight);
 
@@ -95,6 +101,73 @@ onMounted(() => {
   animate();
 
   window.addEventListener("resize", onWindowResize);
+
+  ctx = gsap.context(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: container.value,
+        start: "top top",
+        end: "+=7000",
+        scrub: 1,
+        pin: true,
+      },
+    });
+
+    // 1.
+    tl.to(camera.position, { z: -1, duration: 1 });
+
+    // 2.
+    tl.to(camera.rotation, { y: -1, duration: 1 });
+
+    // 3.
+    tl.to(camera.position, { x: 5, z: -10, duration: 1 });
+
+    // 4.
+    tl.to(camera.position, { x: 9, z: -17, duration: 1 })
+      .to(camera.rotation, { y: 1, duration: 1 }, "<");
+
+    // 5.
+    tl.to(camera.position, { x: 4, z: -20, duration: 1 });
+
+    // 6.
+    tl.to(camera.position, { x: -1, z: -28, duration: 1 })
+      .to(camera.rotation, { y: 0.5, duration: 1 }, "<");
+
+    // 7.
+    tl.to(camera.position, { x: -3, y: 1.2, z: -32, duration: 1 })
+      .to(camera.rotation, { y: 1.2, duration: 1 }, "<");
+
+    // 8.
+    tl.to(camera.position, { x: -6, y: 2, z: -32, duration: 1 })
+      .to(camera.rotation, { y: 1.4, duration: 1 }, "<");
+
+    // 9.
+    tl.to(camera.position, { x: -11, y: 2, z: -32, duration: 1 });
+
+    // 10.
+    tl.to(camera.position, { x: -14, y: 2, z: -30, duration: 1 })
+      .to(camera.rotation, { y: 1.4, duration: 1 }, "<");
+
+    // 11.
+    tl.to(camera.position, { x: -17, y: 2, z: -32, duration: 1 })
+      .to(camera.rotation, { y: 1, duration: 1 }, "<");
+
+    // 12.
+    tl.to(camera.position, { x: -17, y: 2, z: -32, duration: 1 })
+      .to(camera.rotation, { y: 2, duration: 1 }, "<");
+
+    // 13.
+    tl.to(camera.position, { x: -19, y: 2, z: -32, duration: 1 })
+      .to(camera.rotation, { y: 3, duration: 1 }, "<");
+
+    // 14.
+    tl.to(camera.position, { x: -19, y: 2, z: -30, duration: 1 })
+      .to(camera.rotation, { y: 4, duration: 1 }, "<");
+
+    // 15.
+    tl.to(camera.position, { x: -17, y: 2, z: -28, duration: 1 })
+      .to(camera.rotation, { y: 3, duration: 1 }, "<");
+  }, container.value);
 });
 
 const onWindowResize = () => {
@@ -114,6 +187,7 @@ onUnmounted(() => {
   if (renderer) {
     renderer.dispose();
   }
+  if (ctx) ctx.revert();
 });
 </script>
 
