@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import PixelArt from "@/components/PixelArt.vue";
 
 export interface CardLink {
   name: string;
@@ -10,8 +11,6 @@ export interface cardInfo {
   heading: string;
   data?: string;
   links?: CardLink[];
-  img?: any;
-  altText?: string;
 }
 
 const props = defineProps<{
@@ -45,13 +44,12 @@ onMounted(() => {
           <div v-if="cardInfo.links.length === 1" class="pb-2">
             <a :href="cardInfo.links[0].url" class="block text-center" target="_blank">
               {{ cardInfo.links[0].name }}
-              <img v-if="cardInfo.img" :src="cardInfo.img" :alt="cardInfo.altText" class="max-w-48 max-h-48 m-auto pt-2"
-                width="200" height="200" />
+              <PixelArt class="relative mt-6 ml-18" />
             </a>
           </div>
           <div v-else class="relative">
             <button @click="showDropdown = !showDropdown"
-              class="bg-pink-dark hover:bg-green-light px-4 py-2 rounded-md mb-2">
+              class="bg-pink-dark hover:bg-green-light px-4 py-2 rounded-md mb-2 ml-14">
               {{ selectedLink?.name || "Select link" }}
               <span class="ml-1">▼</span>
             </button>
@@ -62,7 +60,7 @@ onMounted(() => {
               </a>
             </div>
             <a v-if="selectedLink" :href="selectedLink.url" class="block text-center" target="_blank">
-              <img v-if="cardInfo.img" :src="cardInfo.img" alt="fact image" class="max-w-48 max-h-48 m-auto pt-2" />
+              <PixelArt class="relative mt-6 ml-18" />
             </a>
           </div>
         </div>

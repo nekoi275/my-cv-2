@@ -1,9 +1,9 @@
 <template>
-    <div class="pixel-art"></div>
+    <div id="pixel-art" class="pixel-art"></div>
 </template>
 
 <style scoped>
-:root {
+#pixel-art {
     --p1: #d53259;
     --p2: #f84f7d;
     --p3: #fd7fa8;

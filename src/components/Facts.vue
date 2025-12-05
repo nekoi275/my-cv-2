@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import Flipcard from "@/components/FlipCard.vue";
 import type { cardInfo } from "@/components/FlipCard.vue";
-import factCv from "@/assets/fact_cv.gif";
-import factDrawings from "@/assets/fact_drawings.webp";
-import factPhotos from "@/assets/fact_photos.webp";
 
 const cards: cardInfo[] = [
   {
@@ -15,8 +12,6 @@ const cards: cardInfo[] = [
         url: "https://docs.google.com/document/d/1xcALkYF9U2flC6naGoAQtBuERRoRbpLxqMtDjlvRV4g/edit?tab=t.0#heading=h.m96rc670hd9p",
       },
     ],
-    img: factCv,
-    altText: "CV link",
   },
   {
     heading: "My drawings",
@@ -25,9 +20,7 @@ const cards: cardInfo[] = [
       { name: "DeviantArt", url: "https://www.deviantart.com/nekoi275" },
       { name: "Doodle Addicts", url: "https://www.doodleaddicts.com/nekoi" },
       { name: "Pixiv", url: "https://www.pixiv.net/en/users/114240685" },
-    ],
-    img: factDrawings,
-    altText: "drawings link",
+    ]
   },
   {
     heading: "My photography",
@@ -37,9 +30,7 @@ const cards: cardInfo[] = [
         name: "Pexels",
         url: "https://www.pexels.com/ru-ru/@2148646707/gallery",
       },
-    ],
-    img: factPhotos,
-    altText: "photos link",
+    ]
   }
 ];
 </script>
