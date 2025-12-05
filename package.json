@@ -13,10 +13,12 @@
     "@heroicons/vue": "^2.1.1",
     "@tailwindcss/postcss": "^4.1.17",
     "gsap": "^3.13.0",
+    "three": "^0.181.2",
     "vue": "^3.3.11"
   },
   "devDependencies": {
     "@types/node": "^20.11.5",
+    "@types/three": "^0.181.0",
     "@vitejs/plugin-vue": "^4.5.2",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.33",
