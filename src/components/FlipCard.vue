@@ -11,6 +11,7 @@ export interface cardInfo {
   data?: string;
   links?: CardLink[];
   img?: any;
+  altText?: string;
 }
 
 const props = defineProps<{
@@ -44,7 +45,8 @@ onMounted(() => {
           <div v-if="cardInfo.links.length === 1" class="pb-2">
             <a :href="cardInfo.links[0].url" class="block text-center" target="_blank">
               {{ cardInfo.links[0].name }}
-              <img v-if="cardInfo.img" :src="cardInfo.img" alt="fact image" class="max-w-48 max-h-48 m-auto pt-2" />
+              <img v-if="cardInfo.img" :src="cardInfo.img" :alt="cardInfo.altText" class="max-w-48 max-h-48 m-auto pt-2"
+                width="200" height="200" />
             </a>
           </div>
           <div v-else class="relative">
@@ -101,17 +103,13 @@ onMounted(() => {
 
 .flip-card-front {
   background-color: #a7c191;
-  /* green-dark */
   color: #491212;
-  /* dark */
   text-align: center;
 }
 
 .flip-card-back {
   background-color: #e4cbce;
-  /* pink-dark */
   color: #491212;
-  /* dark */
   transform: rotateY(180deg);
   text-align: left;
 }

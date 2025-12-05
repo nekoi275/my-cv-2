@@ -16,6 +16,7 @@ const cards: cardInfo[] = [
       },
     ],
     img: factCv,
+    altText: "CV link",
   },
   {
     heading: "My drawings",
@@ -26,6 +27,7 @@ const cards: cardInfo[] = [
       { name: "Pixiv", url: "https://www.pixiv.net/en/users/114240685" },
     ],
     img: factDrawings,
+    altText: "drawings link",
   },
   {
     heading: "My photography",
@@ -37,6 +39,7 @@ const cards: cardInfo[] = [
       },
     ],
     img: factPhotos,
+    altText: "photos link",
   }
 ];
 </script>
