@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Projects from '@/components/Projects.vue'
-import Footer from '@/components/Footer.vue'
-import Facts from '@/components/Facts.vue'
-import TeapotSection from '@/components/TeapotSection.vue'
+import Projects from '@/sections/Projects.vue'
+import Footer from '@/sections/Footer.vue'
+import Facts from '@/sections/Facts.vue'
+import TeapotSection from '@/sections/TeapotSection.vue'
 </script>
 
 <template>
