@@ -126,7 +126,7 @@ onMounted(() => {
       createProjectModel(projects[4], new THREE.Vector3(0, 0, -30));
 
       // 6. CV
-      createProjectModel(projects[5], new THREE.Vector3(-12, 2, -32));
+      createProjectModel(projects[5], new THREE.Vector3(-12, 2, -33));
     },
     undefined,
     (error) => {
@@ -167,7 +167,7 @@ onMounted(() => {
       scrollTrigger: {
         trigger: container.value,
         start: "top top",
-        end: "+=7000",
+        end: "+=10000",
         scrub: 1,
         pin: true,
       },
@@ -227,6 +227,46 @@ onMounted(() => {
     // 15.
     tl.to(camera.position, { x: -17, y: 2, z: -28, duration: 1 })
       .to(camera.rotation, { y: 3, duration: 1 }, "<");
+
+    // 16.
+    tl.to(camera.position, { x: -20, y: 0, z: -20, duration: 1 })
+      .to(camera.rotation, { y: 2.5, duration: 1 }, "<");
+
+    // 17.
+    tl.to(camera.position, { x: -20, y: 0, z: -16, duration: 1 })
+      .to(camera.rotation, { y: 2.5, duration: 1 }, "<");
+
+    // 18.
+    tl.to(camera.position, { x: -21, y: 0, z: -14, duration: 1 })
+      .to(camera.rotation, { y: 3, duration: 1 }, "<");
+
+    // 19.
+    tl.to(camera.position, { x: -21, y: 0, z: -10, duration: 1 })
+      .to(camera.rotation, { y: 3, duration: 1 }, "<");
+
+    // 20.
+    tl.to(camera.position, { x: -21, y: 0, z: -8, duration: 1 })
+      .to(camera.rotation, { y: 4, duration: 1 }, "<");
+
+    // 21.
+    tl.to(camera.position, { x: -19, y: 0, z: -4, duration: 1 })
+      .to(camera.rotation, { y: 4.5, duration: 1 }, "<");
+
+    // 22.
+    tl.to(camera.position, { x: -10, y: 0, z: -2, duration: 1 })
+      .to(camera.rotation, { y: 4.5, duration: 1 }, "<");
+
+    // 23.
+    tl.to(camera.position, { x: -1, y: 0, z: -2, duration: 1 })
+      .to(camera.rotation, { y: 4.5, duration: 1 }, "<");
+
+    // 23.
+    tl.to(camera.position, { x: 0, y: 0, z: -2, duration: 1 })
+      .to(camera.rotation, { y: 3.2, duration: 1 }, "<");
+
+    // 24.
+    tl.to(camera.position, { x: 0, y: 0, z: 2, duration: 1 })
+      .to(camera.rotation, { y: 3.2, duration: 1 }, "<");
   }, container.value);
 });
 
