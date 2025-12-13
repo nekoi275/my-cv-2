@@ -2,11 +2,11 @@
 import { onMounted, ref, onUnmounted } from "vue";
 import gsap from "gsap";
 import Teapot from "@/components/Teapot.vue";
+import MouseScroll from "@/components/MouseScroll.vue";
 
 const sectionRef = ref<HTMLElement | null>(null);
 const teapotRef = ref<HTMLElement | null>(null);
 const pourRef = ref<HTMLElement | null>(null);
-const textContainerRef = ref<HTMLElement | null>(null);
 const words1Ref = ref<HTMLElement[]>([]);
 const words2Ref = ref<HTMLElement[]>([]);
 const words3Ref = ref<HTMLElement[]>([]);
@@ -107,6 +107,7 @@ onUnmounted(() => {
           :key="'w3-' + index" :ref="(el: any) => addToRefs(el, words3Ref)"
           class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
       </p>
+      <MouseScroll class="absolute bottom-12 right-1/2 translate-x-1/2" />
     </div>
   </section>
 </template>
