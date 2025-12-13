@@ -15,7 +15,7 @@ let renderer: THREE.WebGLRenderer;
 let animationId: number;
 let ctx: gsap.Context;
 
-const emit = defineEmits(['modelLoaded']);
+const emit = defineEmits(['modelLoaded', 'sceneUnload']);
 
 onMounted(() => {
     if (!container.value) return;
@@ -75,6 +75,9 @@ onMounted(() => {
                 end: "+=10000",
                 scrub: 1,
                 pin: true,
+                onLeave: () => {
+                    emit('sceneUnload');
+                },
             },
         });
 
