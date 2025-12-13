@@ -7,6 +7,7 @@ import Garden3D from "@/components/3DGarden.vue";
 const isSceneActive = ref(false);
 const isModelLoaded = ref(false);
 const isProjectsVisible = ref(false);
+const isUnloading = ref(false);
 
 const projects = [
   { label: "REST API + Vue.js applications", url: "https://pokemon-tcg.pages.dev/" },
@@ -19,12 +20,16 @@ const initScene = () => {
   isProjectsVisible.value = false;
   isSceneActive.value = true;
   isModelLoaded.value = false;
+  isUnloading.value = false;
 };
 
 const handleSceneUnload = () => {
-  isModelLoaded.value = false;
-  isSceneActive.value = false;
-  isProjectsVisible.value = true;
+  isUnloading.value = true;
+  setTimeout(() => {
+    isSceneActive.value = false;
+    isProjectsVisible.value = true;
+    isUnloading.value = false;
+  }, 1000);
 };
 </script>
 
@@ -54,6 +59,10 @@ const handleSceneUnload = () => {
     <Garden3D v-if="isSceneActive" @modelLoaded="isModelLoaded = true" @sceneUnload="handleSceneUnload"
       :class="{ 'opacity-0': !isModelLoaded, 'transition-opacity duration-1000': true, 'opacity-100': isModelLoaded }" />
 
+    <Transition name="fade">
+      <div v-if="isUnloading" class="absolute inset-0 z-40 bg-white"></div>
+    </Transition>
+
     <div v-if="isProjectsVisible" class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-pink-dark">
       <div class="flex flex-col gap-8 mb-12">
         <a v-for="project in projects" :key="project.label" :href="project.url" target="_blank"
@@ -66,6 +75,16 @@ const handleSceneUnload = () => {
 </template>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 @keyframes dot-animation {
   0% {
     opacity: 0;
