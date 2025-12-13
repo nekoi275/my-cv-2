@@ -5,6 +5,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import garden from "@/assets/3d/garden.glb";
+import music from "@/assets/music.mp3";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,6 +15,7 @@ let camera: THREE.PerspectiveCamera;
 let renderer: THREE.WebGLRenderer;
 let animationId: number;
 let ctx: gsap.Context;
+let sound: THREE.Audio;
 
 const emit = defineEmits(['modelLoaded', 'sceneUnload']);
 
@@ -27,6 +29,18 @@ onMounted(() => {
     const height = container.value.clientHeight;
     camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     camera.position.set(0, 0, 5);
+
+    const listener = new THREE.AudioListener();
+    camera.add(listener);
+
+    sound = new THREE.Audio(listener);
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load(music, function (buffer) {
+        sound.setBuffer(buffer);
+        sound.setLoop(true);
+        sound.setVolume(0.5);
+        sound.play();
+    });
 
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
@@ -133,6 +147,10 @@ const onWindowResize = () => {
 
 onUnmounted(() => {
     window.removeEventListener("resize", onWindowResize);
+
+    if (sound && sound.isPlaying) {
+        sound.stop();
+    }
 
     cancelAnimationFrame(animationId);
     if (renderer) {
