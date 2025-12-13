@@ -26,49 +26,57 @@ onMounted(() => {
       defaults: { ease: "power1.inOut" },
     });
 
-    tl.to(teapotRef.value, {
-      rotation: -50,
-      duration: 3,
-    }, 0);
+    if (teapotRef.value) {
+      tl.to(teapotRef.value, {
+        rotation: -50,
+        duration: 3,
+      }, 0);
+    }
 
-    const pourTl = gsap.timeline();
-    pourTl
-      .to(pourRef.value, { height: "100%", width: "2%", duration: 1, ease: "linear" })
-      .to(pourRef.value, { width: "3%", duration: 0.6, ease: "linear" })
-      .to(pourRef.value, { width: "3%", duration: 0.8, ease: "linear" })
-      .to(pourRef.value, { width: "2%", duration: 0.6, ease: "linear" })
-      .to(pourRef.value, { width: "0%", duration: 1, ease: "linear" });
+    if (pourRef.value) {
+      const pourTl = gsap.timeline();
+      pourTl
+        .to(pourRef.value, { height: "100%", width: "2%", duration: 1, ease: "linear" })
+        .to(pourRef.value, { width: "3%", duration: 0.6, ease: "linear" })
+        .to(pourRef.value, { width: "3%", duration: 0.8, ease: "linear" })
+        .to(pourRef.value, { width: "2%", duration: 0.6, ease: "linear" })
+        .to(pourRef.value, { width: "0%", duration: 1, ease: "linear" });
 
-    tl.add(pourTl, 2.5);
+      tl.add(pourTl, 2.5);
+    }
 
     const wordGroups = [words1Ref, words2Ref, words3Ref, words4Ref];
 
     wordGroups.forEach((group, index) => {
-      tl.fromTo(group.value,
-        {
-          y: 50,
-          scale: 0.8,
-          opacity: 0,
-          filter: "blur(10px)"
-        },
-        {
-          y: 0,
-          scale: 1,
-          opacity: 1,
-          filter: "blur(0px)",
-          duration: 1.5,
-          stagger: 0.05,
-          ease: "power2.out"
-        },
-        6.5 + (index * 0.8)
-      );
+      if (group.value && group.value.length > 0) {
+        tl.fromTo(group.value,
+          {
+            y: 50,
+            scale: 0.8,
+            opacity: 0,
+            filter: "blur(10px)"
+          },
+          {
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            filter: "blur(0px)",
+            duration: 1.5,
+            stagger: 0.05,
+            ease: "power2.out"
+          },
+          6.5 + (index * 0.8)
+        );
+      }
     });
 
-    tl.to(sectionRef.value, {
-      y: "-90vh",
-      duration: 4,
-      ease: "power1.out"
-    }, 4);
+    if (sectionRef.value) {
+      tl.to(sectionRef.value, {
+        y: "-90vh",
+        duration: 4,
+        ease: "power1.out"
+      }, 4);
+    }
 
   }, sectionRef.value!);
 });
