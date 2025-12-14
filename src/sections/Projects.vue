@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import MouseScroll from "@/components/MouseScroll.vue";
-import scenePlaceholder from "@/assets/scene_placeholder.webp";
 import Garden3D from "@/components/3DGarden.vue";
 
 const isSceneActive = ref(false);
 const isModelLoaded = ref(false);
 const isProjectsVisible = ref(false);
 const isUnloading = ref(false);
+const scenePlaceholder = ref<string>("");
+const sectionRef = ref<HTMLElement | null>(null);
 
 const projects = [
   { label: "REST API + Vue.js applications", url: "https://pokemon-tcg.pages.dev/" },
@@ -31,10 +32,42 @@ const handleSceneUnload = () => {
     isUnloading.value = false;
   }, 1000);
 };
+
+let observer: IntersectionObserver | null = null;
+
+onMounted(() => {
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !scenePlaceholder.value) {
+          import("@/assets/scene_placeholder.webp").then((module) => {
+            scenePlaceholder.value = module.default;
+          });
+          if (observer) {
+            observer.disconnect();
+          }
+        }
+      });
+    },
+    {
+      rootMargin: "200px",
+    }
+  );
+
+  if (sectionRef.value) {
+    observer.observe(sectionRef.value);
+  }
+});
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect();
+  }
+});
 </script>
 
 <template>
-  <section id="projects" class="bg-pink-dark relative h-screen">
+  <section ref="sectionRef" id="projects" class="bg-pink-dark relative h-screen">
     <div v-if="!isSceneActive && !isProjectsVisible" class="absolute inset-0 z-10 flex items-center justify-center">
       <img :src="scenePlaceholder" alt="Scene Placeholder" class="absolute inset-0 w-full h-full object-cover" />
       <div
