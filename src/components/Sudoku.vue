@@ -144,7 +144,8 @@ function solvePuzzle() {
     <table>
       <tr v-for="(row, rowIndex) in puzzle">
         <td v-for="(_, cellIndex) in row">
-          <input v-show="!isPuzzleSolved" v-model="puzzle[rowIndex][cellIndex]"/>
+          <input v-show="!isPuzzleSolved" v-model="puzzle[rowIndex][cellIndex]"
+            :aria-label="`Sudoku cell row ${rowIndex + 1} column ${cellIndex + 1}`" />
           <span v-show="isPuzzleSolved">{{ puzzle[rowIndex][cellIndex] }}</span>
         </td>
       </tr>
