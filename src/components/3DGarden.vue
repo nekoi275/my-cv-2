@@ -116,10 +116,16 @@ onMounted(() => {
                 end: endValue,
                 scrub: 1,
                 pin: true,
+                onUpdate: (self) => {
+                    if (self.progress > 0.99) {
+                        emit('sceneUnload');
+                    }
+                },
                 onLeave: () => {
                     emit('sceneUnload');
                 },
             },
+
         });
 
         const steps = [
