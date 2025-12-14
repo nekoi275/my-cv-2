@@ -29,7 +29,7 @@ const copyEmail = async () => {
       </button>
     </div>
     <a href="#" @click.prevent="$emit('show-easter-egg')"
-      class="text-dark hover:text-green-dark cursor-pointer no-underline">
+      class="text-dark hover:text-green-dark cursor-pointer no-underline text-[11px]">
       Easter egg 🐣
     </a>
   </footer>

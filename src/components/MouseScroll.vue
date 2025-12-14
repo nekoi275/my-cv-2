@@ -59,4 +59,10 @@
         transform: translateY(12px);
     }
 }
+
+@media (max-width: 768px) {
+    .mouse-scroll {
+        display: none;
+    }
+}
 </style>
