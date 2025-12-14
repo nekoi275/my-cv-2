@@ -19,11 +19,11 @@ const copyEmail = async () => {
 </script>
 
 <template>
-  <footer class="w-full bg-pink-light text-center text-dark pt-3 pb-3 text-xs">
+  <footer class="w-full bg-pink-light text-center text-dark p-3 text-xs">
     <div>
       <span class="text-dark">Built with: Vue.js, three.js, GSAP, Tailwind CSS - {{ currentYear }}</span>
     </div>
-    <div class="mt-1">
+    <div class="mt-1 mb-2">
       <button @click="copyEmail" class="text-dark hover:text-green-dark cursor-pointer">
         {{ emailCopied ? '💌 Email copied 💌' : '✉️ Contact me ✉️' }}
       </button>

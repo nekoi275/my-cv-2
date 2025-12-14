@@ -10,13 +10,13 @@ const showGames = ref(false)
 </script>
 
 <template>
-  <div v-if="!showGames">
+  <main v-if="!showGames">
     <div class="h-screen overflow-hidden">
       <TeapotSection></TeapotSection>
     </div>
     <Facts></Facts>
     <Projects></Projects>
-  </div>
+  </main>
   <Games v-else @back="showGames = false"></Games>
   <Footer @show-easter-egg="showGames = true"></Footer>
 </template>

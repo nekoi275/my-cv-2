@@ -42,7 +42,8 @@ onMounted(() => {
       <div class="flip-card-back text-center">
         <div v-if="cardInfo.links && cardInfo.links.length > 0">
           <div v-if="cardInfo.links.length === 1" class="pb-2">
-            <a :href="cardInfo.links[0].url" class="block text-center" target="_blank">
+            <a :href="cardInfo.links[0].url" class="block text-center" target="_blank"
+              :aria-label="`Visit ${cardInfo.links[0].name}`">
               {{ cardInfo.links[0].name }}
               <PixelArt class="relative mt-6 ml-18" />
             </a>
@@ -59,7 +60,8 @@ onMounted(() => {
                 {{ link.name }}
               </a>
             </div>
-            <a v-if="selectedLink" :href="selectedLink.url" class="block text-center" target="_blank">
+            <a v-if="selectedLink" :href="selectedLink.url" class="block text-center" target="_blank"
+              :aria-label="`Visit ${selectedLink.name}`">
               <PixelArt class="relative mt-6 ml-18" />
             </a>
           </div>
