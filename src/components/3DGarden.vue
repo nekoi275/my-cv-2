@@ -4,8 +4,9 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import garden from "@/assets/3d/garden.glb";
 import music from "@/assets/music.mp3";
+
+const GARDEN_MODEL_URL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/garden.glb";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -70,7 +71,7 @@ onMounted(() => {
     const loader = new GLTFLoader();
 
     loader.load(
-        garden,
+        GARDEN_MODEL_URL,
         (gltf) => {
             const model = gltf.scene;
             model.scale.set(0.05, 0.05, 0.05);
