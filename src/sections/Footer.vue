@@ -28,12 +28,10 @@ const copyEmail = async () => {
         {{ emailCopied ? '💌 Email copied 💌' : '✉️ Contact me ✉️' }}
       </button>
     </div>
-    <div class="mt-1 hidden lg:block">
-      <a href="#" @click.prevent="$emit('show-easter-egg')"
-        class="text-dark hover:text-green-dark cursor-pointer no-underline">
-        Easter egg
-      </a>
-    </div>
+    <a href="#" @click.prevent="$emit('show-easter-egg')"
+      class="text-dark hover:text-green-dark cursor-pointer no-underline">
+      Easter egg 🐣
+    </a>
   </footer>
 </template>
 
