@@ -33,7 +33,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flip-card">
+  <article class="flip-card">
     <div class="flip-card-inner shadow-lg shadow-dark">
       <div class="flip-card-front">
         <h3 class="text-xl">{{ cardInfo.heading }}</h3>
@@ -66,7 +66,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-  </div>
+  </article>
 </template>
 
 <style scoped>

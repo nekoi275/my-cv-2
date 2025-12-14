@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import MouseScroll from "@/components/MouseScroll.vue";
-import scenePlaceholder from "@/assets/scene_placeholder.png";
+import scenePlaceholder from "@/assets/scene_placeholder.webp";
 import Garden3D from "@/components/3DGarden.vue";
 
 const isSceneActive = ref(false);
