@@ -4,9 +4,9 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import music from "@/assets/music.mp3";
 
 const GARDEN_MODEL_URL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/garden.glb";
+const MUSIC_URL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/music.mp3";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +23,7 @@ let mm: gsap.MatchMedia;
 let sound: THREE.Audio;
 
 const isMusicPlaying = ref(false);
+const isModelReady = ref(false);
 
 const toggleMusic = () => {
     if (sound && sound.buffer) {
@@ -54,12 +55,14 @@ onMounted(() => {
 
     sound = new THREE.Audio(listener);
     const audioLoader = new THREE.AudioLoader();
-    audioLoader.load(music, function (buffer) {
+    audioLoader.load(MUSIC_URL, function (buffer) {
         sound.setBuffer(buffer);
         sound.setLoop(true);
         sound.setVolume(0.5);
-        sound.play();
-        isMusicPlaying.value = true;
+        if (isModelReady.value) {
+            sound.play();
+            isMusicPlaying.value = true;
+        }
     });
 
     renderer = new THREE.WebGLRenderer({
@@ -90,6 +93,11 @@ onMounted(() => {
             model.position.set(-17, -2, -33);
             scene.add(model);
             emit('modelLoaded');
+            isModelReady.value = true;
+            if (sound && sound.buffer && !sound.isPlaying) {
+                sound.play();
+                isMusicPlaying.value = true;
+            }
         },
         undefined,
         (error) => {
