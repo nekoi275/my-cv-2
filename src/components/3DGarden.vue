@@ -10,13 +10,18 @@ const GARDEN_MODEL_URL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/ga
 
 gsap.registerPlugin(ScrollTrigger);
 
+ScrollTrigger.config({ ignoreMobileResize: true });
+
+
 const container = ref<HTMLDivElement | null>(null);
 let scene: THREE.Scene;
 let camera: THREE.PerspectiveCamera;
 let renderer: THREE.WebGLRenderer;
 let animationId: number;
-let ctx: gsap.Context;
+let mm: gsap.MatchMedia;
+
 let sound: THREE.Audio;
+
 const isMusicPlaying = ref(false);
 
 const toggleMusic = () => {
@@ -57,9 +62,14 @@ onMounted(() => {
         isMusicPlaying.value = true;
     });
 
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer = new THREE.WebGLRenderer({
+        antialias: window.devicePixelRatio < 2,
+        powerPreference: "high-performance"
+    });
     renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.value.appendChild(renderer.domElement);
+
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
@@ -95,13 +105,15 @@ onMounted(() => {
 
     window.addEventListener("resize", onWindowResize);
 
-    ctx = gsap.context(() => {
+    mm = gsap.matchMedia();
+
+    const setupTimeline = (endValue: string) => {
         const tl = gsap.timeline({
             defaults: { duration: 1 },
             scrollTrigger: {
                 trigger: container.value,
                 start: "top top",
-                end: "+=10000",
+                end: endValue,
                 scrub: 1,
                 pin: true,
                 onLeave: () => {
@@ -146,7 +158,15 @@ onMounted(() => {
                 tl.to(camera.rotation, step.rot, step.pos ? "<" : undefined);
             }
         });
-    }, container.value);
+    };
+
+    mm.add("(min-width: 800px)", () => {
+        setupTimeline("+=10000");
+    });
+
+    mm.add("(max-width: 799px)", () => {
+        setupTimeline("+=4000");
+    });
 });
 
 const onWindowResize = () => {
@@ -168,10 +188,30 @@ onUnmounted(() => {
     }
 
     cancelAnimationFrame(animationId);
+
+    if (mm) mm.revert();
+
+
+    if (scene) {
+        scene.traverse((object) => {
+            if ((object as THREE.Mesh).isMesh) {
+                const mesh = object as THREE.Mesh;
+                mesh.geometry.dispose();
+                if (Array.isArray(mesh.material)) {
+                    mesh.material.forEach((m) => m.dispose());
+                } else {
+                    mesh.material.dispose();
+                }
+            }
+        });
+    }
+
     if (renderer) {
         renderer.dispose();
+        if (renderer.domElement && renderer.domElement.parentNode) {
+            renderer.domElement.parentNode.removeChild(renderer.domElement);
+        }
     }
-    if (ctx) ctx.revert();
 });
 </script>
 
