@@ -16,6 +16,19 @@ let renderer: THREE.WebGLRenderer;
 let animationId: number;
 let ctx: gsap.Context;
 let sound: THREE.Audio;
+const isMusicPlaying = ref(false);
+
+const toggleMusic = () => {
+    if (sound && sound.buffer) {
+        if (sound.isPlaying) {
+            sound.pause();
+            isMusicPlaying.value = false;
+        } else {
+            sound.play();
+            isMusicPlaying.value = true;
+        }
+    }
+};
 
 const emit = defineEmits(['modelLoaded', 'sceneUnload']);
 
@@ -40,6 +53,7 @@ onMounted(() => {
         sound.setLoop(true);
         sound.setVolume(0.5);
         sound.play();
+        isMusicPlaying.value = true;
     });
 
     renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -161,7 +175,32 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div ref="container" class="h-screen w-full"></div>
+    <div ref="container" class="h-screen w-full relative">
+        <button @click="toggleMusic" class="music-toggle-btn">
+            {{ isMusicPlaying ? 'Turn Off Music' : 'Turn On Music' }}
+        </button>
+    </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.music-toggle-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.music-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 1);
+    transform: scale(1.05);
+}
+</style>
