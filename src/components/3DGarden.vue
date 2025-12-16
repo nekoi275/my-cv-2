@@ -24,6 +24,7 @@ let sound: THREE.Audio;
 
 const isMusicPlaying = ref(false);
 const isModelReady = ref(false);
+const isSceneUnloaded = ref(false);
 
 const toggleMusic = () => {
     if (sound && sound.buffer) {
@@ -126,10 +127,12 @@ onMounted(() => {
                 pin: true,
                 onUpdate: (self) => {
                     if (self.progress > 0.99) {
+                        isSceneUnloaded.value = true;
                         emit('sceneUnload');
                     }
                 },
                 onLeave: () => {
+                    isSceneUnloaded.value = true;
                     emit('sceneUnload');
                 },
             },
@@ -231,7 +234,7 @@ onUnmounted(() => {
 
 <template>
     <div ref="container" class="h-screen w-full relative">
-        <button @click="toggleMusic" class="music-toggle-btn">
+        <button v-if="!isSceneUnloaded" @click="toggleMusic" class="music-toggle-btn">
             {{ isMusicPlaying ? 'Turn Off Music' : 'Turn On Music' }}
         </button>
     </div>
