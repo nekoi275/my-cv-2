@@ -115,7 +115,7 @@ onUnmounted(() => {
           :key="'w3-' + index" :ref="(el: any) => addToRefs(el, words3Ref)"
           class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
       </p>
-      <MouseScroll class="absolute bottom-12 right-1/2 translate-x-1/2" />
+      <MouseScroll class="absolute bottom-18 right-1/2 translate-x-1/2" />
     </div>
   </section>
 </template>
