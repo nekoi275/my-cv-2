@@ -5,8 +5,15 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const GARDEN_MODEL_URL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/garden.glb";
-const MUSIC_URL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/music.mp3";
+import localGardenModel from "../assets/3d/garden.glb";
+import localMusic from "../assets/music.mp3";
+
+const REMOTE_GARDEN_MODEL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/garden.glb";
+const REMOTE_MUSIC = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/music.mp3";
+
+const GARDEN_MODEL_URL = import.meta.env.DEV ? localGardenModel : REMOTE_GARDEN_MODEL;
+const MUSIC_URL = import.meta.env.DEV ? localMusic : REMOTE_MUSIC;
+
 
 gsap.registerPlugin(ScrollTrigger);
 

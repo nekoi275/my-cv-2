@@ -95,7 +95,7 @@ onUnmounted(() => {
     <div id="tea-pouring" ref="pourRef" class="rounded-full bg-green-dark relative m-auto z-0 w-0 h-0"></div>
 
     <div id="tea-poured" class="absolute bg-green-dark left-0 right-0 bottom-0 h-[70vh] p-6 z-0">
-      <p ref="textContainerRef" class="block z-10 will-change-transform transform-gpu origin-top-left">
+      <p ref="textContainerRef" class="block z-10 will-change-transform transform-gpu origin-top-left leading-10">
         <span
           v-for="(text, index) in ['Hi,', 'I’m', 'Valeria', '(a.k.a Nekoi),', 'a web-developer', 'with a passion', 'for crafting', 'interactive and', 'visually', 'appealing', 'websites.']"
           :key="'w1-' + index" :ref="(el: any) => addToRefs(el, words1Ref)"

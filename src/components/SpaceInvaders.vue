@@ -383,7 +383,7 @@ onUnmounted(() => {
   position: relative;
   width: 100%;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 0;
   aspect-ratio: 6/5;
   background-color: #222;
   border-radius: 15px;
