@@ -15,7 +15,7 @@ const cards: cardInfo[] = [
   },
   {
     heading: "My drawings",
-    data: "Soft strokes, serene colors—where cats nap, birds perch, and flowers sway in quiet harmony. A touch of Zen in every sketch.",
+    data: "Soft strokes, vivid colors—where cats nap, birds perch, and flowers sway in quiet harmony.",
     links: [
       { name: "DeviantArt", url: "https://www.deviantart.com/nekoi275" },
       { name: "Doodle Addicts", url: "https://www.doodleaddicts.com/nekoi" },
