@@ -124,7 +124,6 @@ const start = () => {
 
 const init = () => {
   initState();
-  // Controls are initialized in onMounted
   if (!spriteImage.value) {
     initSpriteImage(run);
   } else {
