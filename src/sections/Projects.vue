@@ -97,10 +97,14 @@ onUnmounted(() => {
     </Transition>
 
     <div v-if="isProjectsVisible" class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-pink-dark">
-      <div class="flex flex-col gap-8 mb-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl px-4 w-full">
         <a v-for="project in projects" :key="project.label" :href="project.url" target="_blank"
-          class="text-[var(--color-dark)] text-2xl font-bold tracking-wider border-b-2 border-transparent transition-all hover:border-b-2 hover:border-[var(--color-green-dark)] text-center">
-          {{ project.label }}
+          class="group relative p-6 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg 
+                 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:bg-[var(--color-green-light)] flex flex-col items-center justify-center text-center gap-2">
+          <span class="text-[var(--color-dark)] text-xl font-bold tracking-wider group-hover:text-[var(--color-dark)]">
+            {{ project.label }}
+          </span>
+          <div class="w-8 h-1 bg-[var(--color-dark)] opacity-20 rounded-full transition-all duration-300 group-hover:w-16 group-hover:opacity-60"></div>
         </a>
       </div>
     </div>
