@@ -2,16 +2,19 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import localGardenModel from "../assets/3d/garden.glb";
+import localKoiModel from "../assets/3d/koi.glb";
 import localMusic from "../assets/music.mp3";
 
 const REMOTE_GARDEN_MODEL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/garden.glb";
 const REMOTE_MUSIC = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/music.mp3";
 
 const GARDEN_MODEL_URL = import.meta.env.DEV ? localGardenModel : REMOTE_GARDEN_MODEL;
+const KOI_MODEL_URL = localKoiModel;
 const MUSIC_URL = import.meta.env.DEV ? localMusic : REMOTE_MUSIC;
 
 
@@ -247,10 +250,69 @@ onMounted(() => {
     };
     createPotSmoke();
 
+    const fishList: { mesh: THREE.Object3D, velocity: THREE.Vector3, speed: number }[] = [];
+    const fishCount = 10;
+    
+    loader.load(
+        KOI_MODEL_URL,
+        (gltf) => {
+            const model = gltf.scene;
+            
+            for (let i = 0; i < fishCount; i++) {
+                const fish = SkeletonUtils.clone(model);
+                fish.scale.set(0.08, 0.08, 0.08);
+                
+                const x = -3 + (Math.random() - 0.5) * 10;
+                const z = -10 + (Math.random() - 0.5) * 8;
+                const y = -2.5;
+                
+                fish.position.set(x, y, z);
+                
+                fish.rotation.y = Math.random() * Math.PI * 2;
+
+                scene.add(fish);
+
+                const speed = 0.01 + Math.random() * 0.01;
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = new THREE.Vector3(Math.cos(angle) * speed, 0, Math.sin(angle) * speed);
+
+                fishList.push({ mesh: fish, velocity, speed });
+            }
+        },
+        undefined,
+        (error) => {
+            console.error("An error happened loading the koi model:", error);
+        }
+    );
 
     const animate = () => {
         animationId = requestAnimationFrame(animate);
         
+        fishList.forEach((fishInfo) => {
+            const { mesh, velocity } = fishInfo;
+            
+            mesh.position.add(velocity);
+
+            const targetPos = mesh.position.clone().add(velocity);
+            mesh.lookAt(targetPos);
+
+            let bounced = false;
+
+            if (mesh.position.x < -13 || mesh.position.x > 7) {
+                velocity.x = -velocity.x;
+                bounced = true;
+            }
+            if (mesh.position.z < -17.5 || mesh.position.z > -2.5) {
+                velocity.z = -velocity.z;
+                bounced = true;
+            }
+
+            if (!bounced && Math.random() < 0.005) {
+                const angle = (Math.random() - 0.5) * 0.5;
+                velocity.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle);
+            }
+        });
+
         if (sakuraMesh) {
             for (let i = 0; i < petalCount; i++) {
                 const info = petalInfo[i];
@@ -300,7 +362,7 @@ onMounted(() => {
 
                 if (info.age >= info.life) {
                     info.age = 0;
-                    info.position.set(0, 0, 0); // Reset to origin (relative to mesh position)
+                    info.position.set(0, 0, 0);
                     info.velocity.set(
                         (Math.random() - 0.5) * 0.02,
                         0.01 + Math.random() * 0.02,
@@ -311,7 +373,7 @@ onMounted(() => {
                 info.position.add(info.velocity);
                 
                 dummySmoke.position.copy(info.position);
-                dummySmoke.lookAt(camera.position); // Billboard
+                dummySmoke.lookAt(camera.position);
                 
                 const scale = 1 + (info.age / info.life) * 2;
                 dummySmoke.scale.setScalar(scale);
