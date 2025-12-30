@@ -6,17 +6,9 @@ import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import localGardenModel from "../assets/3d/garden.glb";
-import localKoiModel from "../assets/3d/koi.glb";
-import localMusic from "../assets/music.mp3";
-
 const REMOTE_GARDEN_MODEL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/garden.glb";
 const REMOTE_MUSIC = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/music.mp3";
-const REMOTE_KOI_MODEL = "hhttps://pub-aa00446aba67443397993f29b0708952.r2.dev/koi.glb";
-
-const GARDEN_MODEL_URL = import.meta.env.DEV ? localGardenModel : REMOTE_GARDEN_MODEL;
-const KOI_MODEL_URL = import.meta.env.DEV ? localKoiModel : REMOTE_KOI_MODEL;
-const MUSIC_URL = import.meta.env.DEV ? localMusic : REMOTE_MUSIC;
+const REMOTE_KOI_MODEL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/koi.glb";
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -60,8 +52,27 @@ const toggleMusic = () => {
 
 const emit = defineEmits(['modelLoaded', 'sceneUnload']);
 
-onMounted(() => {
+onMounted(async () => {
     if (!container.value) return;
+
+    let GARDEN_MODEL_URL = REMOTE_GARDEN_MODEL;
+    let KOI_MODEL_URL = REMOTE_KOI_MODEL;
+    let MUSIC_URL = REMOTE_MUSIC;
+
+    if (import.meta.env.DEV) {
+        try {
+            const gardenModule = await import("../assets/3d/garden.glb");
+            GARDEN_MODEL_URL = gardenModule.default;
+            
+            const koiModule = await import("../assets/3d/koi.glb");
+            KOI_MODEL_URL = koiModule.default;
+
+            const musicModule = await import("../assets/music.mp3");
+            MUSIC_URL = musicModule.default;
+        } catch (e) {
+            console.warn("Failed to load local assets, falling back to remote", e);
+        }
+    }
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color("#e4cbce");
