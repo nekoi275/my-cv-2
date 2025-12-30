@@ -28,6 +28,15 @@ let animationId: number;
 let mm: gsap.MatchMedia;
 
 let sound: THREE.Audio;
+let sakuraMesh: THREE.InstancedMesh;
+const petalCount = 1500;
+const dummy = new THREE.Object3D();
+const petalInfo: { position: THREE.Vector3, velocity: THREE.Vector3, rotationAxis: THREE.Vector3, rotationSpeed: number }[] = [];
+
+let fogMesh: THREE.InstancedMesh;
+const fogCount = 50;
+const fogInfo: { position: THREE.Vector3, rotationZ: number }[] = [];
+
 
 const isMusicPlaying = ref(false);
 const isModelReady = ref(false);
@@ -113,8 +122,144 @@ onMounted(() => {
         }
     );
 
+    const createSakuraPetals = () => {
+        const geometry = new THREE.PlaneGeometry(0.08, 0.08);
+        const material = new THREE.MeshBasicMaterial({
+            color: 0xffb7c5,
+            side: THREE.DoubleSide,
+            transparent: true,
+            opacity: 0.8,
+        });
+
+        sakuraMesh = new THREE.InstancedMesh(geometry, material, petalCount);
+        
+        for (let i = 0; i < petalCount; i++) {
+            const x = (Math.random() - 0.5) * 40;
+            const y = (Math.random() - 0.5) * 20 + 5; 
+            const z = (Math.random() - 0.5) * 40 - 15;
+
+            dummy.position.set(x, y, z);
+            dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+            dummy.scale.setScalar(0.5 + Math.random() * 0.5);
+            dummy.updateMatrix();
+            sakuraMesh.setMatrixAt(i, dummy.matrix);
+
+            petalInfo.push({
+                position: new THREE.Vector3(x, y, z),
+                velocity: new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.01,
+                    -0.005 - Math.random() * 0.01,
+                    (Math.random() - 0.5) * 0.01
+                ),
+                rotationAxis: new THREE.Vector3(Math.random(), Math.random(), Math.random()).normalize(),
+                rotationSpeed: Math.random() * 0.02 + 0.01
+            });
+        }
+        
+        scene.add(sakuraMesh);
+    };
+
+    const createFogTexture = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 32;
+        canvas.height = 32;
+        const context = canvas.getContext('2d');
+        if (!context) return new THREE.Texture();
+
+        const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, 32, 32);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        return texture;
+    };
+
+    const createPondFog = () => {
+        const geometry = new THREE.PlaneGeometry(8, 8);
+        const material = new THREE.MeshBasicMaterial({
+            map: createFogTexture(),
+            transparent: true,
+            opacity: 0.3,
+            depthWrite: false,
+            side: THREE.DoubleSide,
+            blending: THREE.NormalBlending,
+        });
+
+        fogMesh = new THREE.InstancedMesh(geometry, material, fogCount);
+
+        for (let i = 0; i < fogCount; i++) {
+            const x = -3 + (Math.random() - 0.5) * 20;
+            const z = -10 + (Math.random() - 0.5) * 15;
+            const y = -1.5 + Math.random() * 0.5;
+
+            dummy.position.set(x, y, z);
+            dummy.rotation.x = -Math.PI / 2;
+            const rotZ = Math.random() * 2 * Math.PI;
+            dummy.rotation.z = rotZ;
+            dummy.scale.setScalar(0.8 + Math.random() * 0.4);
+            dummy.updateMatrix();
+            fogMesh.setMatrixAt(i, dummy.matrix);
+
+            fogInfo.push({
+                position: new THREE.Vector3(x, y, z),
+                rotationZ: rotZ
+            });
+        }
+        scene.add(fogMesh);
+    };
+
+    createSakuraPetals();
+    createPondFog();
+
+
     const animate = () => {
         animationId = requestAnimationFrame(animate);
+        
+        if (sakuraMesh) {
+            for (let i = 0; i < petalCount; i++) {
+                const info = petalInfo[i];
+                info.position.add(info.velocity);
+                
+                info.position.x += Math.sin(Date.now() * 0.001 + i) * 0.002;
+                info.position.z += Math.cos(Date.now() * 0.001 + i) * 0.002;
+
+                if (info.position.y < -5) {
+                    info.position.y = 15;
+                    info.position.x = (Math.random() - 0.5) * 40;
+                    info.position.z = (Math.random() - 0.5) * 40 - 15;
+                }
+
+                dummy.position.copy(info.position);
+                
+                dummy.rotateOnAxis(info.rotationAxis, info.rotationSpeed);
+                
+                dummy.updateMatrix();
+                sakuraMesh.setMatrixAt(i, dummy.matrix);
+            }
+            sakuraMesh.instanceMatrix.needsUpdate = true;
+        }
+
+        if (fogMesh) {
+             for (let i = 0; i < fogCount; i++) {
+                const info = fogInfo[i];
+                
+                dummy.position.copy(info.position);
+                dummy.rotation.x = -Math.PI / 2;
+                dummy.rotation.z = info.rotationZ; 
+                
+                const time = Date.now() * 0.0002;
+                dummy.position.x = info.position.x + Math.sin(time + i) * 0.2;
+                dummy.position.z = info.position.z + Math.cos(time + i * 0.5) * 0.2;
+
+                dummy.updateMatrix();
+                fogMesh.setMatrixAt(i, dummy.matrix);
+            }
+            fogMesh.instanceMatrix.needsUpdate = true;
+        }
+
         renderer.render(scene, camera);
     };
     animate();
