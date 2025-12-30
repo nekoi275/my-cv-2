@@ -95,7 +95,7 @@ onUnmounted(() => {
     <div id="tea-pouring" ref="pourRef" class="rounded-full bg-green-dark relative m-auto z-0 w-0 h-0"></div>
 
     <div id="tea-poured" class="absolute bg-green-dark left-0 right-0 bottom-0 h-[70vh] p-6 z-0">
-      <p ref="textContainerRef" class="block z-10 will-change-transform transform-gpu origin-top-left leading-10">
+      <p ref="textContainerRef" class="block z-10 will-change-transform transform-gpu origin-top-left text-[clamp(0.7rem,2.5vw,1.5rem)]">
         <span
           v-for="(text, index) in ['Hi,', 'I’m', 'Valeria', '(a.k.a Nekoi),', 'a web-developer', 'with a passion', 'for crafting', 'interactive and', 'visually', 'appealing', 'websites.']"
           :key="'w1-' + index" :ref="(el: any) => addToRefs(el, words1Ref)"
@@ -115,7 +115,7 @@ onUnmounted(() => {
           :key="'w3-' + index" :ref="(el: any) => addToRefs(el, words3Ref)"
           class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
       </p>
-      <MouseScroll class="absolute bottom-18 right-1/2 translate-x-1/2" />
+      <MouseScroll class="absolute bottom-18 right-1/2 translate-x-1/2 landscape:hidden" />
     </div>
   </section>
 </template>

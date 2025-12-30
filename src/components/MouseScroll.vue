@@ -1,5 +1,5 @@
 <template>
-    <div class="mouse-scroll">
+    <div class="mouse-scroll flex justify-center items-center p-5 max-md:hidden">
         <div class="mouse">
             <div class="wheel"></div>
         </div>
@@ -10,13 +10,6 @@
 </script>
 
 <style scoped>
-.mouse-scroll {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
 .mouse {
     width: 30px;
     height: 50px;
@@ -57,12 +50,6 @@
     100% {
         opacity: 0;
         transform: translateY(12px);
-    }
-}
-
-@media (max-width: 768px) {
-    .mouse-scroll {
-        display: none;
     }
 }
 </style>

@@ -8,7 +8,7 @@ import Sudoku from "@/components/Sudoku.vue";
         <header class="p-4 bg-pink-light">
             <button @click="$emit('back')" class="text-3xl cursor-pointer">⬅️</button>
         </header>
-        <section class="bg-green-light flex flex-row flex-wrap gap-4 items-center justify-around flex-grow">
+        <section class="bg-green-light flex flex-row flex-wrap gap-4 items-center justify-around flex-grow py-4">
             <SpaceInvaders></SpaceInvaders>
             <Sudoku></Sudoku>
         </section>
