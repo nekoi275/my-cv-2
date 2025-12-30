@@ -12,9 +12,10 @@ import localMusic from "../assets/music.mp3";
 
 const REMOTE_GARDEN_MODEL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/garden.glb";
 const REMOTE_MUSIC = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/music.mp3";
+const REMOTE_KOI_MODEL = "hhttps://pub-aa00446aba67443397993f29b0708952.r2.dev/koi.glb";
 
 const GARDEN_MODEL_URL = import.meta.env.DEV ? localGardenModel : REMOTE_GARDEN_MODEL;
-const KOI_MODEL_URL = localKoiModel;
+const KOI_MODEL_URL = import.meta.env.DEV ? localKoiModel : REMOTE_KOI_MODEL;
 const MUSIC_URL = import.meta.env.DEV ? localMusic : REMOTE_MUSIC;
 
 
