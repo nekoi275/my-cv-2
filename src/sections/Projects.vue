@@ -11,9 +11,9 @@ const scenePlaceholder = ref<string>("");
 const sectionRef = ref<HTMLElement | null>(null);
 
 const projects = [
-  { label: "REST API + Vue.js applications", url: "https://pokemon-tcg.pages.dev/" },
-  { label: "Pixi.js + GSAP games", url: "https://dreamshot-test-task.pages.dev/" },
-  { label: "three.js 3D scenes", url: "https://nekoi275.github.io/aframe-test" },
+  { label: "Modern single-page applications", url: "https://pokemon-tcg.pages.dev/" },
+  { label: "2d browser games", url: "https://dreamshot-test-task.pages.dev/" },
+  { label: "3D browser scenes", url: "https://nekoi275.github.io/aframe-test" },
   { label: "Telegram mini apps", url: "https://t.me/banny_safe_bot" },
 ]
 
