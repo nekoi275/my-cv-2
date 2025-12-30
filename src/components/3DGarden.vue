@@ -214,6 +214,39 @@ onMounted(() => {
     createSakuraPetals();
     createPondFog();
 
+    let potSmokeMesh: THREE.InstancedMesh;
+    const potSmokeCount = 30;
+    const potSmokeInfo: { position: THREE.Vector3, velocity: THREE.Vector3, age: number, life: number }[] = [];
+    const dummySmoke = new THREE.Object3D();
+
+    const createPotSmoke = () => {
+        const geometry = new THREE.PlaneGeometry(0.5, 0.5);
+        const texture = createFogTexture();
+        const material = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            opacity: 0.4,
+            depthWrite: false,
+            side: THREE.DoubleSide,
+            blending: THREE.NormalBlending,
+        });
+
+        potSmokeMesh = new THREE.InstancedMesh(geometry, material, potSmokeCount);
+        
+        potSmokeMesh.position.set(-16.95, 0.65, -30.11); 
+
+        for (let i = 0; i < potSmokeCount; i++) {
+            potSmokeInfo.push({
+                position: new THREE.Vector3(0, 0, 0),
+                velocity: new THREE.Vector3(0, 0, 0),
+                age: Math.random() * 100,
+                life: 100 + Math.random() * 50
+            });
+        }
+        scene.add(potSmokeMesh);
+    };
+    createPotSmoke();
+
 
     const animate = () => {
         animationId = requestAnimationFrame(animate);
@@ -258,6 +291,35 @@ onMounted(() => {
                 fogMesh.setMatrixAt(i, dummy.matrix);
             }
             fogMesh.instanceMatrix.needsUpdate = true;
+        }
+
+        if (potSmokeMesh) {
+            for (let i = 0; i < potSmokeCount; i++) {
+                const info = potSmokeInfo[i];
+                info.age++;
+
+                if (info.age >= info.life) {
+                    info.age = 0;
+                    info.position.set(0, 0, 0); // Reset to origin (relative to mesh position)
+                    info.velocity.set(
+                        (Math.random() - 0.5) * 0.02,
+                        0.01 + Math.random() * 0.02,
+                        (Math.random() - 0.5) * 0.02
+                    );
+                }
+
+                info.position.add(info.velocity);
+                
+                dummySmoke.position.copy(info.position);
+                dummySmoke.lookAt(camera.position); // Billboard
+                
+                const scale = 1 + (info.age / info.life) * 2;
+                dummySmoke.scale.setScalar(scale);
+
+                dummySmoke.updateMatrix();
+                potSmokeMesh.setMatrixAt(i, dummySmoke.matrix);
+            }
+            potSmokeMesh.instanceMatrix.needsUpdate = true;
         }
 
         renderer.render(scene, camera);
