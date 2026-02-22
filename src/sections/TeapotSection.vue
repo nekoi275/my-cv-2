@@ -99,21 +99,21 @@ onUnmounted(() => {
         <span
           v-for="(text, index) in ['Hi,', 'I’m', 'Valeria', '(a.k.a Nekoi),', 'a web-developer', 'with a passion', 'for crafting', 'interactive and', 'visually', 'appealing', 'websites.']"
           :key="'w1-' + index" :ref="(el: any) => addToRefs(el, words1Ref)"
-          class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
+          class="inline-block opacity-0 will-change-transform transform-gpu mr-[1ch]">{{ text }}</span>
 
         <br />
 
         <span
           v-for="(text, index) in ['I enjoy', 'blending', 'technical', 'skills with', 'artistic', 'expression', 'to build', 'unique', 'digital', 'experiences.']"
           :key="'w2-' + index" :ref="(el: any) => addToRefs(el, words2Ref)"
-          class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
+          class="inline-block opacity-0 will-change-transform transform-gpu mr-[1ch]">{{ text }}</span>
 
         <br />
 
         <span
           v-for="(text, index) in ['When', 'I’m not', 'coding,', 'you’ll', 'find me', 'drawing or', 'capturing', 'moments', 'through', 'photography —', 'two hobbies', 'that fuel', 'my creativity.']"
           :key="'w3-' + index" :ref="(el: any) => addToRefs(el, words3Ref)"
-          class="inline-block opacity-0 will-change-transform transform-gpu mr-1">{{ text }}</span>
+          class="inline-block opacity-0 will-change-transform transform-gpu mr-[1ch]">{{ text }}</span>
       </p>
       <MouseScroll class="absolute bottom-18 right-1/2 translate-x-1/2 landscape:hidden" />
     </div>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
 import PixelArt from "@/components/PixelArt.vue";
 
 export interface CardLink {
@@ -13,23 +12,9 @@ export interface cardInfo {
   links?: CardLink[];
 }
 
-const props = defineProps<{
+defineProps<{
   cardInfo: cardInfo;
 }>();
-
-const selectedLink = ref<CardLink | null>(null);
-const showDropdown = ref(false);
-
-const selectLink = (link: CardLink) => {
-  selectedLink.value = link;
-  showDropdown.value = false;
-};
-
-onMounted(() => {
-  if (props.cardInfo.links && props.cardInfo.links.length > 0) {
-    selectedLink.value = props.cardInfo.links[0];
-  }
-});
 </script>
 
 <template>
@@ -38,6 +23,7 @@ onMounted(() => {
       <div class="flip-card-front">
         <h3 class="text-xl">{{ cardInfo.heading }}</h3>
         <p class="pt-2">{{ cardInfo.data }}</p>
+        <PixelArt v-if="cardInfo.links && cardInfo.links.length > 1" class="relative mt-6 ml-18" />
       </div>
       <div class="flip-card-back text-center">
         <div v-if="cardInfo.links && cardInfo.links.length > 0">
@@ -48,21 +34,11 @@ onMounted(() => {
               <PixelArt class="relative mt-6 ml-18" />
             </a>
           </div>
-          <div v-else class="relative">
-            <button @click="showDropdown = !showDropdown"
-              class="bg-pink-dark hover:bg-green-light px-4 py-2 rounded-md mb-2 ml-14">
-              {{ selectedLink?.name || "Select link" }}
-              <span class="ml-1">▼</span>
-            </button>
-            <div v-if="showDropdown" class="absolute z-10 bg-pink-light shadow-md rounded-md w-full">
-              <a v-for="link in cardInfo.links" :key="link.url" :href="link.url" target="_blank"
-                @click="selectLink(link)" class="block px-4 py-2 hover:bg-green-light cursor-pointer">
-                {{ link.name }}
-              </a>
-            </div>
-            <a v-if="selectedLink" :href="selectedLink.url" class="block text-center" target="_blank"
-              :aria-label="`Visit ${selectedLink.name}`">
-              <PixelArt class="relative mt-6 ml-18" />
+          <div v-else class="links-list">
+            <a v-for="link in cardInfo.links" :key="link.url" :href="link.url" target="_blank"
+              class="block px-4 py-2 hover:bg-green-light rounded-md"
+              :aria-label="`Visit ${link.name}`">
+              {{ link.name }}
             </a>
           </div>
         </div>

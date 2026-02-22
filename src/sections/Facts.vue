@@ -8,18 +8,18 @@ const cards: cardInfo[] = [
     data: "Check out my CV — I’m eager to learn, grow, and contribute to your team with fresh ideas and enthusiasm.",
     links: [
       {
-        name: "Google doc CV",
-        url: "https://docs.google.com/document/d/1xcALkYF9U2flC6naGoAQtBuERRoRbpLxqMtDjlvRV4g/edit?tab=t.0#heading=h.m96rc670hd9p",
+        name: "Download CV",
+        url: "https://docs.google.com/document/d/1xcALkYF9U2flC6naGoAQtBuERRoRbpLxqMtDjlvRV4g/export?format=pdf",
       },
-    ],
+    ]
   },
   {
     heading: "My drawings",
-    data: "Soft strokes, vivid colors—where cats nap, birds perch, and flowers sway in quiet harmony.",
     links: [
+      { name: "Cara", url: "https://cara.app/nekoi275" },
       { name: "DeviantArt", url: "https://www.deviantart.com/nekoi275" },
       { name: "Doodle Addicts", url: "https://www.doodleaddicts.com/nekoi" },
-      { name: "Pixiv", url: "https://www.pixiv.net/en/users/114240685" },
+      { name: "Pixiv", url: "https://www.pixiv.net/en/users/114240685" }
     ]
   },
   {
