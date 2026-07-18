@@ -1,0 +1,24 @@
+# Nekoi - Valeriia Drozdova's Portfolio
+
+> Portfolio of Valeriia Drozdova (a.k.a Nekoi), a web developer specializing in Front-End Development and immersive web experiences.
+
+## About Me
+- **Name:** Valeriia Drozdova
+- **Alias:** Nekoi
+- **Role:** Front-End Developer
+- **Website:** https://nekoi.me/
+
+## Summary
+I am a Front-End Web Developer passionate about building interactive, user-friendly, and immersive web experiences. This website serves as my digital portfolio, showcasing my skills, projects, and professional background.
+
+## Contact & Social Links
+- **GitHub:** [github.com/nekoi275](https://github.com/nekoi275)
+- **LinkedIn:** [linkedin.com/in/Ваш_Профиль](https://www.linkedin.com/in/valeriia-drozdova-81761a380/)
+- **Email:** valeriiadrozdova90@gmail.com (valeriiadrozdova90@gmail.com)
+
+## Core Tech Stack
+- JavaScript (ES6+) / TypeScript
+- Vue.js
+- HTML5, CSS3, SCSS, Tailwind CSS
+- Three.js / WebGL (for immersive experiences)
+- Git, Webpack, Vite
