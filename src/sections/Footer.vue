@@ -1,21 +1,8 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 
 const currentYear = computed(() => new Date().getFullYear());
-const emailCopied = ref(false);
-const email = "valeriiadrozdova90@gmail.com";
 
-const copyEmail = async () => {
-  try {
-    await navigator.clipboard.writeText(email);
-    emailCopied.value = true;
-    setTimeout(() => {
-      emailCopied.value = false;
-    }, 2000);
-  } catch (err) {
-    console.error("Failed to copy email:", err);
-  }
-};
 </script>
 
 <template>
