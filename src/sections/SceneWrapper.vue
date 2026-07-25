@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch, nextTick } from "vue";
+import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import Garden3D from "@/components/3DGarden.vue";
 import { gsap } from "gsap";
+import scenePlaceholder from "@/assets/scene_placeholder.webp";
 
 const isSceneActive = ref(false);
 const isModelLoaded = ref(false);
 const isContactVisible = ref(false);
 const isUnloading = ref(false);
-const scenePlaceholder = ref<string>("");
-const sectionRef = ref<HTMLElement | null>(null);
 const instructionRows = ref<HTMLElement[]>([]);
 
 const isCopied = ref(false);
@@ -145,31 +144,7 @@ const copyEmail = () => {
   });
 };
 
-let observer: IntersectionObserver | null = null;
-
 onMounted(() => {
-  observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !scenePlaceholder.value) {
-          import("@/assets/scene_placeholder.webp").then((module) => {
-            scenePlaceholder.value = module.default;
-          });
-          if (observer) {
-            observer.disconnect();
-          }
-        }
-      });
-    },
-    {
-      rootMargin: "200px",
-    }
-  );
-
-  if (sectionRef.value) {
-    observer.observe(sectionRef.value);
-  }
-
   nextTick(() => {
     setTimeout(() => {
       playEmergeAnimation();
@@ -178,9 +153,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  if (observer) {
-    observer.disconnect();
-  }
   if (rippleAnimTl) {
     rippleAnimTl.kill();
   }
@@ -192,7 +164,7 @@ onUnmounted(() => {
     ref="sectionRef" 
     id="projects" 
     class="bg-pink-dark relative"
-    :class="{ 'h-screen overflow-hidden': !isSceneActive, 'min-h-screen': isSceneActive }"
+    :class="{ 'h-screen overflow-hidden': !isModelLoaded, 'min-h-screen': isModelLoaded }"
   >
     
     <svg class="water-svg-filter" xmlns="http://www.w3.org/2000/svg">
@@ -219,47 +191,59 @@ onUnmounted(() => {
       </defs>
     </svg>
 
-    <div v-if="!isSceneActive && !isContactVisible" ref="instructionsRef" class="absolute inset-0 z-10 flex items-center justify-center">
-      <img v-if="scenePlaceholder" :src="scenePlaceholder" alt="Scene Placeholder" class="absolute inset-0 w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-black/20"></div>
-      
+    <Transition name="fade">
       <div 
-        @click="initScene" 
-        class="gate-anchor cursor-pointer"
+        v-if="(!isSceneActive || !isModelLoaded) && !isContactVisible" 
+        class="absolute top-0 left-0 w-full h-screen z-10 flex items-center justify-center overflow-hidden"
       >
-        <div class="instructions-glow" aria-hidden="true">
-          <div class="glow-blob glow-blob--a"></div>
-          <div class="glow-blob glow-blob--b"></div>
+        <img :src="scenePlaceholder" alt="Scene Placeholder" class="absolute top-0 left-0 w-full h-screen object-cover" />
+        <div class="absolute top-0 left-0 w-full h-screen bg-black/20"></div>
+        
+        <div 
+          v-if="!isSceneActive"
+          @click="initScene" 
+          class="gate-anchor cursor-pointer"
+        >
+          <div class="instructions-glow" aria-hidden="true">
+            <div class="glow-blob glow-blob--a"></div>
+            <div class="glow-blob glow-blob--b"></div>
+          </div>
+
+          <div class="instructions-panel">
+            <div class="instructions-box">
+              <div
+                v-for="(item, i) in [
+                  'Click here to start',
+                  'Scroll to move forward',
+                  'Drag mouse to look around',
+                ]"
+                :key="i"
+                :ref="el => { if (el) instructionRows[i] = el as HTMLElement }"
+                class="instruction-row"
+              >
+                <span class="instruction-dot"></span>
+                <span class="instruction-text">{{ item }}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="instructions-panel">
-          <div class="instructions-box">
-            <div
-              v-for="(item, i) in [
-                'Click here to start',
-                'Scroll to move forward',
-                'Drag mouse to look around',
-              ]"
-              :key="i"
-              :ref="el => { if (el) instructionRows[i] = el as HTMLElement }"
-              class="instruction-row"
-            >
-              <span class="instruction-dot"></span>
-              <span class="instruction-text">{{ item }}</span>
+        <div v-else-if="!isModelLoaded" class="gate-anchor">
+          <div class="instructions-glow" aria-hidden="true">
+            <div class="glow-blob glow-blob--a"></div>
+            <div class="glow-blob glow-blob--b"></div>
+          </div>
+          <div class="instructions-panel">
+            <div class="text-[var(--color-dark)] text-xl font-bold tracking-wider flex items-center font-mono">
+              Loading
+              <span class="dot-1">.</span>
+              <span class="dot-2">.</span>
+              <span class="dot-3">.</span>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div v-if="isSceneActive && !isModelLoaded" class="absolute inset-0 z-20 flex items-center justify-center bg-pink-dark">
-      <div class="text-[var(--color-dark)] text-2xl font-bold tracking-wider flex items-center">
-        Loading
-        <span class="dot-1">.</span>
-        <span class="dot-2">.</span>
-        <span class="dot-3">.</span>
-      </div>
-    </div>
+    </Transition>
 
     <Garden3D 
       v-if="isSceneActive" 
