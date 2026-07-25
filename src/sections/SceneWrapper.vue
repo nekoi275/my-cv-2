@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
-import MouseScroll from "@/components/MouseScroll.vue";
+import { ref, onMounted, onUnmounted, watch, nextTick } from "vue";
 import Garden3D from "@/components/3DGarden.vue";
+import { gsap } from "gsap";
 
 const isSceneActive = ref(false);
 const isModelLoaded = ref(false);
@@ -9,16 +9,121 @@ const isContactVisible = ref(false);
 const isUnloading = ref(false);
 const scenePlaceholder = ref<string>("");
 const sectionRef = ref<HTMLElement | null>(null);
+const instructionRows = ref<HTMLElement[]>([]);
 
 const isCopied = ref(false);
 
 const CONTACT_EMAIL = "valeriiadrozdova90@gmail.com";
 
+const turbulenceState = { scale: 0 };
+
+let rippleAnimTl: gsap.core.Timeline | null = null;
+let feTurbulenceEl: SVGFETurbulenceElement | null = null;
+let feDisplacementEl: SVGFEDisplacementMapElement | null = null;
+
+const playEmergeAnimation = () => {
+  if (!instructionRows.value.length) return;
+
+  feTurbulenceEl = document.querySelector('#water-turbulence') as SVGFETurbulenceElement;
+  feDisplacementEl = document.querySelector('#water-displacement') as SVGFEDisplacementMapElement;
+
+  if (rippleAnimTl) {
+    rippleAnimTl.kill();
+  }
+
+  turbulenceState.scale = 80;
+
+  gsap.set(instructionRows.value, {
+    y: 40,
+    opacity: 0,
+    filter: 'url(#water-filter)',
+  });
+
+  rippleAnimTl = gsap.timeline();
+
+  rippleAnimTl.to(turbulenceState, {
+    scale: 0,
+    duration: 2.2,
+    ease: 'power2.out',
+    onUpdate: () => {
+      if (feDisplacementEl) {
+        feDisplacementEl.setAttribute('scale', String(turbulenceState.scale));
+      }
+    }
+  }, 0);
+
+  rippleAnimTl.to({}, {
+    duration: 2.2,
+    ease: 'power2.out',
+    onUpdate: function() {
+      if (feTurbulenceEl) {
+        const p = this.progress();
+        const freq = 0.08 - p * 0.07;
+        feTurbulenceEl.setAttribute('baseFrequency', `${freq} ${freq * 1.4}`);
+      }
+    }
+  }, 0);
+
+  rippleAnimTl.to(instructionRows.value, {
+    y: 0,
+    opacity: 1,
+    duration: 1.1,
+    ease: 'back.out(1.4)',
+    stagger: 0.18,
+  }, 0.1);
+
+  rippleAnimTl.to(instructionRows.value, {
+    filter: 'none',
+    duration: 0.01,
+  }, 2.2);
+};
+
+const playSubmergeAnimation = (onComplete: () => void) => {
+  if (!instructionRows.value.length) {
+    onComplete();
+    return;
+  }
+
+  feTurbulenceEl = document.querySelector('#water-turbulence') as SVGFETurbulenceElement;
+  feDisplacementEl = document.querySelector('#water-displacement') as SVGFEDisplacementMapElement;
+
+  if (rippleAnimTl) {
+    rippleAnimTl.kill();
+  }
+
+  turbulenceState.scale = 0;
+
+  gsap.set(instructionRows.value, { filter: 'url(#water-filter)' });
+
+  const tl = gsap.timeline({ onComplete });
+
+  tl.to(turbulenceState, {
+    scale: 90,
+    duration: 0.9,
+    ease: 'power2.in',
+    onUpdate: () => {
+      if (feDisplacementEl) {
+        feDisplacementEl.setAttribute('scale', String(turbulenceState.scale));
+      }
+    }
+  }, 0);
+
+  tl.to(instructionRows.value, {
+    y: -30,
+    opacity: 0,
+    duration: 0.7,
+    ease: 'power2.in',
+    stagger: { each: 0.1, from: 'end' },
+  }, 0);
+};
+
 const initScene = () => {
-  isContactVisible.value = false;
-  isSceneActive.value = true;
-  isModelLoaded.value = false;
-  isUnloading.value = false;
+  playSubmergeAnimation(() => {
+    isContactVisible.value = false;
+    isSceneActive.value = true;
+    isModelLoaded.value = false;
+    isUnloading.value = false;
+  });
 };
 
 const handleSceneUnload = () => {
@@ -64,11 +169,20 @@ onMounted(() => {
   if (sectionRef.value) {
     observer.observe(sectionRef.value);
   }
+
+  nextTick(() => {
+    setTimeout(() => {
+      playEmergeAnimation();
+    }, 300);
+  });
 });
 
 onUnmounted(() => {
   if (observer) {
     observer.disconnect();
+  }
+  if (rippleAnimTl) {
+    rippleAnimTl.kill();
   }
 });
 </script>
@@ -81,30 +195,60 @@ onUnmounted(() => {
     :class="{ 'h-screen overflow-hidden': !isSceneActive, 'min-h-screen': isSceneActive }"
   >
     
-    <div v-if="!isSceneActive && !isContactVisible" class="absolute inset-0 z-10 flex items-center justify-center">
+    <svg class="water-svg-filter" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="water-filter" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="linearRGB">
+          <feTurbulence
+            id="water-turbulence"
+            type="turbulence"
+            baseFrequency="0.08 0.11"
+            numOctaves="3"
+            seed="7"
+            stitchTiles="stitch"
+            result="turbulenceOut"
+          />
+          <feDisplacementMap
+            id="water-displacement"
+            in="SourceGraphic"
+            in2="turbulenceOut"
+            scale="80"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </defs>
+    </svg>
+
+    <div v-if="!isSceneActive && !isContactVisible" ref="instructionsRef" class="absolute inset-0 z-10 flex items-center justify-center">
       <img v-if="scenePlaceholder" :src="scenePlaceholder" alt="Scene Placeholder" class="absolute inset-0 w-full h-full object-cover" />
       <div class="absolute inset-0 bg-black/20"></div>
       
       <div 
         @click="initScene" 
-        class="relative z-10 cursor-pointer p-4"
+        class="gate-anchor cursor-pointer"
       >
-        
-        <div class="space-y-2 mb-8 text-[var(--color-dark)] font-medium">
-          <div class="flex items-center gap-2">
-              <span class="w-1 h-1 bg-[var(--color-dark)]"></span>
-            <span>Click here to start</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-1 h-1 bg-[var(--color-dark)]"></span>
-            <span>Scroll to move forward</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-1 h-1 bg-[var(--color-dark)]"></span>
-            <span>Drag mouse to look around</span>
-          </div>
+        <div class="instructions-glow" aria-hidden="true">
+          <div class="glow-blob glow-blob--a"></div>
+          <div class="glow-blob glow-blob--b"></div>
         </div>
 
+        <div class="instructions-panel">
+          <div class="instructions-box">
+            <div
+              v-for="(item, i) in [
+                'Click here to start',
+                'Scroll to move forward',
+                'Drag mouse to look around',
+              ]"
+              :key="i"
+              :ref="el => { if (el) instructionRows[i] = el as HTMLElement }"
+              class="instruction-row"
+            >
+              <span class="instruction-dot"></span>
+              <span class="instruction-text">{{ item }}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -199,7 +343,7 @@ onUnmounted(() => {
 }
 
 .contact-title {
-  font-size: clamp(3.5rem, 8vw, 7rem); /* Огромный текст */
+  font-size: clamp(3.5rem, 8vw, 7rem);
   line-height: 0.9;
   font-weight: 900;
   letter-spacing: -0.04em;
@@ -226,5 +370,126 @@ onUnmounted(() => {
   border-right: 2px dashed rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   backdrop-filter: blur(2px);
+}
+
+.water-svg-filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gate-anchor {
+  position: absolute;
+  top: 53%;
+  left: 48%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.instructions-panel {
+  position: relative;
+  width: clamp(340px, 58vh, 620px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    black 50%,
+    rgba(0,0,0,0.5) 68%,
+    transparent 82%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    black 50%,
+    rgba(0,0,0,0.5) 68%,
+    transparent 82%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.instructions-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-blob {
+  position: absolute;
+  border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%;
+  filter: blur(32px);
+  will-change: border-radius, transform;
+}
+
+.glow-blob--a {
+  inset: -25% -20%;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(255, 255, 255, 0.55) 0%,
+    transparent 68%
+  );
+  animation: blob-drift 7s ease-in-out infinite;
+}
+
+.glow-blob--b {
+  inset: -20% -25%;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(230, 230, 230, 0.35) 0%,
+    transparent 62%
+  );
+  filter: blur(42px);
+  border-radius: 45% 55% 40% 60% / 60% 40% 55% 45%;
+  animation: blob-drift 9s ease-in-out infinite reverse;
+  animation-delay: -3.5s;
+}
+
+@keyframes blob-drift {
+  0%   { border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%; transform: scale(1)    rotate(0deg);  }
+  25%  { border-radius: 50% 50% 65% 35% / 55% 45% 65% 35%; transform: scale(1.05) rotate(4deg); }
+  50%  { border-radius: 40% 60% 45% 55% / 60% 40% 55% 45%; transform: scale(0.96) rotate(-3deg); }
+  75%  { border-radius: 55% 45% 35% 65% / 40% 60% 45% 55%; transform: scale(1.04) rotate(5deg); }
+  100% { border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%; transform: scale(1)    rotate(0deg);  }
+}
+
+.instructions-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.instruction-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: visible;
+  opacity: 0;
+  transform: translateY(40px);
+  will-change: transform, opacity, filter;
+}
+
+.instruction-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  background-color: var(--color-dark);
+}
+
+.instruction-text {
+  color: var(--color-dark);
+  font-weight: 500;
+  font-family: monospace;
 }
 </style>
