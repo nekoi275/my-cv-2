@@ -19,19 +19,10 @@ const copyEmail = async () => {
 </script>
 
 <template>
-  <footer class="w-full bg-pink-light text-center text-dark p-3 text-xs">
+  <footer class="w-full bg-pink-light text-center text-dark p-1 text-[12px] fixed bottom-0 z-10">
     <div>
       <span class="text-dark">Built with: Vue.js, three.js, GSAP, Tailwind CSS - {{ currentYear }}</span>
     </div>
-    <div class="mt-1 mb-2">
-      <button @click="copyEmail" class="text-dark hover:text-green-dark cursor-pointer">
-        {{ emailCopied ? '💌 Email copied 💌' : '✉️ Contact me ✉️' }}
-      </button>
-    </div>
-    <a href="#" @click.prevent="$emit('show-easter-egg')"
-      class="text-dark hover:text-green-dark cursor-pointer no-underline text-[11px]">
-      Easter egg 🐣
-    </a>
   </footer>
 </template>
 
