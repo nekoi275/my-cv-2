@@ -31,6 +31,15 @@ let fogMesh: THREE.InstancedMesh;
 const fogCount = 50;
 const fogInfo: { position: THREE.Vector3, rotationZ: number }[] = [];
 
+const raycaster = new THREE.Raycaster();
+const hoverPointer = new THREE.Vector2();
+let allTreeTargets: THREE.Object3D[] = [];
+let treeIndicatorGroup: THREE.Group | null = null;
+let indicatorInnerMat: THREE.MeshBasicMaterial | null = null;
+let indicatorOuterMat: THREE.MeshBasicMaterial | null = null;
+let wasPointerDrag = false;
+let hoverCheckScheduled = false;
+
 const isMusicPlaying = ref(false);
 const isModelReady = ref(false);
 const isSceneUnloaded = ref(false);
@@ -51,9 +60,10 @@ const toggleMusic = () => {
     }
 };
 
-const emit = defineEmits(['modelLoaded', 'sceneUnload']);
+const emit = defineEmits(['modelLoaded', 'sceneUnload', 'treeClicked']);
 
 const onPointerDown = (e: PointerEvent) => {
+    wasPointerDrag = false;
     if (!canLookAround.value) return;
     isDragging.value = true;
     gsap.killTweensOf(camera.rotation);
@@ -64,23 +74,107 @@ const onPointerDown = (e: PointerEvent) => {
 
 const onPointerMove = (e: PointerEvent) => {
     if (!isDragging.value || !canLookAround.value) return;
-    
+
     const deltaX = e.clientX - prevPointer.x;
+    if (Math.abs(deltaX) > 15) wasPointerDrag = true;
 
     prevPointer.x = e.clientX;
     prevPointer.y = e.clientY;
 
     camera.rotation.y -= deltaX * 0.003;
-    
     const limit = Math.PI / 3;
     camera.rotation.y = Math.max(-limit, Math.min(limit, camera.rotation.y));
 };
 
-const onPointerUp = () => {
+const onPointerUp = (e: PointerEvent) => {
     if (isDragging.value) {
         isDragging.value = false;
         if (container.value) container.value.style.cursor = '';
     }
+
+    if (!wasPointerDrag && allTreeTargets.length > 0 && isModelReady.value && container.value) {
+        const rect = container.value.getBoundingClientRect();
+        hoverPointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        hoverPointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(hoverPointer, camera);
+        
+        const intersects = raycaster.intersectObjects(allTreeTargets, true);
+        if (intersects.length > 0) {
+            emit('treeClicked');
+        }
+    }
+};
+
+const onMouseMove = (e: MouseEvent) => {
+    if (!container.value || allTreeTargets.length === 0 || !isModelReady.value || isDragging.value) return;
+    const rect = container.value.getBoundingClientRect();
+    hoverPointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    hoverPointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    hoverCheckScheduled = true;
+};
+
+const findAndSetupTreeTargets = (model: THREE.Object3D): THREE.Vector3 => {
+    allTreeTargets = [];
+
+    model.traverse(obj => {
+        if ((obj as THREE.Mesh).isMesh) {
+            const mesh = obj as THREE.Mesh;
+            const box = new THREE.Box3().setFromObject(mesh);
+            const center = new THREE.Vector3();
+            box.getCenter(center);
+
+            if (center.x > 3.0 && center.x < 10.0 && center.z > -9.0 && center.z < -1.0) {
+                allTreeTargets.push(mesh);
+            }
+        }
+    });
+
+    return new THREE.Vector3(7.2, 0.1, -4.5);
+};
+
+const createTreeIndicator = (position: THREE.Vector3) => {
+    treeIndicatorGroup = new THREE.Group();
+    treeIndicatorGroup.position.copy(position);
+
+    const hitGeo = new THREE.SphereGeometry(1.0, 16, 16);
+    const hitMat = new THREE.MeshBasicMaterial({ visible: false });
+    const hitMesh = new THREE.Mesh(hitGeo, hitMat);
+    treeIndicatorGroup.add(hitMesh);
+    allTreeTargets.push(hitMesh);
+
+    const innerGeo = new THREE.SphereGeometry(0.32, 24, 24);
+    indicatorInnerMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.9 });
+    const inner = new THREE.Mesh(innerGeo, indicatorInnerMat);
+    treeIndicatorGroup.add(inner);
+    allTreeTargets.push(inner);
+
+    const crystalGeo = new THREE.OctahedronGeometry(0.2, 0);
+    const crystalMat = new THREE.MeshBasicMaterial({ color: 0xe0f2fe, wireframe: true });
+    const crystalMesh = new THREE.Mesh(crystalGeo, crystalMat);
+    treeIndicatorGroup.add(crystalMesh);
+    allTreeTargets.push(crystalMesh);
+
+    const ringGeo = new THREE.RingGeometry(0.38, 0.55, 32);
+    indicatorOuterMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.8 });
+    const ring = new THREE.Mesh(ringGeo, indicatorOuterMat);
+    ring.rotation.x = -Math.PI / 2;
+    treeIndicatorGroup.add(ring);
+    allTreeTargets.push(ring);
+
+    scene.add(treeIndicatorGroup);
+
+    gsap.to(crystalMesh.rotation, { y: Math.PI * 2, duration: 3.5, repeat: -1, ease: 'none' });
+    gsap.to(indicatorInnerMat, { opacity: 0.35, duration: 0.9, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+    gsap.to(inner.scale, { x: 1.4, y: 1.4, z: 1.4, duration: 0.9, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+    gsap.to(treeIndicatorGroup.position, { y: position.y + 0.18, duration: 1.3, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+
+    const ripple = () => {
+        ring.scale.set(1, 1, 1);
+        if (indicatorOuterMat) indicatorOuterMat.opacity = 0.8;
+        gsap.to(ring.scale, { x: 2.8, y: 2.8, z: 2.8, duration: 1.4, ease: 'power2.out', onComplete: ripple });
+        gsap.to(indicatorOuterMat, { opacity: 0, duration: 1.4, ease: 'power2.out' });
+    };
+    ripple();
 };
 
 onMounted(async () => {
@@ -155,11 +249,16 @@ onMounted(async () => {
         (gltf) => {
             const model = gltf.scene;
             model.scale.set(0.05, 0.05, 0.05);
-            model.updateMatrixWorld(true);
             model.position.set(-17, -2, -33);
             scene.add(model);
+            model.updateMatrixWorld(true);
+
             emit('modelLoaded');
             isModelReady.value = true;
+
+            const indicatorPos = findAndSetupTreeTargets(model);
+            createTreeIndicator(indicatorPos);
+
             if (sound && sound.buffer && !sound.isPlaying) {
                 sound.play();
                 isMusicPlaying.value = true;
@@ -391,12 +490,22 @@ onMounted(async () => {
         }
 
         renderer.render(scene, camera);
+
+        if (hoverCheckScheduled && allTreeTargets.length > 0 && !isDragging.value) {
+            hoverCheckScheduled = false;
+            raycaster.setFromCamera(hoverPointer, camera);
+            const hits = raycaster.intersectObjects(allTreeTargets, true);
+            if (container.value) {
+                container.value.style.cursor = hits.length > 0 ? 'pointer' : '';
+            }
+        }
     };
     animate();
 
     window.addEventListener("resize", onWindowResize);
 
     container.value.addEventListener('pointerdown', onPointerDown);
+    container.value.addEventListener('mousemove', onMouseMove);
     window.addEventListener('pointermove', onPointerMove);
     window.addEventListener('pointerup', onPointerUp);
 
@@ -528,7 +637,18 @@ onUnmounted(() => {
     window.removeEventListener("resize", onWindowResize);
     window.removeEventListener('pointermove', onPointerMove);
     window.removeEventListener('pointerup', onPointerUp);
-    if (container.value) container.value.removeEventListener('pointerdown', onPointerDown);
+    if (container.value) {
+        container.value.removeEventListener('pointerdown', onPointerDown);
+        container.value.removeEventListener('mousemove', onMouseMove);
+    }
+
+    if (treeIndicatorGroup) {
+        gsap.killTweensOf(treeIndicatorGroup.position);
+        treeIndicatorGroup.children.forEach(c => gsap.killTweensOf(c.scale));
+        if (indicatorInnerMat) gsap.killTweensOf(indicatorInnerMat);
+        if (indicatorOuterMat) gsap.killTweensOf(indicatorOuterMat);
+        scene?.remove(treeIndicatorGroup);
+    }
 
     if (sound && sound.isPlaying) sound.stop();
     cancelAnimationFrame(animationId);

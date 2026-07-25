@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref, onUnmounted } from "vue";
+import { onMounted, ref, onUnmounted, nextTick } from "vue";
 import gsap from "gsap";
 import Teapot from "@/components/Teapot.vue";
 import MouseScroll from "@/components/MouseScroll.vue";
+
+const props = defineProps<{ isOverlay?: boolean }>();
+const emit = defineEmits(['back']);
 
 const sectionRef = ref<HTMLElement | null>(null);
 const teapotRef = ref<HTMLElement | null>(null);
@@ -21,73 +24,95 @@ const addToRefs = (el: any, arr: HTMLElement[]) => {
 let ctx: gsap.Context;
 
 onMounted(() => {
-  ctx = gsap.context(() => {
-    const tl = gsap.timeline({
-      defaults: { ease: "power1.inOut" },
-    });
+  nextTick(() => {
+    ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        defaults: { ease: "power1.inOut" },
+      });
 
-    if (teapotRef.value) {
-      tl.to(teapotRef.value, {
-        rotation: -50,
-        duration: 3,
-      }, 0);
-    }
-
-    if (pourRef.value) {
-      const pourTl = gsap.timeline();
-      pourTl
-        .to(pourRef.value, { height: "100%", width: "2%", duration: 1, ease: "linear" })
-        .to(pourRef.value, { width: "3%", duration: 0.6, ease: "linear" })
-        .to(pourRef.value, { width: "3%", duration: 0.8, ease: "linear" })
-        .to(pourRef.value, { width: "2%", duration: 0.6, ease: "linear" })
-        .to(pourRef.value, { width: "0%", duration: 1, ease: "linear" });
-
-      tl.add(pourTl, 2.5);
-    }
-
-    const wordGroups = [words1Ref, words2Ref, words3Ref, words4Ref];
-
-    wordGroups.forEach((group, index) => {
-      if (group.value && group.value.length > 0) {
-        tl.fromTo(group.value,
-          {
-            y: 50,
-            scale: 0.8,
-            opacity: 0,
-            filter: "blur(10px)"
-          },
-          {
-            y: 0,
-            scale: 1,
-            opacity: 1,
-            filter: "blur(0px)",
-            duration: 1.5,
-            stagger: 0.05,
-            ease: "power2.out"
-          },
-          6.5 + (index * 0.8)
-        );
+      if (teapotRef.value) {
+        tl.to(teapotRef.value, {
+          rotation: -50,
+          duration: 3,
+        }, 0);
       }
-    });
 
-    if (sectionRef.value) {
-      tl.to(sectionRef.value, {
-        y: "-90vh",
-        duration: 4,
-        ease: "power1.out"
-      }, 4);
-    }
+      if (pourRef.value) {
+        const pourTl = gsap.timeline();
+        pourTl
+          .to(pourRef.value, { height: "100%", width: "2%", duration: 1, ease: "linear" })
+          .to(pourRef.value, { width: "3%", duration: 0.6, ease: "linear" })
+          .to(pourRef.value, { width: "3%", duration: 0.8, ease: "linear" })
+          .to(pourRef.value, { width: "2%", duration: 0.6, ease: "linear" })
+          .to(pourRef.value, { width: "0%", duration: 1, ease: "linear" });
 
-  }, sectionRef.value!);
+        tl.add(pourTl, 2.5);
+      }
+
+      const wordGroups = [words1Ref, words2Ref, words3Ref, words4Ref];
+
+      wordGroups.forEach((group, index) => {
+        if (group.value && group.value.length > 0) {
+          tl.fromTo(group.value,
+            {
+              y: 50,
+              scale: 0.8,
+              opacity: 0,
+              filter: "blur(10px)"
+            },
+            {
+              y: 0,
+              scale: 1,
+              opacity: 1,
+              filter: "blur(0px)",
+              duration: 1.5,
+              stagger: 0.05,
+              ease: "power2.out"
+            },
+            6.5 + (index * 0.8)
+          );
+        }
+      });
+
+      if (sectionRef.value) {
+        tl.to(sectionRef.value, {
+          y: "-90vh",
+          duration: 4,
+          ease: "power1.out"
+        }, 4);
+      }
+
+      if (props.isOverlay) {
+        tl.timeScale(2.0).play();
+      }
+
+    }, sectionRef.value!);
+  });
 });
 
 onUnmounted(() => {
-  ctx.revert();
+  ctx?.revert();
 });
 </script>
 
 <template>
-  <section id="teapot-section" ref="sectionRef" class="bg-pink-dark pt-20 relative text-dark h-2screen overflow-hidden">
+  <section 
+    id="teapot-section" 
+    ref="sectionRef" 
+    :class="[
+      'bg-pink-dark pt-20 relative text-dark h-2screen overflow-hidden',
+      props.isOverlay ? 'is-overlay' : ''
+    ]"
+  >
+    <Teleport to="body" v-if="props.isOverlay">
+      <button
+        @click="emit('back')"
+        class="back-to-garden-btn"
+      >
+        ← back to garden
+      </button>
+    </Teleport>
+
     <div ref="teapotRef" class="relative left-1/2 z-20 will-change-transform origin-center inline-block">
       <Teapot />
     </div>
@@ -119,3 +144,37 @@ onUnmounted(() => {
     </div>
   </section>
 </template>
+
+<style scoped>
+#teapot-section.is-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  background-color: #e4cbce !important;
+  width: 100vw !important;
+  height: 200vh !important;
+  padding-top: 5rem !important;
+}
+
+.back-to-garden-btn {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 1000000;
+  background: transparent;
+  border: none;
+  color: var(--color-dark, #491212);
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  padding: 0.4em 0;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.back-to-garden-btn:hover {
+  opacity: 1;
+  transform: translateX(-4px);
+}
+</style>

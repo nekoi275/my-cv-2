@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import Garden3D from "@/components/3DGarden.vue";
+import TeapotSection from "@/sections/TeapotSection.vue";
 import { gsap } from "gsap";
 import scenePlaceholder from "@/assets/scene_placeholder.webp";
 
@@ -8,7 +9,9 @@ const isSceneActive = ref(false);
 const isModelLoaded = ref(false);
 const isContactVisible = ref(false);
 const isUnloading = ref(false);
+const isTeapotVisible = ref(false);
 const instructionRows = ref<HTMLElement[]>([]);
+let savedScrollY = 0;
 
 const isCopied = ref(false);
 
@@ -144,6 +147,20 @@ const copyEmail = () => {
   });
 };
 
+const handleTreeClicked = () => {
+  savedScrollY = window.scrollY;
+  document.body.style.overflow = 'hidden';
+  isTeapotVisible.value = true;
+};
+
+const handleTeapotBack = () => {
+  isTeapotVisible.value = false;
+  document.body.style.overflow = '';
+  nextTick(() => {
+    window.scrollTo({ top: savedScrollY, behavior: 'instant' });
+  });
+};
+
 onMounted(() => {
   nextTick(() => {
     setTimeout(() => {
@@ -214,8 +231,9 @@ onUnmounted(() => {
               <div
                 v-for="(item, i) in [
                   'Click here to start',
-                  'Scroll to move forward',
+                  'Scroll to move',
                   'Drag mouse to look around',
+                  'Click on the interactive signs',
                 ]"
                 :key="i"
                 :ref="el => { if (el) instructionRows[i] = el as HTMLElement }"
@@ -249,8 +267,19 @@ onUnmounted(() => {
       v-if="isSceneActive" 
       @modelLoaded="isModelLoaded = true" 
       @sceneUnload="handleSceneUnload"
+      @treeClicked="handleTreeClicked"
       :class="{ 'opacity-0': !isModelLoaded, 'transition-opacity duration-1000': true, 'opacity-100': isModelLoaded }" 
     />
+
+    <Teleport to="body">
+      <Transition name="teapot-overlay">
+        <TeapotSection
+          v-if="isTeapotVisible"
+          :isOverlay="true"
+          @back="handleTeapotBack"
+        />
+      </Transition>
+    </Teleport>
 
     <Transition name="fade">
       <div v-if="isUnloading" class="absolute inset-0 z-40 bg-white"></div>
@@ -323,6 +352,17 @@ onUnmounted(() => {
 
 .fade-enter-from,
 .fade-leave-to {
+  opacity: 0;
+}
+
+.teapot-overlay-enter-active {
+  transition: opacity 0.45s ease;
+}
+.teapot-overlay-leave-active {
+  transition: opacity 0.35s ease;
+}
+.teapot-overlay-enter-from,
+.teapot-overlay-leave-to {
   opacity: 0;
 }
 
