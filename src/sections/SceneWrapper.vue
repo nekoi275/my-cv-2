@@ -87,30 +87,24 @@ onUnmounted(() => {
       
       <div 
         @click="initScene" 
-        class="start-card relative z-20 cursor-pointer p-8 md:p-10 bg-white border-2 border-[var(--color-dark)]"
+        class="relative z-10 cursor-pointer p-4"
       >
-        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--color-dark)] mb-4">
-          Enter the Garden
-        </h2>
         
         <div class="space-y-2 mb-8 text-[var(--color-dark)] font-medium">
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 bg-[var(--color-dark)]"></span>
+              <span class="w-1 h-1 bg-[var(--color-dark)]"></span>
             <span>Click here to start</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 bg-[var(--color-dark)]"></span>
+            <span class="w-1 h-1 bg-[var(--color-dark)]"></span>
             <span>Scroll to move forward</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 bg-[var(--color-dark)]"></span>
+            <span class="w-1 h-1 bg-[var(--color-dark)]"></span>
             <span>Drag mouse to look around</span>
           </div>
         </div>
 
-        <div class="flex justify-center text-[var(--color-dark)]">
-          <MouseScroll />
-        </div>
       </div>
     </div>
 
@@ -153,7 +147,6 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <!-- "Открытка" с имейлом -->
         <div class="md:col-span-5 relative">
           <div class="email-card relative bg-white p-8 md:p-10 border-2 border-[var(--color-dark)] shadow-[12px_12px_0px_var(--color-dark)]">
             <div class="tape"></div>
@@ -203,16 +196,6 @@ onUnmounted(() => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-.start-card {
-  box-shadow: 10px 10px 0px var(--color-dark);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.start-card:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: 14px 14px 0px var(--color-dark);
 }
 
 .contact-title {
