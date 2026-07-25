@@ -66,17 +66,14 @@ const onPointerMove = (e: PointerEvent) => {
     if (!isDragging.value || !canLookAround.value) return;
     
     const deltaX = e.clientX - prevPointer.x;
-    const deltaY = e.clientY - prevPointer.y;
-
-    if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        camera.rotation.y -= deltaX * 0.005;
-        
-        const limit = Math.PI / 2.2;
-        camera.rotation.y = Math.max(-limit, Math.min(limit, camera.rotation.y));
-    }
 
     prevPointer.x = e.clientX;
     prevPointer.y = e.clientY;
+
+    camera.rotation.y -= deltaX * 0.003;
+    
+    const limit = Math.PI / 3;
+    camera.rotation.y = Math.max(-limit, Math.min(limit, camera.rotation.y));
 };
 
 const onPointerUp = () => {
@@ -418,8 +415,24 @@ onMounted(async () => {
                 scrub: 1,
                 pin: true,
                 onUpdate: (self) => {
-                    if (self.progress >= 1/33 && !canLookAround.value) {
-                        canLookAround.value = true;
+                    if (self.progress >= 0.005) {
+                        if (!canLookAround.value) {
+                            canLookAround.value = true;
+                        }
+                    } else {
+                        if (canLookAround.value) {
+                            canLookAround.value = false;
+                            if (isDragging.value) {
+                                isDragging.value = false;
+                                if (container.value) container.value.style.cursor = '';
+                            }
+                            gsap.to(camera.rotation, {
+                                y: 0,
+                                duration: 0.8,
+                                ease: "power2.out",
+                                overwrite: "auto"
+                            });
+                        }
                     }
 
                     if (Math.abs(self.progress - lastScrollProgress) > 0.0001) {
@@ -548,7 +561,7 @@ onUnmounted(() => {
         style="touch-action: pan-y;" 
     >
         <button v-if="!isSceneUnloaded" @click="toggleMusic" class="music-toggle-btn">
-            {{ isMusicPlaying ? 'Turn Off Music' : 'Turn On Music' }}
+            Music: {{ isMusicPlaying ? 'on' : 'off' }}
         </button>
     </div>
 </template>
@@ -556,7 +569,7 @@ onUnmounted(() => {
 <style scoped>
 .music-toggle-btn {
     position: absolute;
-    bottom: 20px;
+    top: 20px;
     right: 20px;
     z-index: 100;
     padding: 10px 20px;
