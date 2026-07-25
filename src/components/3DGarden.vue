@@ -10,15 +10,13 @@ const REMOTE_GARDEN_MODEL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev
 const REMOTE_MUSIC = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/music.mp3";
 const REMOTE_KOI_MODEL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/koi.glb";
 
-
 gsap.registerPlugin(ScrollTrigger);
-
 ScrollTrigger.config({ ignoreMobileResize: true });
-
 
 const container = ref<HTMLDivElement | null>(null);
 let scene: THREE.Scene;
 let camera: THREE.PerspectiveCamera;
+let cameraRig: THREE.Group;
 let renderer: THREE.WebGLRenderer;
 let animationId: number;
 let mm: gsap.MatchMedia;
@@ -33,10 +31,13 @@ let fogMesh: THREE.InstancedMesh;
 const fogCount = 50;
 const fogInfo: { position: THREE.Vector3, rotationZ: number }[] = [];
 
-
 const isMusicPlaying = ref(false);
 const isModelReady = ref(false);
 const isSceneUnloaded = ref(false);
+
+const canLookAround = ref(false);
+const isDragging = ref(false);
+const prevPointer = { x: 0, y: 0 };
 
 const toggleMusic = () => {
     if (sound && sound.buffer) {
@@ -51,6 +52,39 @@ const toggleMusic = () => {
 };
 
 const emit = defineEmits(['modelLoaded', 'sceneUnload']);
+
+const onPointerDown = (e: PointerEvent) => {
+    if (!canLookAround.value) return;
+    isDragging.value = true;
+    gsap.killTweensOf(camera.rotation);
+    prevPointer.x = e.clientX;
+    prevPointer.y = e.clientY;
+    if (container.value) container.value.style.cursor = 'grabbing';
+};
+
+const onPointerMove = (e: PointerEvent) => {
+    if (!isDragging.value || !canLookAround.value) return;
+    
+    const deltaX = e.clientX - prevPointer.x;
+    const deltaY = e.clientY - prevPointer.y;
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        camera.rotation.y -= deltaX * 0.005;
+        
+        const limit = Math.PI / 2.2;
+        camera.rotation.y = Math.max(-limit, Math.min(limit, camera.rotation.y));
+    }
+
+    prevPointer.x = e.clientX;
+    prevPointer.y = e.clientY;
+};
+
+const onPointerUp = () => {
+    if (isDragging.value) {
+        isDragging.value = false;
+        if (container.value) container.value.style.cursor = '';
+    }
+};
 
 onMounted(async () => {
     if (!container.value) return;
@@ -79,8 +113,13 @@ onMounted(async () => {
 
     const width = container.value.clientWidth;
     const height = container.value.clientHeight;
+    
     camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    camera.position.set(0, 0, 5);
+    
+    cameraRig = new THREE.Group();
+    cameraRig.position.set(0, 0, 5);
+    cameraRig.add(camera);
+    scene.add(cameraRig);
 
     const listener = new THREE.AudioListener();
     camera.add(listener);
@@ -105,7 +144,6 @@ onMounted(async () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.value.appendChild(renderer.domElement);
 
-
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
 
@@ -121,7 +159,6 @@ onMounted(async () => {
             const model = gltf.scene;
             model.scale.set(0.05, 0.05, 0.05);
             model.updateMatrixWorld(true);
-
             model.position.set(-17, -2, -33);
             scene.add(model);
             emit('modelLoaded');
@@ -130,11 +167,12 @@ onMounted(async () => {
                 sound.play();
                 isMusicPlaying.value = true;
             }
+            requestAnimationFrame(() => {
+                ScrollTrigger.refresh();
+            });
         },
         undefined,
-        (error) => {
-            console.error("An error happened loading the model:", error);
-        }
+        (error) => console.error("An error happened loading the model:", error)
     );
 
     const createSakuraPetals = () => {
@@ -170,7 +208,6 @@ onMounted(async () => {
                 rotationSpeed: Math.random() * 0.02 + 0.01
             });
         }
-        
         scene.add(sakuraMesh);
     };
 
@@ -188,8 +225,7 @@ onMounted(async () => {
         context.fillStyle = gradient;
         context.fillRect(0, 0, 32, 32);
 
-        const texture = new THREE.CanvasTexture(canvas);
-        return texture;
+        return new THREE.CanvasTexture(canvas);
     };
 
     const createPondFog = () => {
@@ -218,10 +254,7 @@ onMounted(async () => {
             dummy.updateMatrix();
             fogMesh.setMatrixAt(i, dummy.matrix);
 
-            fogInfo.push({
-                position: new THREE.Vector3(x, y, z),
-                rotationZ: rotZ
-            });
+            fogInfo.push({ position: new THREE.Vector3(x, y, z), rotationZ: rotZ });
         }
         scene.add(fogMesh);
     };
@@ -247,7 +280,6 @@ onMounted(async () => {
         });
 
         potSmokeMesh = new THREE.InstancedMesh(geometry, material, potSmokeCount);
-        
         potSmokeMesh.position.set(-16.95, 0.65, -30.11); 
 
         for (let i = 0; i < potSmokeCount; i++) {
@@ -269,32 +301,22 @@ onMounted(async () => {
         KOI_MODEL_URL,
         (gltf) => {
             const model = gltf.scene;
-            
             for (let i = 0; i < fishCount; i++) {
                 const fish = SkeletonUtils.clone(model);
                 fish.scale.set(0.08, 0.08, 0.08);
-                
                 const x = -3 + (Math.random() - 0.5) * 10;
                 const z = -10 + (Math.random() - 0.5) * 8;
-                const y = -2.5;
-                
-                fish.position.set(x, y, z);
-                
+                fish.position.set(x, -2.5, z);
                 fish.rotation.y = Math.random() * Math.PI * 2;
-
                 scene.add(fish);
 
                 const speed = 0.01 + Math.random() * 0.01;
                 const angle = Math.random() * Math.PI * 2;
-                const velocity = new THREE.Vector3(Math.cos(angle) * speed, 0, Math.sin(angle) * speed);
-
-                fishList.push({ mesh: fish, velocity, speed });
+                fishList.push({ mesh: fish, velocity: new THREE.Vector3(Math.cos(angle) * speed, 0, Math.sin(angle) * speed), speed });
             }
         },
         undefined,
-        (error) => {
-            console.error("An error happened loading the koi model:", error);
-        }
+        (error) => console.error("An error happened loading the koi model:", error)
     );
 
     const animate = () => {
@@ -302,26 +324,15 @@ onMounted(async () => {
         
         fishList.forEach((fishInfo) => {
             const { mesh, velocity } = fishInfo;
-            
             mesh.position.add(velocity);
-
-            const targetPos = mesh.position.clone().add(velocity);
-            mesh.lookAt(targetPos);
+            mesh.lookAt(mesh.position.clone().add(velocity));
 
             let bounced = false;
-
-            if (mesh.position.x < -13 || mesh.position.x > 7) {
-                velocity.x = -velocity.x;
-                bounced = true;
-            }
-            if (mesh.position.z < -17.5 || mesh.position.z > -2.5) {
-                velocity.z = -velocity.z;
-                bounced = true;
-            }
+            if (mesh.position.x < -13 || mesh.position.x > 7) { velocity.x = -velocity.x; bounced = true; }
+            if (mesh.position.z < -17.5 || mesh.position.z > -2.5) { velocity.z = -velocity.z; bounced = true; }
 
             if (!bounced && Math.random() < 0.005) {
-                const angle = (Math.random() - 0.5) * 0.5;
-                velocity.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle);
+                velocity.applyAxisAngle(new THREE.Vector3(0, 1, 0), (Math.random() - 0.5) * 0.5);
             }
         });
 
@@ -329,7 +340,6 @@ onMounted(async () => {
             for (let i = 0; i < petalCount; i++) {
                 const info = petalInfo[i];
                 info.position.add(info.velocity);
-                
                 info.position.x += Math.sin(Date.now() * 0.001 + i) * 0.002;
                 info.position.z += Math.cos(Date.now() * 0.001 + i) * 0.002;
 
@@ -340,9 +350,7 @@ onMounted(async () => {
                 }
 
                 dummy.position.copy(info.position);
-                
                 dummy.rotateOnAxis(info.rotationAxis, info.rotationSpeed);
-                
                 dummy.updateMatrix();
                 sakuraMesh.setMatrixAt(i, dummy.matrix);
             }
@@ -352,7 +360,6 @@ onMounted(async () => {
         if (fogMesh) {
              for (let i = 0; i < fogCount; i++) {
                 const info = fogInfo[i];
-                
                 dummy.position.copy(info.position);
                 dummy.rotation.x = -Math.PI / 2;
                 dummy.rotation.z = info.rotationZ; 
@@ -371,25 +378,15 @@ onMounted(async () => {
             for (let i = 0; i < potSmokeCount; i++) {
                 const info = potSmokeInfo[i];
                 info.age++;
-
                 if (info.age >= info.life) {
                     info.age = 0;
                     info.position.set(0, 0, 0);
-                    info.velocity.set(
-                        (Math.random() - 0.5) * 0.02,
-                        0.01 + Math.random() * 0.02,
-                        (Math.random() - 0.5) * 0.02
-                    );
+                    info.velocity.set((Math.random() - 0.5) * 0.02, 0.01 + Math.random() * 0.02, (Math.random() - 0.5) * 0.02);
                 }
-
                 info.position.add(info.velocity);
-                
                 dummySmoke.position.copy(info.position);
                 dummySmoke.lookAt(camera.position);
-                
-                const scale = 1 + (info.age / info.life) * 2;
-                dummySmoke.scale.setScalar(scale);
-
+                dummySmoke.scale.setScalar(1 + (info.age / info.life) * 2);
                 dummySmoke.updateMatrix();
                 potSmokeMesh.setMatrixAt(i, dummySmoke.matrix);
             }
@@ -402,29 +399,57 @@ onMounted(async () => {
 
     window.addEventListener("resize", onWindowResize);
 
+    container.value.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+
     mm = gsap.matchMedia();
 
     const setupTimeline = (endValue: string) => {
+        let lastScrollProgress = 0;
+
         const tl = gsap.timeline({
             defaults: { duration: 1 },
             scrollTrigger: {
+                id: "gardenScroll",
                 trigger: container.value,
                 start: "top top",
                 end: endValue,
                 scrub: 1,
                 pin: true,
                 onUpdate: (self) => {
-                    if (self.progress > 0.99) {
+                    if (self.progress >= 1/33 && !canLookAround.value) {
+                        canLookAround.value = true;
+                    }
+
+                    if (Math.abs(self.progress - lastScrollProgress) > 0.0001) {
+                        if (canLookAround.value && !isDragging.value && Math.abs(camera.rotation.y) > 0.001) {
+                            gsap.to(camera.rotation, {
+                                y: 0,
+                                duration: 1.5,
+                                ease: "power2.out",
+                                overwrite: "auto"
+                            });
+                        }
+                    }
+                    lastScrollProgress = self.progress;
+
+                    if (self.progress > 0.99 && !isSceneUnloaded.value) {
                         isSceneUnloaded.value = true;
                         emit('sceneUnload');
                     }
                 },
-                onLeave: () => {
-                    isSceneUnloaded.value = true;
-                    emit('sceneUnload');
+                onLeave: (self) => {
+                    if (self.progress >= 0.95 && !isSceneUnloaded.value) {
+                        isSceneUnloaded.value = true;
+                        emit('sceneUnload');
+                    }
                 },
+                onLeaveBack: () => {
+                    canLookAround.value = false;
+                    gsap.to(camera.rotation, { y: 0, duration: 0.5, overwrite: true });
+                }
             },
-
         });
 
         const steps = [
@@ -465,29 +490,22 @@ onMounted(async () => {
 
         steps.forEach((step) => {
             if (step.pos) {
-                tl.to(camera.position, step.pos);
+                tl.to(cameraRig.position, step.pos);
             }
             if (step.rot) {
-                tl.to(camera.rotation, step.rot, step.pos ? "<" : undefined);
+                tl.to(cameraRig.rotation, step.rot, step.pos ? "<" : undefined);
             }
         });
     };
 
-    mm.add("(min-width: 800px)", () => {
-        setupTimeline("+=10000");
-    });
-
-    mm.add("(max-width: 799px)", () => {
-        setupTimeline("+=4000");
-    });
+    mm.add("(min-width: 800px)", () => setupTimeline("+=10000"));
+    mm.add("(max-width: 799px)", () => setupTimeline("+=4000"));
 });
 
 const onWindowResize = () => {
     if (!container.value || !camera || !renderer) return;
-
     const width = container.value.clientWidth;
     const height = container.value.clientHeight;
-
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
@@ -495,26 +513,21 @@ const onWindowResize = () => {
 
 onUnmounted(() => {
     window.removeEventListener("resize", onWindowResize);
+    window.removeEventListener('pointermove', onPointerMove);
+    window.removeEventListener('pointerup', onPointerUp);
+    if (container.value) container.value.removeEventListener('pointerdown', onPointerDown);
 
-    if (sound && sound.isPlaying) {
-        sound.stop();
-    }
-
+    if (sound && sound.isPlaying) sound.stop();
     cancelAnimationFrame(animationId);
-
     if (mm) mm.revert();
-
 
     if (scene) {
         scene.traverse((object) => {
             if ((object as THREE.Mesh).isMesh) {
                 const mesh = object as THREE.Mesh;
                 mesh.geometry.dispose();
-                if (Array.isArray(mesh.material)) {
-                    mesh.material.forEach((m) => m.dispose());
-                } else {
-                    mesh.material.dispose();
-                }
+                if (Array.isArray(mesh.material)) mesh.material.forEach((m) => m.dispose());
+                else mesh.material.dispose();
             }
         });
     }
@@ -529,7 +542,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div ref="container" class="h-screen w-full relative">
+    <div 
+        ref="container" 
+        class="h-screen w-full relative" 
+        style="touch-action: pan-y;" 
+    >
         <button v-if="!isSceneUnloaded" @click="toggleMusic" class="music-toggle-btn">
             {{ isMusicPlaying ? 'Turn Off Music' : 'Turn On Music' }}
         </button>

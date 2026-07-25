@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import Projects from '@/sections/Projects.vue'
 import Footer from '@/sections/Footer.vue'
-import Facts from '@/sections/Facts.vue'
-import TeapotSection from '@/sections/TeapotSection.vue'
+//import Facts from '@/sections/Facts.vue'
+//import TeapotSection from '@/sections/TeapotSection.vue'
 import Games from '@/sections/Games.vue'
 import { ref } from 'vue'
 
@@ -11,10 +11,9 @@ const showGames = ref(false)
 
 <template>
   <main v-if="!showGames">
-    <div class="h-screen overflow-hidden">
+    <!-- <div class="h-screen overflow-hidden">
       <TeapotSection></TeapotSection>
-    </div>
-    <Facts></Facts>
+    </div> -->
     <Projects></Projects>
   </main>
   <Games v-else @back="showGames = false"></Games>
