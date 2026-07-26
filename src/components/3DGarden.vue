@@ -13,6 +13,20 @@ const REMOTE_KOI_MODEL = "https://pub-aa00446aba67443397993f29b0708952.r2.dev/ko
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
 
+export interface InteractiveTarget {
+    id: string;
+    position: THREE.Vector3 | { x: number; y: number; z: number };
+    component?: any;
+    title?: string;
+    [key: string]: any;
+}
+
+const props = withDefaults(defineProps<{
+    targets?: InteractiveTarget[];
+}>(), {
+    targets: () => []
+});
+
 const container = ref<HTMLDivElement | null>(null);
 let scene: THREE.Scene;
 let camera: THREE.PerspectiveCamera;
@@ -33,10 +47,8 @@ const fogInfo: { position: THREE.Vector3, rotationZ: number }[] = [];
 
 const raycaster = new THREE.Raycaster();
 const hoverPointer = new THREE.Vector2();
-let allTreeTargets: THREE.Object3D[] = [];
-let treeIndicatorGroup: THREE.Group | null = null;
-let indicatorInnerMat: THREE.MeshBasicMaterial | null = null;
-let indicatorOuterMat: THREE.MeshBasicMaterial | null = null;
+let allIndicatorMeshes: THREE.Object3D[] = [];
+let indicatorGroups: THREE.Group[] = [];
 let wasPointerDrag = false;
 let hoverCheckScheduled = false;
 
@@ -60,7 +72,11 @@ const toggleMusic = () => {
     }
 };
 
-const emit = defineEmits(['modelLoaded', 'sceneUnload', 'treeClicked']);
+const emit = defineEmits<{
+    (e: 'modelLoaded'): void;
+    (e: 'sceneUnload'): void;
+    (e: 'indicatorClicked', target: InteractiveTarget): void;
+}>();
 
 const onPointerDown = (e: PointerEvent) => {
     wasPointerDrag = false;
@@ -92,89 +108,67 @@ const onPointerUp = (e: PointerEvent) => {
         if (container.value) container.value.style.cursor = '';
     }
 
-    if (!wasPointerDrag && allTreeTargets.length > 0 && isModelReady.value && container.value) {
+    if (!wasPointerDrag && allIndicatorMeshes.length > 0 && isModelReady.value && container.value) {
         const rect = container.value.getBoundingClientRect();
         hoverPointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         hoverPointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
         raycaster.setFromCamera(hoverPointer, camera);
         
-        const intersects = raycaster.intersectObjects(allTreeTargets, true);
+        const intersects = raycaster.intersectObjects(allIndicatorMeshes, true);
         if (intersects.length > 0) {
-            emit('treeClicked');
+            const hitObject = intersects[0].object;
+            const targetData = hitObject.userData?.target as InteractiveTarget;
+            if (targetData) {
+                emit('indicatorClicked', targetData);
+            }
         }
     }
 };
 
 const onMouseMove = (e: MouseEvent) => {
-    if (!container.value || allTreeTargets.length === 0 || !isModelReady.value || isDragging.value) return;
+    if (!container.value || allIndicatorMeshes.length === 0 || !isModelReady.value || isDragging.value) return;
     const rect = container.value.getBoundingClientRect();
     hoverPointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     hoverPointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
     hoverCheckScheduled = true;
 };
 
-const findAndSetupTreeTargets = (model: THREE.Object3D): THREE.Vector3 => {
-    allTreeTargets = [];
+const createIndicator = (target: InteractiveTarget) => {
+    const group = new THREE.Group();
+    const pos = target.position instanceof THREE.Vector3 
+        ? target.position.clone() 
+        : new THREE.Vector3(target.position.x, target.position.y, target.position.z);
 
-    model.traverse(obj => {
-        if ((obj as THREE.Mesh).isMesh) {
-            const mesh = obj as THREE.Mesh;
-            const box = new THREE.Box3().setFromObject(mesh);
-            const center = new THREE.Vector3();
-            box.getCenter(center);
-
-            if (center.x > 3.0 && center.x < 10.0 && center.z > -9.0 && center.z < -1.0) {
-                allTreeTargets.push(mesh);
-            }
-        }
-    });
-
-    return new THREE.Vector3(7.2, 0.1, -4.5);
-};
-
-const createTreeIndicator = (position: THREE.Vector3) => {
-    treeIndicatorGroup = new THREE.Group();
-    treeIndicatorGroup.position.copy(position);
+    group.position.copy(pos);
 
     const hitGeo = new THREE.SphereGeometry(1.0, 16, 16);
     const hitMat = new THREE.MeshBasicMaterial({ visible: false });
     const hitMesh = new THREE.Mesh(hitGeo, hitMat);
-    treeIndicatorGroup.add(hitMesh);
-    allTreeTargets.push(hitMesh);
+    hitMesh.userData = { target };
+    group.add(hitMesh);
+    allIndicatorMeshes.push(hitMesh);
 
     const innerGeo = new THREE.SphereGeometry(0.32, 24, 24);
-    indicatorInnerMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.9 });
-    const inner = new THREE.Mesh(innerGeo, indicatorInnerMat);
-    treeIndicatorGroup.add(inner);
-    allTreeTargets.push(inner);
+    const innerMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.9 });
+    const inner = new THREE.Mesh(innerGeo, innerMat);
+    inner.userData = { target };
+    group.add(inner);
+    allIndicatorMeshes.push(inner);
 
     const crystalGeo = new THREE.OctahedronGeometry(0.2, 0);
     const crystalMat = new THREE.MeshBasicMaterial({ color: 0xe0f2fe, wireframe: true });
     const crystalMesh = new THREE.Mesh(crystalGeo, crystalMat);
-    treeIndicatorGroup.add(crystalMesh);
-    allTreeTargets.push(crystalMesh);
+    crystalMesh.userData = { target };
+    group.add(crystalMesh);
+    allIndicatorMeshes.push(crystalMesh);
 
-    const ringGeo = new THREE.RingGeometry(0.38, 0.55, 32);
-    indicatorOuterMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, side: THREE.DoubleSide, transparent: true, opacity: 0.8 });
-    const ring = new THREE.Mesh(ringGeo, indicatorOuterMat);
-    ring.rotation.x = -Math.PI / 2;
-    treeIndicatorGroup.add(ring);
-    allTreeTargets.push(ring);
-
-    scene.add(treeIndicatorGroup);
+    scene.add(group);
+    indicatorGroups.push(group);
 
     gsap.to(crystalMesh.rotation, { y: Math.PI * 2, duration: 3.5, repeat: -1, ease: 'none' });
-    gsap.to(indicatorInnerMat, { opacity: 0.35, duration: 0.9, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+    gsap.to(innerMat, { opacity: 0.35, duration: 0.9, repeat: -1, yoyo: true, ease: 'sine.inOut' });
     gsap.to(inner.scale, { x: 1.4, y: 1.4, z: 1.4, duration: 0.9, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-    gsap.to(treeIndicatorGroup.position, { y: position.y + 0.18, duration: 1.3, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-
-    const ripple = () => {
-        ring.scale.set(1, 1, 1);
-        if (indicatorOuterMat) indicatorOuterMat.opacity = 0.8;
-        gsap.to(ring.scale, { x: 2.8, y: 2.8, z: 2.8, duration: 1.4, ease: 'power2.out', onComplete: ripple });
-        gsap.to(indicatorOuterMat, { opacity: 0, duration: 1.4, ease: 'power2.out' });
-    };
-    ripple();
+    gsap.to(group.position, { y: pos.y + 0.18, duration: 1.3, repeat: -1, yoyo: true, ease: 'sine.inOut' });
 };
 
 onMounted(async () => {
@@ -256,8 +250,9 @@ onMounted(async () => {
             emit('modelLoaded');
             isModelReady.value = true;
 
-            const indicatorPos = findAndSetupTreeTargets(model);
-            createTreeIndicator(indicatorPos);
+            if (props.targets && props.targets.length > 0) {
+                props.targets.forEach(target => createIndicator(target));
+            }
 
             if (sound && sound.buffer && !sound.isPlaying) {
                 sound.play();
@@ -491,10 +486,10 @@ onMounted(async () => {
 
         renderer.render(scene, camera);
 
-        if (hoverCheckScheduled && allTreeTargets.length > 0 && !isDragging.value) {
+        if (hoverCheckScheduled && allIndicatorMeshes.length > 0 && !isDragging.value) {
             hoverCheckScheduled = false;
             raycaster.setFromCamera(hoverPointer, camera);
-            const hits = raycaster.intersectObjects(allTreeTargets, true);
+            const hits = raycaster.intersectObjects(allIndicatorMeshes, true);
             if (container.value) {
                 container.value.style.cursor = hits.length > 0 ? 'pointer' : '';
             }
@@ -642,13 +637,24 @@ onUnmounted(() => {
         container.value.removeEventListener('mousemove', onMouseMove);
     }
 
-    if (treeIndicatorGroup) {
-        gsap.killTweensOf(treeIndicatorGroup.position);
-        treeIndicatorGroup.children.forEach(c => gsap.killTweensOf(c.scale));
-        if (indicatorInnerMat) gsap.killTweensOf(indicatorInnerMat);
-        if (indicatorOuterMat) gsap.killTweensOf(indicatorOuterMat);
-        scene?.remove(treeIndicatorGroup);
-    }
+    indicatorGroups.forEach(group => {
+        gsap.killTweensOf(group.position);
+        group.children.forEach(c => {
+            gsap.killTweensOf(c.rotation);
+            gsap.killTweensOf(c.scale);
+            if ((c as THREE.Mesh).material) {
+                const mat = (c as THREE.Mesh).material;
+                if (Array.isArray(mat)) mat.forEach(m => { gsap.killTweensOf(m); m.dispose(); });
+                else { gsap.killTweensOf(mat); mat.dispose(); }
+            }
+            if ((c as THREE.Mesh).geometry) {
+                (c as THREE.Mesh).geometry.dispose();
+            }
+        });
+        scene?.remove(group);
+    });
+    indicatorGroups = [];
+    allIndicatorMeshes = [];
 
     if (sound && sound.isPlaying) sound.stop();
     cancelAnimationFrame(animationId);

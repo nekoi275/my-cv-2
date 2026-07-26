@@ -1,21 +1,34 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from "vue";
-import Garden3D from "@/components/3DGarden.vue";
+import { ref, onMounted, onUnmounted, nextTick, markRaw } from "vue";
+import Garden3D, { type InteractiveTarget } from "@/components/3DGarden.vue";
 import TeapotSection from "@/sections/TeapotSection.vue";
+import Projects from "@/sections/Projects.vue";
+import * as THREE from "three";
 import { gsap } from "gsap";
 import scenePlaceholder from "@/assets/scene_placeholder.webp";
 
 const isSceneActive = ref(false);
 const isModelLoaded = ref(false);
-const isContactVisible = ref(false);
 const isUnloading = ref(false);
-const isTeapotVisible = ref(false);
+const isFinished = ref(false);
+const activeTarget = ref<InteractiveTarget | null>(null);
 const instructionRows = ref<HTMLElement[]>([]);
 let savedScrollY = 0;
 
-const isCopied = ref(false);
-
-const CONTACT_EMAIL = "valeriiadrozdova90@gmail.com";
+const interactiveTargets: InteractiveTarget[] = [
+  {
+    id: "teapot",
+    position: new THREE.Vector3(7.2, 0.1, -4.5),
+    component: markRaw(TeapotSection),
+    title: "About Me"
+  },
+  {
+    id: "projects",
+    position: new THREE.Vector3(5.0, 0.1, -11.0),
+    component: markRaw(Projects),
+    title: "Projects"
+  }
+];
 
 const turbulenceState = { scale: 0 };
 
@@ -121,7 +134,7 @@ const playSubmergeAnimation = (onComplete: () => void) => {
 
 const initScene = () => {
   playSubmergeAnimation(() => {
-    isContactVisible.value = false;
+    isFinished.value = false;
     isSceneActive.value = true;
     isModelLoaded.value = false;
     isUnloading.value = false;
@@ -133,28 +146,19 @@ const handleSceneUnload = () => {
   isUnloading.value = true;
   setTimeout(() => {
     isSceneActive.value = false;
-    isContactVisible.value = true;
+    isFinished.value = true;
     isUnloading.value = false;
   }, 1000);
 };
 
-const copyEmail = () => {
-  navigator.clipboard.writeText(CONTACT_EMAIL).then(() => {
-    isCopied.value = true;
-    setTimeout(() => {
-      isCopied.value = false;
-    }, 2000);
-  });
-};
-
-const handleTreeClicked = () => {
+const handleIndicatorClicked = (target: InteractiveTarget) => {
   savedScrollY = window.scrollY;
   document.body.style.overflow = 'hidden';
-  isTeapotVisible.value = true;
+  activeTarget.value = target;
 };
 
-const handleTeapotBack = () => {
-  isTeapotVisible.value = false;
+const closeOverlay = () => {
+  activeTarget.value = null;
   document.body.style.overflow = '';
   nextTick(() => {
     window.scrollTo({ top: savedScrollY, behavior: 'instant' });
@@ -180,8 +184,8 @@ onUnmounted(() => {
   <section 
     ref="sectionRef" 
     id="projects" 
-    class="bg-pink-dark relative"
-    :class="{ 'h-screen overflow-hidden': !isModelLoaded, 'min-h-screen': isModelLoaded }"
+    class="bg-pink-dark relative min-h-screen"
+    :class="{ 'h-screen overflow-hidden': !isModelLoaded && !isFinished, 'min-h-screen': isModelLoaded || isFinished }"
   >
     
     <svg class="water-svg-filter" xmlns="http://www.w3.org/2000/svg">
@@ -210,7 +214,7 @@ onUnmounted(() => {
 
     <Transition name="fade">
       <div 
-        v-if="(!isSceneActive || !isModelLoaded) && !isContactVisible" 
+        v-if="(!isSceneActive || !isModelLoaded) && !isFinished" 
         class="absolute top-0 left-0 w-full h-screen z-10 flex items-center justify-center overflow-hidden"
       >
         <img :src="scenePlaceholder" alt="Scene Placeholder" class="absolute top-0 left-0 w-full h-screen object-cover" />
@@ -265,71 +269,31 @@ onUnmounted(() => {
 
     <Garden3D 
       v-if="isSceneActive" 
+      :targets="interactiveTargets"
       @modelLoaded="isModelLoaded = true" 
       @sceneUnload="handleSceneUnload"
-      @treeClicked="handleTreeClicked"
+      @indicatorClicked="handleIndicatorClicked"
       :class="{ 'opacity-0': !isModelLoaded, 'transition-opacity duration-1000': true, 'opacity-100': isModelLoaded }" 
     />
 
     <Teleport to="body">
       <Transition name="teapot-overlay">
-        <TeapotSection
-          v-if="isTeapotVisible"
-          :isOverlay="true"
-          @back="handleTeapotBack"
-        />
+        <div 
+          v-if="activeTarget && activeTarget.component" 
+          class="fixed inset-0 z-[999999] overflow-auto bg-[#e4cbce]"
+        >
+          <component
+            :is="activeTarget.component"
+            :isOverlay="true"
+            @back="closeOverlay"
+          />
+        </div>
       </Transition>
     </Teleport>
 
     <Transition name="fade">
       <div v-if="isUnloading" class="absolute inset-0 z-40 bg-white"></div>
     </Transition>
-
-    <div v-if="isContactVisible" class="absolute inset-0 z-30 flex items-center justify-center bg-pink-dark p-4">
-      <div class="contact-wrapper relative w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
-        
-        <div class="md:col-span-7 relative z-10">
-          <h2 class="contact-title text-[var(--color-dark)]">
-            Have an<br>
-            <span class="italic font-light">idea?</span>
-          </h2>
-          
-          <div class="mt-6 max-w-md text-[var(--color-dark)] text-lg font-medium leading-relaxed">
-            <p>
-              The garden is explored, but the journey of creation is just beginning. 
-            </p>
-            <p class="mt-3 opacity-80">
-              If you have a vision for a web experience, a game, or an app, let's bring it to life. Drop a line about your project, and let's create something beautiful together.
-            </p>
-          </div>
-        </div>
-
-        <div class="md:col-span-5 relative">
-          <div class="email-card relative bg-white p-8 md:p-10 border-2 border-[var(--color-dark)] shadow-[12px_12px_0px_var(--color-dark)]">
-            <div class="tape"></div>
-            
-            <span class="block text-sm uppercase tracking-[0.2em] text-gray-500 mb-4">
-              Reach out via email
-            </span>
-            
-            <a 
-              :href="`mailto:${CONTACT_EMAIL}`" 
-              class="block text-xl md:text-2xl font-bold text-[var(--color-dark)] hover:underline break-all mb-8"
-            >
-              {{ CONTACT_EMAIL }}
-            </a>
-
-            <button 
-              @click="copyEmail" 
-              class="copy-btn w-full py-3 border-2 border-[var(--color-dark)] bg-[var(--color-green-light)] text-[var(--color-dark)] font-bold uppercase tracking-wider transition-all hover:bg-[var(--color-dark)] hover:text-[var(--color-green-light)]"
-            >
-              {{ isCopied ? 'Copied to clipboard!' : 'Copy email address' }}
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
 
   </section>
 </template>
@@ -364,36 +328,6 @@ onUnmounted(() => {
 .teapot-overlay-enter-from,
 .teapot-overlay-leave-to {
   opacity: 0;
-}
-
-.contact-title {
-  font-size: clamp(3.5rem, 8vw, 7rem);
-  line-height: 0.9;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-}
-
-.email-card {
-  transform: rotate(-2deg);
-  transition: transform 0.4s cubic-bezier(0.25, 1.5, 0.5, 1);
-}
-
-.email-card:hover {
-  transform: rotate(0deg);
-}
-
-.tape {
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%) rotate(-2deg);
-  width: 120px;
-  height: 35px;
-  background-color: rgba(255, 255, 255, 0.6);
-  border-left: 2px dashed rgba(0, 0, 0, 0.1);
-  border-right: 2px dashed rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  backdrop-filter: blur(2px);
 }
 
 .water-svg-filter {

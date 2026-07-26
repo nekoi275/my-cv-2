@@ -3,6 +3,7 @@ import { onMounted, ref, onUnmounted, nextTick } from "vue";
 import gsap from "gsap";
 import Teapot from "@/components/Teapot.vue";
 import MouseScroll from "@/components/MouseScroll.vue";
+import ReturnButton from "@/components/ReturnButton.vue";
 
 const props = defineProps<{ isOverlay?: boolean }>();
 const emit = defineEmits(['back']);
@@ -105,12 +106,7 @@ onUnmounted(() => {
     ]"
   >
     <Teleport to="body" v-if="props.isOverlay">
-      <button
-        @click="emit('back')"
-        class="back-to-garden-btn"
-      >
-        ← back to garden
-      </button>
+      <ReturnButton @back="emit('back')" />
     </Teleport>
 
     <div ref="teapotRef" class="relative left-1/2 z-20 will-change-transform origin-center inline-block">
@@ -154,27 +150,5 @@ onUnmounted(() => {
   width: 100vw !important;
   height: 200vh !important;
   padding-top: 5rem !important;
-}
-
-.back-to-garden-btn {
-  position: fixed;
-  top: 1.5rem;
-  left: 1.5rem;
-  z-index: 1000000;
-  background: transparent;
-  border: none;
-  color: var(--color-dark, #491212);
-  font-family: monospace;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  padding: 0.4em 0;
-  opacity: 0.7;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-.back-to-garden-btn:hover {
-  opacity: 1;
-  transform: translateX(-4px);
 }
 </style>
