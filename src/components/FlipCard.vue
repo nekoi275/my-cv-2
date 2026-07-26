@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import PixelArt from "@/components/PixelArt.vue";
-
 export interface CardLink {
   name: string;
   url: string;
@@ -23,7 +21,6 @@ defineProps<{
       <div class="flip-card-front">
         <h3 class="text-xl">{{ cardInfo.heading }}</h3>
         <p class="pt-2">{{ cardInfo.data }}</p>
-        <PixelArt v-if="cardInfo.links && cardInfo.links.length > 1" class="relative mt-6 ml-18" />
       </div>
       <div class="flip-card-back text-center">
         <div v-if="cardInfo.links && cardInfo.links.length > 0">
@@ -31,7 +28,6 @@ defineProps<{
             <a :href="cardInfo.links[0].url" class="block text-center" target="_blank"
               :aria-label="`Visit ${cardInfo.links[0].name}`">
               {{ cardInfo.links[0].name }}
-              <PixelArt class="relative mt-6 ml-18" />
             </a>
           </div>
           <div v-else class="links-list">
