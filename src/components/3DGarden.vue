@@ -686,31 +686,12 @@ onUnmounted(() => {
         class="h-screen w-full relative" 
         style="touch-action: pan-y;" 
     >
-        <button v-if="!isSceneUnloaded" @click="toggleMusic" class="music-toggle-btn">
+        <button 
+            v-if="!isSceneUnloaded" 
+            @click="toggleMusic" 
+            class="absolute top-5 right-5 z-50 px-5 py-2.5 bg-white/80 border-0 rounded-full cursor-pointer font-bold transition-all duration-300 shadow-md hover:bg-white hover:scale-105 text-sm"
+        >
             Music: {{ isMusicPlaying ? 'on' : 'off' }}
         </button>
     </div>
 </template>
-
-<style scoped>
-.music-toggle-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 100;
-    padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    font-family: inherit;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.music-toggle-btn:hover {
-    background-color: rgba(255, 255, 255, 1);
-    transform: scale(1.05);
-}
-</style>

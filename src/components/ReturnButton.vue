@@ -13,33 +13,9 @@ const handleClick = (e: MouseEvent) => {
 <template>
   <button
     @click="handleClick"
-    class="back-to-garden-btn"
+    class="fixed top-6 left-6 z-[1000000] bg-transparent border-0 text-[var(--color-dark,#491212)] font-mono text-[0.85rem] font-semibold tracking-wider cursor-pointer py-1.5 px-0 opacity-70 transition-all duration-200 hover:opacity-100 hover:-translate-x-1"
     type="button"
   >
     ← back to garden
   </button>
 </template>
-
-<style scoped>
-.back-to-garden-btn {
-  position: fixed;
-  top: 1.5rem;
-  left: 1.5rem;
-  z-index: 1000000;
-  background: transparent;
-  border: none;
-  color: var(--color-dark, #491212);
-  font-family: monospace;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  padding: 0.4em 0;
-  opacity: 0.7;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-.back-to-garden-btn:hover {
-  opacity: 1;
-  transform: translateX(-4px);
-}
-</style>

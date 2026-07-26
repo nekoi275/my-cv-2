@@ -102,7 +102,7 @@ onUnmounted(() => {
     ref="sectionRef" 
     :class="[
       'bg-pink-dark pt-20 relative text-dark h-2screen overflow-hidden',
-      props.isOverlay ? 'is-overlay' : ''
+      props.isOverlay ? 'fixed inset-0 z-[999999] bg-[#e4cbce] w-screen h-[200vh] pt-20' : ''
     ]"
   >
     <Teleport to="body" v-if="props.isOverlay">
@@ -140,15 +140,3 @@ onUnmounted(() => {
     </div>
   </section>
 </template>
-
-<style scoped>
-#teapot-section.is-overlay {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 999999 !important;
-  background-color: #e4cbce !important;
-  width: 100vw !important;
-  height: 200vh !important;
-  padding-top: 5rem !important;
-}
-</style>
