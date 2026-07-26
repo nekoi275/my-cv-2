@@ -10,10 +10,7 @@ const emit = defineEmits<{
 <template>
   <section 
     id="projects-section"
-    :class="[
-      'min-h-screen relative text-[var(--color-dark,#491212)] p-8',
-      props.isOverlay ? 'fixed inset-0 z-[999999] bg-[#e4cbce] w-screen h-screen pt-20' : 'bg-pink-dark'
-    ]"
+    class="min-h-screen relative text-[var(--color-dark,#491212)] p-8 w-full bg-[#e4cbce] pt-20"
   >
     <Teleport to="body" v-if="props.isOverlay">
       <ReturnButton @back="emit('back')" />

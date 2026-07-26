@@ -280,7 +280,7 @@ onUnmounted(() => {
       <Transition name="teapot-overlay">
         <div 
           v-if="activeTarget && activeTarget.component" 
-          class="fixed inset-0 z-[999999] overflow-auto bg-[#e4cbce]"
+          class="fixed inset-0 z-[999999] overflow-hidden bg-[#e4cbce]"
         >
           <component
             :is="activeTarget.component"

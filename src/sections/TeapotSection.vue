@@ -100,10 +100,7 @@ onUnmounted(() => {
   <section 
     id="teapot-section" 
     ref="sectionRef" 
-    :class="[
-      'bg-pink-dark pt-20 relative text-dark h-2screen overflow-hidden',
-      props.isOverlay ? 'fixed inset-0 z-[999999] bg-[#e4cbce] w-screen h-[200vh] pt-20' : ''
-    ]"
+    class="bg-[#e4cbce] pt-20 relative text-dark h-[200vh] w-full overflow-hidden"
   >
     <Teleport to="body" v-if="props.isOverlay">
       <ReturnButton @back="emit('back')" />
