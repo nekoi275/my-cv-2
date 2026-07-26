@@ -24,7 +24,7 @@ const interactiveTargets: InteractiveTarget[] = [
   },
   {
     id: "projects",
-    position: new THREE.Vector3(5.0, 0.1, -11.0),
+    position: new THREE.Vector3(2.1, 0.3, -28),
     component: markRaw(Projects),
     title: "Projects"
   }
