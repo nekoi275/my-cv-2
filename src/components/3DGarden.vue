@@ -49,6 +49,7 @@ const raycaster = new THREE.Raycaster();
 const hoverPointer = new THREE.Vector2();
 let allIndicatorMeshes: THREE.Object3D[] = [];
 let indicatorGroups: THREE.Group[] = [];
+let hoveredSprite: THREE.Sprite | null = null;
 let wasPointerDrag = false;
 let hoverCheckScheduled = false;
 
@@ -80,6 +81,10 @@ const emit = defineEmits<{
 
 const onPointerDown = (e: PointerEvent) => {
     wasPointerDrag = false;
+    if (hoveredSprite) {
+        gsap.to(hoveredSprite.material, { opacity: 0, duration: 0.2, overwrite: 'auto' });
+        hoveredSprite = null;
+    }
     if (!canLookAround.value) return;
     isDragging.value = true;
     gsap.killTweensOf(camera.rotation);
@@ -133,6 +138,59 @@ const onMouseMove = (e: MouseEvent) => {
     hoverCheckScheduled = true;
 };
 
+const createTextSprite = (text: string): THREE.Sprite => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 128;
+    const context = canvas.getContext('2d');
+
+    if (context) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        context.font = 'bold 22px monospace, sans-serif';
+        const textMetrics = context.measureText(text);
+        const textWidth = textMetrics.width;
+        const paddingHorizontal = 28;
+        const pillWidth = Math.min(textWidth + paddingHorizontal * 2, 490);
+        const pillHeight = 52;
+        const pillX = (canvas.width - pillWidth) / 2;
+        const pillY = (canvas.height - pillHeight) / 2;
+
+        context.beginPath();
+        if (typeof context.roundRect === 'function') {
+            context.roundRect(pillX, pillY, pillWidth, pillHeight, 14);
+        } else {
+            context.rect(pillX, pillY, pillWidth, pillHeight);
+        }
+        context.fillStyle = 'rgba(255, 255, 255, 0.92)';
+        context.fill();
+
+        context.lineWidth = 2;
+        context.strokeStyle = 'rgba(73, 18, 18, 0.85)';
+        context.stroke();
+
+        context.fillStyle = '#491212';
+        context.font = 'bold 22px monospace, sans-serif';
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        context.fillText(text, canvas.width / 2, canvas.height / 2 + 1);
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.minFilter = THREE.LinearFilter;
+    const spriteMaterial = new THREE.SpriteMaterial({
+        map: texture,
+        transparent: true,
+        opacity: 0,
+        depthTest: false
+    });
+
+    const sprite = new THREE.Sprite(spriteMaterial);
+    sprite.scale.set(2.4, 0.6, 1);
+    sprite.position.set(0, -0.65, 0);
+    return sprite;
+};
+
 const createIndicator = (target: InteractiveTarget) => {
     const group = new THREE.Group();
     const pos = target.position instanceof THREE.Vector3 
@@ -144,23 +202,28 @@ const createIndicator = (target: InteractiveTarget) => {
     const hitGeo = new THREE.SphereGeometry(1.0, 16, 16);
     const hitMat = new THREE.MeshBasicMaterial({ visible: false });
     const hitMesh = new THREE.Mesh(hitGeo, hitMat);
-    hitMesh.userData = { target };
     group.add(hitMesh);
     allIndicatorMeshes.push(hitMesh);
 
     const innerGeo = new THREE.SphereGeometry(0.32, 24, 24);
     const innerMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.9 });
     const inner = new THREE.Mesh(innerGeo, innerMat);
-    inner.userData = { target };
     group.add(inner);
     allIndicatorMeshes.push(inner);
 
     const crystalGeo = new THREE.OctahedronGeometry(0.2, 0);
     const crystalMat = new THREE.MeshBasicMaterial({ color: 0xe0f2fe, wireframe: true });
     const crystalMesh = new THREE.Mesh(crystalGeo, crystalMat);
-    crystalMesh.userData = { target };
     group.add(crystalMesh);
     allIndicatorMeshes.push(crystalMesh);
+
+    const textLabel = target.title || (target.id === 'teapot' ? 'About me' : 'Projects, case studies, demos');
+    const sprite = createTextSprite(textLabel);
+    group.add(sprite);
+
+    hitMesh.userData = { target, sprite };
+    inner.userData = { target, sprite };
+    crystalMesh.userData = { target, sprite };
 
     scene.add(group);
     indicatorGroups.push(group);
@@ -490,8 +553,24 @@ onMounted(async () => {
             hoverCheckScheduled = false;
             raycaster.setFromCamera(hoverPointer, camera);
             const hits = raycaster.intersectObjects(allIndicatorMeshes, true);
-            if (container.value) {
-                container.value.style.cursor = hits.length > 0 ? 'pointer' : '';
+            if (hits.length > 0) {
+                if (container.value) container.value.style.cursor = 'pointer';
+                const hitObj = hits[0].object;
+                const sprite = hitObj.userData?.sprite as THREE.Sprite | undefined;
+
+                if (sprite && sprite !== hoveredSprite) {
+                    if (hoveredSprite) {
+                        gsap.to(hoveredSprite.material, { opacity: 0, duration: 0.3, overwrite: 'auto' });
+                    }
+                    hoveredSprite = sprite;
+                    gsap.to(sprite.material, { opacity: 1, duration: 0.3, overwrite: 'auto' });
+                }
+            } else {
+                if (container.value) container.value.style.cursor = '';
+                if (hoveredSprite) {
+                    gsap.to(hoveredSprite.material, { opacity: 0, duration: 0.3, overwrite: 'auto' });
+                    hoveredSprite = null;
+                }
             }
         }
     };

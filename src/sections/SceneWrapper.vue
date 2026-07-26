@@ -20,13 +20,13 @@ const interactiveTargets: InteractiveTarget[] = [
     id: "teapot",
     position: new THREE.Vector3(7.2, 0.1, -4.5),
     component: markRaw(TeapotSection),
-    title: "About Me"
+    title: "About me"
   },
   {
     id: "projects",
     position: new THREE.Vector3(2.1, 0.3, -28),
     component: markRaw(Projects),
-    title: "Projects"
+    title: "Projects, case studies, demos"
   }
 ];
 
