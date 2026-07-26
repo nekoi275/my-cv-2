@@ -13,6 +13,8 @@ const props = withDefaults(defineProps<{
   type: SlideType;
   reversed?: boolean;
   videoUrl?: string;
+  linkUrl?: string;
+  imageUrl?: string;
   links?: LinkItem[];
   canvasComponent?: any;
 }>(), {
@@ -51,7 +53,26 @@ const props = withDefaults(defineProps<{
       </template>
 
       <template v-else-if="props.type === 'links'">
-        <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a
+          v-if="props.linkUrl || (props.links && props.links.length === 1)"
+          :href="props.linkUrl || props.links[0]?.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block w-full overflow-hidden border-2 border-[var(--color-dark,#491212)] bg-black/5 shadow-md relative group cursor-pointer max-h-[65vh]"
+        >
+          <img
+            :src="props.imageUrl || props.links[0]?.image"
+            :alt="props.title"
+            class="w-full h-auto max-h-[65vh] object-cover block transition-all duration-300 group-hover:blur-sm"
+          />
+          <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
+            <span class="text-white font-mono text-xl tracking-wider">
+              Open
+            </span>
+          </div>
+        </a>
+
+        <div v-else class="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
           <a
             v-for="(link, index) in props.links"
             :key="index"
