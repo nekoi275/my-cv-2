@@ -8,6 +8,10 @@ import Project, { type SlideType, type LinkItem } from "@/components/Project.vue
 import dentalVideo from "@/assets/projects/project_dental.mp4";
 import glassVideo from "@/assets/projects/project_glass.mp4";
 import memeImage from "@/assets/projects/project_meme.webp";
+import jewelryImage from "@/assets/projects/project_jewelry.webp";
+import skiiVideo from "@/assets/projects/project_skii.mp4";
+import weddingImage from "@/assets/projects/project_wedding.webp";
+import motionImage from "@/assets/projects/project_motion.webp";
 
 const props = defineProps<{ isOverlay?: boolean }>();
 const emit = defineEmits<{ (e: 'back'): void }>();
@@ -27,25 +31,56 @@ interface SlideConfig {
 const slides: SlideConfig[] = [
   {
     id: "dental",
-    title: "Dental Care Platform",
+    title: "Dental scans viewer",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     type: "video",
     videoUrl: dentalVideo,
   },
   {
     id: "glass",
-    title: "Glassmorphic 3D Interface",
+    title: "Glass constructions configurator",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     type: "video",
     videoUrl: glassVideo,
   },
   {
     id: "memesearch",
-    title: "Meme Search Engine",
+    title: "AI-powered meme search engine",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Fast and intelligent search engine for discovering memes and visual content across the web.",
     type: "links",
     linkUrl: "https://memesearch.org/",
     imageUrl: memeImage,
+  },
+  {
+    id: "jewelry",
+    title: "Jewelry configurator",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    type: "links",
+    linkUrl: "https://memesearch.org/",
+    imageUrl: jewelryImage,
+  },
+  {
+    id: "skii",
+    title: "Skii training simulator",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    type: "video",
+    videoUrl: skiiVideo,
+  },
+  {
+    id: "wedding",
+    title: "Video recording app for wedding",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    type: "links",
+    linkUrl: "https://memesearch.org/",
+    imageUrl: weddingImage,
+  },
+  {
+    id: "motion",
+    title: "Motion detection game",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    type: "links",
+    linkUrl: "https://memesearch.org/",
+    imageUrl: motionImage,
   }
 ];
 
@@ -168,7 +203,6 @@ onUnmounted(() => {
     </Teleport>
     <ReturnButton v-else @back="emit('back')" />
 
-    <!-- Slides Track -->
     <div 
       ref="slidesTrackRef" 
       class="h-full flex flex-nowrap w-full"
@@ -193,7 +227,6 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Bottom MouseScroll Indicator -->
     <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
       <MouseScroll />
     </div>
