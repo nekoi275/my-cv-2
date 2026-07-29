@@ -270,6 +270,7 @@ onUnmounted(() => {
     <Garden3D 
       v-if="isSceneActive" 
       :targets="interactiveTargets"
+      :paused="!!activeTarget"
       @modelLoaded="isModelLoaded = true" 
       @sceneUnload="handleSceneUnload"
       @indicatorClicked="handleIndicatorClicked"

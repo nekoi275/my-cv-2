@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
@@ -23,8 +23,10 @@ export interface InteractiveTarget {
 
 const props = withDefaults(defineProps<{
     targets?: InteractiveTarget[];
+    paused?: boolean;
 }>(), {
-    targets: () => []
+    targets: () => [],
+    paused: false
 });
 
 const container = ref<HTMLDivElement | null>(null);
@@ -34,6 +36,8 @@ let cameraRig: THREE.Group;
 let renderer: THREE.WebGLRenderer;
 let animationId: number;
 let mm: gsap.MatchMedia;
+let animateRef: (() => void) | null = null;
+let isPaused = false;
 
 let sound: THREE.Audio;
 let sakuraMesh: THREE.InstancedMesh;
@@ -78,6 +82,26 @@ const emit = defineEmits<{
     (e: 'sceneUnload'): void;
     (e: 'indicatorClicked', target: InteractiveTarget): void;
 }>();
+
+let wasMusicPlayingBeforePause = false;
+
+watch(() => props.paused, (paused) => {
+    isPaused = paused;
+    if (paused) {
+        cancelAnimationFrame(animationId);
+        wasMusicPlayingBeforePause = !!(sound && sound.isPlaying);
+        if (sound && sound.isPlaying) {
+            sound.pause();
+            isMusicPlaying.value = false;
+        }
+    } else {
+        if (animateRef) animateRef();
+        if (wasMusicPlayingBeforePause && sound && sound.buffer && !sound.isPlaying) {
+            sound.play();
+            isMusicPlaying.value = true;
+        }
+    }
+});
 
 const onPointerDown = (e: PointerEvent) => {
     wasPointerDrag = false;
@@ -474,6 +498,7 @@ onMounted(async () => {
     );
 
     const animate = () => {
+        if (isPaused) return;
         animationId = requestAnimationFrame(animate);
         
         fishList.forEach((fishInfo) => {
@@ -574,6 +599,7 @@ onMounted(async () => {
             }
         }
     };
+    animateRef = animate;
     animate();
 
     window.addEventListener("resize", onWindowResize);
