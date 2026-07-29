@@ -56,7 +56,7 @@ const slides: SlideConfig[] = [
     title: "Jewelry configurator",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
     type: "links",
-    linkUrl: "/jewelry-configurator",
+    linkUrl: "https://jewelry-configurator.nekoi275.workers.dev/",
     imageUrl: jewelryImage,
   },
   {
@@ -71,7 +71,7 @@ const slides: SlideConfig[] = [
     title: "Video recording app for wedding",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
     type: "links",
-    linkUrl: "/wedding-photos",
+    linkUrl: "https://wedding-photos.nekoi275.workers.dev/",
     imageUrl: weddingImage,
   },
   {
@@ -79,7 +79,7 @@ const slides: SlideConfig[] = [
     title: "Motion detection game",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     type: "links",
-    linkUrl: "/motion-detection-game",
+    linkUrl: "https://game85.pages.dev/",
     imageUrl: motionImage,
   }
 ];
