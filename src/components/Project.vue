@@ -25,16 +25,23 @@ const props = withDefaults(defineProps<{
 
 <template>
   <div 
-    class="w-full h-full flex flex-col md:flex-row items-center justify-center p-6 md:p-16 gap-8 md:gap-16"
+    class="w-full h-full flex flex-col md:flex-row items-center justify-center p-3 sm:p-6 md:p-16 gap-3 sm:gap-6 md:gap-16"
     :class="{ 'md:flex-row-reverse': props.reversed }"
   >
-    <div class="w-full md:w-1/2 flex flex-col justify-center space-y-4 max-w-xl">
-      <h2 class="text-2xl md:text-3xl font-bold tracking-tight text-[var(--color-dark,#491212)] font-mono">
+    <div class="w-full md:w-1/2 flex flex-col justify-center space-y-2 md:space-y-4 max-w-xl">
+      <h2 class="text-lg sm:text-2xl md:text-3xl font-bold tracking-tight text-[var(--color-dark,#491212)] font-mono">
         {{ props.title }}
       </h2>
-      <p class="text-base md:text-lg leading-relaxed text-[var(--color-dark,#491212)] opacity-85">
+      <p class="text-xs sm:text-base md:text-lg leading-normal md:leading-relaxed text-[var(--color-dark,#491212)] opacity-85">
         {{ props.description }}
       </p>
+      <a
+        v-if="props.type === 'links' && (props.linkUrl || (props.links && props.links[0]?.url))"
+        :href="props.linkUrl || props.links[0]?.url"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="md:hidden inline-flex items-center justify-center self-center px-5 py-2 border border-[var(--color-dark,#491212)] text-[var(--color-dark,#491212)] font-mono text-xs font-bold rounded-full hover:bg-[var(--color-dark,#491212)] hover:text-white transition-colors"
+      ><span class="leading-none flex items-center justify-center pt-[1px]">open</span></a>
     </div>
 
     <div class="w-full md:w-1/2 flex items-center justify-center max-w-2xl">
@@ -46,7 +53,7 @@ const props = withDefaults(defineProps<{
             loop
             muted
             playsinline
-            class="w-full h-auto max-h-[65vh] object-cover block pointer-events-none"
+            class="w-full h-auto max-h-[35vh] md:max-h-[65vh] object-cover block pointer-events-none"
           ></video>
         </div>
       </template>
@@ -57,15 +64,15 @@ const props = withDefaults(defineProps<{
           :href="props.linkUrl || props.links[0]?.url"
           target="_blank"
           rel="noopener noreferrer"
-          class="relative inline-block overflow-hidden group cursor-pointer max-h-[65vh]"
+          class="relative inline-block overflow-hidden group cursor-pointer max-h-[35vh] md:max-h-[65vh]"
         >
           <img
             :src="props.imageUrl || props.links[0]?.image"
             :alt="props.title"
-            class="max-w-full h-auto max-h-[65vh] block transition-all duration-300 group-hover:blur-sm"
+            class="max-w-full h-auto max-h-[35vh] md:max-h-[65vh] block transition-all duration-300 md:group-hover:blur-sm"
           />
-          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-            <span class="text-white mix-blend-difference font-mono text-base md:text-lg font-bold tracking-wider animate-pulse">
+          <div class="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            <span class="text-[var(--color-dark,#491212)] [text-shadow:_0_0_8px_rgba(255,255,255,0.9)] font-mono text-lg font-bold tracking-wider animate-pulse">
               open
             </span>
           </div>
