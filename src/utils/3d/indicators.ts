@@ -55,6 +55,20 @@ export function createTextSprite(text: string): THREE.Sprite {
     return sprite;
 }
 
+export function getIndicatorTitle(target: InteractiveTarget): string {
+    if (target.title) return target.title;
+
+    switch (target.id) {
+        case 'teapot':
+            return 'About me';
+        case 'games':
+            return 'Games';
+        case 'projects':
+        default:
+            return 'Projects, case studies, demos';
+    }
+}
+
 export class IndicatorManager {
     public indicatorGroups: THREE.Group[] = [];
     public allIndicatorMeshes: THREE.Object3D[] = [];
@@ -87,7 +101,7 @@ export class IndicatorManager {
         group.add(crystalMesh);
         this.allIndicatorMeshes.push(crystalMesh);
 
-        const textLabel = target.title || (target.id === 'teapot' ? 'About me' : 'Projects, case studies, demos');
+        const textLabel = getIndicatorTitle(target);
         const sprite = createTextSprite(textLabel);
         group.add(sprite);
 

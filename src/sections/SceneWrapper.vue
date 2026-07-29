@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted, nextTick, markRaw } from "vue";
 import Garden3D, { type InteractiveTarget } from "@/components/3DGarden.vue";
 import TeapotSection from "@/sections/TeapotSection.vue";
 import Projects from "@/sections/Projects.vue";
+import Games from "@/sections/Games.vue";
 import * as THREE from "three";
 import { gsap } from "gsap";
 import scenePlaceholder from "@/assets/scene_placeholder.webp";
@@ -27,6 +28,12 @@ const interactiveTargets: InteractiveTarget[] = [
     position: new THREE.Vector3(2.1, 0.3, -28),
     component: markRaw(Projects),
     title: "Projects, case studies, demos"
+  },
+  {
+    id: "games",
+    position: new THREE.Vector3(-13, 1.5, -33.0),
+    component: markRaw(Games),
+    title: "Mini-games"
   }
 ];
 

@@ -9,9 +9,7 @@ const emit = defineEmits(['back']);
 
 <template>
     <div class="min-h-screen flex flex-col">
-        <header class="p-4 bg-pink-light">
-            <ReturnButton @back="emit('back')" />
-        </header>
+        <ReturnButton @back="emit('back')" />
         <section class="bg-green-light flex flex-row flex-wrap gap-4 items-center justify-around flex-grow py-4">
             <SpaceInvaders></SpaceInvaders>
             <Sudoku></Sudoku>
