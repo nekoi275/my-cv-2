@@ -180,6 +180,7 @@ const handleSceneUnload = () => {
     isSceneActive.value = false;
     isFinished.value = true;
     isUnloading.value = false;
+    router.push('/contact');
   }, 1000);
 };
 

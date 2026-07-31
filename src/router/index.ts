@@ -3,6 +3,7 @@ import SceneWrapper from '@/sections/SceneWrapper.vue';
 import TeapotSection from '@/sections/TeapotSection.vue';
 import Projects from '@/sections/Projects.vue';
 import Games from '@/sections/Games.vue';
+import Contact from '@/sections/Contact.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -24,6 +25,11 @@ const routes: RouteRecordRaw[] = [
     path: '/games',
     name: 'games',
     component: Games
+  },
+  {
+    path: '/contact',
+    name: 'contact',
+    component: Contact
   },
   {
     path: '/:pathMatch(.*)*',
