@@ -19,7 +19,6 @@ const headlineWords = headlineText.split(" ");
 const bodyParagraphs = [
   "I don't build websites — I paint digital spaces.",
   "Every project starts with a blank canvas and a deep dive into your world, your rhythm, your industry's unspoken rules.",
-  "The result? A digital artwork that feels more like a destination than a page.",
   "If you have a spark of an idea that doesn't fit into a template, don't feed it to a chatbot — send it straight to me.",
 ];
 
