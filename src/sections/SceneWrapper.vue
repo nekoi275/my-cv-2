@@ -158,12 +158,18 @@ const playSubmergeAnimation = (onComplete: () => void) => {
   }, 0);
 };
 
+const isInitializing = ref(false);
+
 const initScene = () => {
+  if (isInitializing.value || isSceneActive.value) return;
+  isInitializing.value = true;
+
   playSubmergeAnimation(() => {
     isFinished.value = false;
     isSceneActive.value = true;
     isModelLoaded.value = false;
     isUnloading.value = false;
+    isInitializing.value = false;
   });
 };
 
@@ -210,8 +216,7 @@ onUnmounted(() => {
   <section 
     ref="sectionRef" 
     id="projects" 
-    class="bg-pink-dark relative min-h-screen"
-    :class="{ 'h-screen overflow-hidden': !isModelLoaded && !isFinished, 'min-h-screen': isModelLoaded || isFinished }"
+    class="bg-pink-dark relative w-full min-h-screen overflow-x-hidden"
   >
     
     <svg class="water-svg-filter" xmlns="http://www.w3.org/2000/svg">
@@ -250,6 +255,7 @@ onUnmounted(() => {
           v-if="!isSceneActive"
           @click="initScene" 
           class="gate-anchor cursor-pointer"
+          :class="{ 'pointer-events-none': isInitializing }"
         >
           <div class="instructions-glow" aria-hidden="true">
             <div class="glow-blob glow-blob--a"></div>

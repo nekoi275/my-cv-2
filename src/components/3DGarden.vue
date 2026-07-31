@@ -168,6 +168,8 @@ onMounted(async () => {
             scene.add(model);
             model.updateMatrixWorld(true);
 
+            indicators.setGardenModel(model);
+
             emit('modelLoaded');
             isModelReady.value = true;
 
@@ -178,7 +180,10 @@ onMounted(async () => {
             audio.playIfLoaded();
 
             requestAnimationFrame(() => {
-                ScrollTrigger.refresh();
+                const koiLoader = new GLTFLoader();
+                koiLoader.load(KOI_MODEL_URL, (koiGltf) => {
+                    particles.initKoiFish(scene, koiGltf.scene);
+                });
             });
         },
         undefined,
@@ -188,15 +193,6 @@ onMounted(async () => {
     particles.createSakuraPetals(scene);
     particles.createPondFog(scene);
     particles.createPotSmoke(scene);
-
-    loader.load(
-        KOI_MODEL_URL,
-        (gltf) => {
-            particles.initKoiFish(scene, gltf.scene);
-        },
-        undefined,
-        (error) => console.error("An error happened loading the koi model:", error)
-    );
 
     const animate = () => {
         if (isPaused) return;

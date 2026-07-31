@@ -15,5 +15,6 @@
   html {
     font-family: monospace;
     font-size: clamp(0.875rem, 0.75rem + 2vw, 1.5rem);
+    scrollbar-gutter: stable;
   }
 }

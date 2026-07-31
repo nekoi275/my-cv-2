@@ -79,7 +79,12 @@ export class IndicatorManager {
     public indicatorGroups: THREE.Group[] = [];
     public allIndicatorMeshes: THREE.Object3D[] = [];
     public hoveredSprite: THREE.Sprite | null = null;
+    public gardenModel: THREE.Object3D | null = null;
     private raycaster = new THREE.Raycaster();
+
+    setGardenModel(model: THREE.Object3D) {
+        this.gardenModel = model;
+    }
 
     createIndicator(target: InteractiveTarget, scene: THREE.Scene) {
         const group = new THREE.Group();
@@ -89,8 +94,8 @@ export class IndicatorManager {
 
         group.position.copy(pos);
 
-        const hitGeo = new THREE.SphereGeometry(1.0, 16, 16);
-        const hitMat = new THREE.MeshBasicMaterial({ visible: false });
+        const hitGeo = new THREE.SphereGeometry(0.5, 16, 16);
+        const hitMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false });
         const hitMesh = new THREE.Mesh(hitGeo, hitMat);
         group.add(hitMesh);
         this.allIndicatorMeshes.push(hitMesh);
@@ -133,26 +138,46 @@ export class IndicatorManager {
         if (!container || this.allIndicatorMeshes.length === 0 || isDragging || isMobileDevice()) return;
 
         this.raycaster.setFromCamera(hoverPointer, camera);
-        const hits = this.raycaster.intersectObjects(this.allIndicatorMeshes, true);
+        
+        const objectsToTest = this.gardenModel 
+            ? [this.gardenModel, ...this.allIndicatorMeshes] 
+            : this.allIndicatorMeshes;
 
-        if (hits.length > 0) {
-            container.style.cursor = 'pointer';
-            const hitObj = hits[0].object;
-            const sprite = hitObj.userData?.sprite as THREE.Sprite | undefined;
+        const hits = this.raycaster.intersectObjects(objectsToTest, true);
 
-            if (sprite && sprite !== this.hoveredSprite) {
-                if (this.hoveredSprite) {
-                    gsap.to(this.hoveredSprite.material, { opacity: 0, duration: 0.3, overwrite: 'auto' });
+        const validHits = hits.filter(hit => {
+            const obj = hit.object;
+            if (obj instanceof THREE.Sprite || obj instanceof THREE.Points || obj instanceof THREE.Line) return false;
+            if (!obj.visible) return false;
+            const mat = (obj as THREE.Mesh).material;
+            if (mat) {
+                const m = Array.isArray(mat) ? mat[0] : mat;
+                if (!m.visible && !this.allIndicatorMeshes.includes(obj)) return false;
+            }
+            return true;
+        });
+
+        if (validHits.length > 0) {
+            const firstHitObj = validHits[0].object;
+            if (this.allIndicatorMeshes.includes(firstHitObj)) {
+                container.style.cursor = 'pointer';
+                const sprite = firstHitObj.userData?.sprite as THREE.Sprite | undefined;
+
+                if (sprite && sprite !== this.hoveredSprite) {
+                    if (this.hoveredSprite) {
+                        gsap.to(this.hoveredSprite.material, { opacity: 0, duration: 0.3, overwrite: 'auto' });
+                    }
+                    this.hoveredSprite = sprite;
+                    gsap.to(sprite.material, { opacity: 1, duration: 0.3, overwrite: 'auto' });
                 }
-                this.hoveredSprite = sprite;
-                gsap.to(sprite.material, { opacity: 1, duration: 0.3, overwrite: 'auto' });
+                return;
             }
-        } else {
-            container.style.cursor = '';
-            if (this.hoveredSprite) {
-                gsap.to(this.hoveredSprite.material, { opacity: 0, duration: 0.3, overwrite: 'auto' });
-                this.hoveredSprite = null;
-            }
+        }
+
+        container.style.cursor = '';
+        if (this.hoveredSprite) {
+            gsap.to(this.hoveredSprite.material, { opacity: 0, duration: 0.3, overwrite: 'auto' });
+            this.hoveredSprite = null;
         }
     }
 
@@ -164,11 +189,30 @@ export class IndicatorManager {
         if (!container || this.allIndicatorMeshes.length === 0) return null;
 
         this.raycaster.setFromCamera(clickPointer, camera);
-        const intersects = this.raycaster.intersectObjects(this.allIndicatorMeshes, true);
+        
+        const objectsToTest = this.gardenModel 
+            ? [this.gardenModel, ...this.allIndicatorMeshes] 
+            : this.allIndicatorMeshes;
 
-        if (intersects.length > 0) {
-            const hitObject = intersects[0].object;
-            return (hitObject.userData?.target as InteractiveTarget) || null;
+        const hits = this.raycaster.intersectObjects(objectsToTest, true);
+
+        const validHits = hits.filter(hit => {
+            const obj = hit.object;
+            if (obj instanceof THREE.Sprite || obj instanceof THREE.Points || obj instanceof THREE.Line) return false;
+            if (!obj.visible) return false;
+            const mat = (obj as THREE.Mesh).material;
+            if (mat) {
+                const m = Array.isArray(mat) ? mat[0] : mat;
+                if (!m.visible && !this.allIndicatorMeshes.includes(obj)) return false;
+            }
+            return true;
+        });
+
+        if (validHits.length > 0) {
+            const firstHitObj = validHits[0].object;
+            if (this.allIndicatorMeshes.includes(firstHitObj)) {
+                return (firstHitObj.userData?.target as InteractiveTarget) || null;
+            }
         }
         return null;
     }
@@ -201,5 +245,6 @@ export class IndicatorManager {
         this.indicatorGroups = [];
         this.allIndicatorMeshes = [];
         this.hoveredSprite = null;
+        this.gardenModel = null;
     }
 }
