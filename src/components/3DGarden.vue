@@ -279,7 +279,7 @@ onUnmounted(() => {
         <button 
             v-if="!isSceneUnloaded" 
             @click="audio.toggleMusic" 
-            class="absolute top-5 right-5 z-50 px-5 py-2.5 bg-white/80 border-0 rounded-full cursor-pointer font-bold transition-all duration-300 shadow-md hover:bg-white hover:scale-105 text-sm"
+            class="absolute top-5 right-5 z-50 px-5 py-2.5 bg-white/80 border-0 rounded-full cursor-pointer font-bold transition-colors duration-300 shadow-md hover:bg-white text-sm"
         >
             Music: {{ audio.isMusicPlaying.value ? 'on' : 'off' }}
         </button>

@@ -2,6 +2,10 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 import type { InteractiveTarget } from "@/components/3DGarden.vue";
 
+function isMobileDevice(): boolean {
+    return typeof window !== 'undefined' && (window.innerWidth < 800 || matchMedia('(max-width: 799px)').matches);
+}
+
 export function createTextSprite(text: string): THREE.Sprite {
     const canvas = document.createElement('canvas');
     canvas.width = 512;
@@ -42,10 +46,11 @@ export function createTextSprite(text: string): THREE.Sprite {
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.minFilter = THREE.LinearFilter;
+    const isMobile = isMobileDevice();
     const spriteMaterial = new THREE.SpriteMaterial({
         map: texture,
         transparent: true,
-        opacity: 0,
+        opacity: isMobile ? 1 : 0,
         depthTest: false
     });
 
@@ -124,7 +129,7 @@ export class IndicatorManager {
         container: HTMLElement | null,
         isDragging: boolean
     ) {
-        if (!container || this.allIndicatorMeshes.length === 0 || isDragging) return;
+        if (!container || this.allIndicatorMeshes.length === 0 || isDragging || isMobileDevice()) return;
 
         this.raycaster.setFromCamera(hoverPointer, camera);
         const hits = this.raycaster.intersectObjects(this.allIndicatorMeshes, true);
@@ -168,6 +173,7 @@ export class IndicatorManager {
     }
 
     clearHoveredSprite() {
+        if (isMobileDevice()) return;
         if (this.hoveredSprite) {
             gsap.to(this.hoveredSprite.material, { opacity: 0, duration: 0.2, overwrite: 'auto' });
             this.hoveredSprite = null;

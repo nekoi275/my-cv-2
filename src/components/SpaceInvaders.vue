@@ -1,30 +1,39 @@
 <template>
-  <div class="game-container">
-    <canvas id="game-screen" ref="canvasRef"></canvas>
+  <div class="space-invaders-wrapper">
+    <div class="game-container">
+      <canvas id="game-screen" ref="canvasRef"></canvas>
 
-    <div v-if="isButtonShown || isGameOver || isWin" class="overlay">
-      <div v-if="isButtonShown" class="menu-content">
-        <button @click="start()">Play</button>
-        <div class="instructions">
-          <p><strong>Controls:</strong></p>
-          <p>Move Left: A / <span class="icon">⬅️</span></p>
-          <p>Move Right: D / <span class="icon">➡️</span></p>
-          <p>Fire: W / <span class="icon">🔴</span></p>
+      <div v-if="isButtonShown || isGameOver || isWin" class="overlay">
+        <div v-if="isButtonShown" class="menu-content">
+          <button @click="start()">Play</button>
+          <div class="instructions">
+            <p><strong>Controls:</strong></p>
+            <template v-if="isTouchDevice">
+              <p>Move Left: <span class="icon">⬅️</span></p>
+              <p>Move Right: <span class="icon">➡️</span></p>
+              <p>Fire: <span class="icon">🔴</span></p>
+            </template>
+            <template v-else>
+              <p>Move Left: A</p>
+              <p>Move Right: D</p>
+              <p>Fire: W</p>
+            </template>
+          </div>
         </div>
-      </div>
 
-      <div v-if="isGameOver" class="menu-content">
-        <h2>Game Over</h2>
-        <button @click="start()">Play Again</button>
-      </div>
+        <div v-if="isGameOver" class="menu-content">
+          <h2>Game Over</h2>
+          <button @click="start()">Play Again</button>
+        </div>
 
-      <div v-if="isWin" class="menu-content">
-        <h2>You Won!</h2>
-        <button @click="start()">Play Again</button>
+        <div v-if="isWin" class="menu-content">
+          <h2>You Won!</h2>
+          <button @click="start()">Play Again</button>
+        </div>
       </div>
     </div>
 
-    \ <div class="mobile-controls">
+    <div class="mobile-controls">
       <div class="direction-controls">
         <button class="control-btn left-btn" @touchstart.prevent="control.left = true"
           @touchend.prevent="control.left = false" @mousedown.prevent="control.left = true"
@@ -56,6 +65,17 @@ const isButtonShown = ref(true);
 const isGameOver = ref(false);
 const isWin = ref(false);
 const spriteImage = ref(null);
+const isTouchDevice = ref(false);
+
+const checkDevice = () => {
+  if (typeof window === 'undefined') return;
+  isTouchDevice.value = (
+    'ontouchstart' in window ||
+    navigator.maxTouchPoints > 0 ||
+    window.matchMedia('(hover: none) and (pointer: coarse)').matches ||
+    window.innerWidth <= 768
+  );
+};
 
 const config = {
   aliens: {
@@ -366,11 +386,14 @@ onMounted(() => {
     canvas.height = 500;
   }
 
+  checkDevice();
+  window.addEventListener('resize', checkDevice);
   window.addEventListener('keydown', handleKeydown);
   window.addEventListener('keyup', handleKeyup);
 });
 
 onUnmounted(() => {
+  window.removeEventListener('resize', checkDevice);
   window.removeEventListener('keydown', handleKeydown);
   window.removeEventListener('keyup', handleKeyup);
   if (animationFrameId) cancelAnimationFrame(animationFrameId);
@@ -378,16 +401,28 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.space-invaders-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 32rem;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .game-container {
   position: relative;
   width: 100%;
-  max-width: 600px;
   margin: 0;
+  padding: 1.25rem 1rem;
+  box-sizing: border-box;
   aspect-ratio: 6/5;
-  background-color: #222;
-  border-radius: 15px;
+  background-color: var(--color-pink-light, #eadbdc);
+  border: 2px solid var(--color-green-dark, #a7c191);
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 30px rgba(73, 18, 18, 0.08);
   overflow: hidden;
   touch-action: none;
+  font-family: monospace;
 }
 
 canvas {
@@ -395,37 +430,50 @@ canvas {
   width: 100%;
   height: 100%;
   background-color: #000000;
+  border: 2px solid var(--color-green-dark, #a7c191);
+  border-radius: 0.75rem;
+  box-sizing: border-box;
 }
 
 .overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
+  background-color: rgba(73, 18, 18, 0.45);
+  color: var(--color-dark, #491212);
   z-index: 10;
+  border-radius: 1.25rem;
 }
 
 .menu-content {
-  background-color: #cde2bd;
-  color: #491212;
-  padding: 20px;
-  border-radius: 20px;
+  background-color: var(--color-white, #dae2e2);
+  border: 2px solid var(--color-green-dark, #a7c191);
+  color: var(--color-dark, #491212);
+  padding: 1.25rem;
+  border-radius: 1rem;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-  max-width: 80%;
+  box-shadow: 0 8px 25px rgba(73, 18, 18, 0.15);
+  max-width: 85%;
+  font-family: monospace;
+}
+
+.menu-content h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .instructions {
   margin-top: 15px;
   text-align: left;
-  font-size: 0.9em;
+  font-size: 0.85em;
+  font-family: monospace;
 }
 
 .instructions p {
@@ -433,55 +481,61 @@ canvas {
 }
 
 button {
-  border: none;
-  background-color: #491212;
-  color: #cde2bd;
-  padding: 10px 20px;
-  border-radius: 10px;
+  border: 2px solid var(--color-green-dark, #a7c191);
+  background-color: var(--color-green-light, #cde2bd);
+  color: var(--color-dark, #491212);
+  padding: 0.5rem 1.25rem;
+  border-radius: 1rem;
   cursor: pointer;
-  font-size: 18px;
-  font-weight: bold;
-  transition: transform 0.1s;
+  font-family: monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+button:hover {
+  background-color: var(--color-green-dark, #a7c191);
+  color: var(--color-dark, #491212);
 }
 
 button:active {
-  transform: scale(0.95);
+  background-color: var(--color-green-dark, #a7c191);
 }
 
 .mobile-controls {
   display: none;
-  position: absolute;
-  bottom: 20px;
-  left: 0;
+  margin-top: 0.75rem;
   width: 100%;
-  padding: 0 20px;
+  padding: 0 0.5rem;
   box-sizing: border-box;
   justify-content: space-between;
-  pointer-events: none;
+  align-items: center;
 }
 
 .control-btn {
   pointer-events: auto;
-  width: 60px;
-  height: 60px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  font-size: 24px;
+  background-color: var(--color-green-light, #cde2bd);
+  border: 2px solid var(--color-green-dark, #a7c191);
+  color: var(--color-dark, #491212);
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   user-select: none;
   -webkit-user-select: none;
+  box-shadow: 0 4px 10px rgba(73, 18, 18, 0.15);
 }
 
 .control-btn:active {
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: var(--color-green-dark, #a7c191);
 }
 
 .direction-controls {
   display: flex;
-  gap: 20px;
+  gap: 15px;
 }
 
 @media (hover: none) and (pointer: coarse),
