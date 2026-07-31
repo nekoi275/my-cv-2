@@ -51,7 +51,8 @@ export function createTextSprite(text: string): THREE.Sprite {
         map: texture,
         transparent: true,
         opacity: isMobile ? 1 : 0,
-        depthTest: false
+        depthTest: true,
+        depthWrite: false
     });
 
     const sprite = new THREE.Sprite(spriteMaterial);
