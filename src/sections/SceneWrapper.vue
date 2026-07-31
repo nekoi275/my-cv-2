@@ -44,13 +44,13 @@ const interactiveTargets: InteractiveTarget[] = [
   },
   {
     id: "projects",
-    position: new THREE.Vector3(2.1, 0.3, -28),
+    position: new THREE.Vector3(-13, 1.5, -33.0),
     component: markRaw(Projects),
     title: "Projects, case studies, demos"
   },
   {
     id: "games",
-    position: new THREE.Vector3(-13, 1.5, -33.0),
+    position: new THREE.Vector3(-22.0, 0.2, -14.0),
     component: markRaw(Games),
     title: "Mini-games"
   }
