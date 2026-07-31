@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick, markRaw } from "vue";
+import { ref, onMounted, onUnmounted, nextTick, markRaw, computed, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import Garden3D, { type InteractiveTarget } from "@/components/3DGarden.vue";
 import TeapotSection from "@/sections/TeapotSection.vue";
 import Projects from "@/sections/Projects.vue";
@@ -8,13 +9,31 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 import scenePlaceholder from "@/assets/scene_placeholder.webp";
 
+const route = useRoute();
+const router = useRouter();
+
 const isSceneActive = ref(false);
 const isModelLoaded = ref(false);
 const isUnloading = ref(false);
 const isFinished = ref(false);
-const activeTarget = ref<InteractiveTarget | null>(null);
 const instructionRows = ref<HTMLElement[]>([]);
 let savedScrollY = 0;
+
+const isSubRouteActive = computed(() => route.path !== '/');
+
+watch(() => route.path, (newPath, oldPath) => {
+  if (newPath !== '/') {
+    if (oldPath === '/') {
+      savedScrollY = window.scrollY;
+    }
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+    nextTick(() => {
+      window.scrollTo({ top: savedScrollY, behavior: 'instant' });
+    });
+  }
+}, { immediate: true });
 
 const interactiveTargets: InteractiveTarget[] = [
   {
@@ -159,17 +178,17 @@ const handleSceneUnload = () => {
 };
 
 const handleIndicatorClicked = (target: InteractiveTarget) => {
-  savedScrollY = window.scrollY;
-  document.body.style.overflow = 'hidden';
-  activeTarget.value = target;
+  if (target.id === 'teapot') {
+    router.push('/about');
+  } else if (target.id === 'projects') {
+    router.push('/projects');
+  } else if (target.id === 'games') {
+    router.push('/games');
+  }
 };
 
 const closeOverlay = () => {
-  activeTarget.value = null;
-  document.body.style.overflow = '';
-  nextTick(() => {
-    window.scrollTo({ top: savedScrollY, behavior: 'instant' });
-  });
+  router.push('/');
 };
 
 onMounted(() => {
@@ -277,27 +296,24 @@ onUnmounted(() => {
     <Garden3D 
       v-if="isSceneActive" 
       :targets="interactiveTargets"
-      :paused="!!activeTarget"
+      :paused="isSubRouteActive"
       @modelLoaded="isModelLoaded = true" 
       @sceneUnload="handleSceneUnload"
       @indicatorClicked="handleIndicatorClicked"
       :class="{ 'opacity-0': !isModelLoaded, 'transition-opacity duration-1000': true, 'opacity-100': isModelLoaded }" 
     />
 
-    <Teleport to="body">
-      <Transition name="teapot-overlay">
-        <div 
-          v-if="activeTarget && activeTarget.component" 
-          class="fixed inset-0 z-[999999] overflow-y-auto bg-[#e4cbce]"
-        >
-          <component
-            :is="activeTarget.component"
-            :isOverlay="true"
-            @back="closeOverlay"
-          />
-        </div>
-      </Transition>
-    </Teleport>
+    <Transition name="teapot-overlay">
+      <div 
+        v-if="isSubRouteActive" 
+        class="fixed inset-0 z-[999999]"
+        :class="{ 'overflow-y-auto bg-[#e4cbce]': route.path === '/games' }"
+      >
+        <router-view v-slot="{ Component }">
+          <component :is="Component" @back="closeOverlay" />
+        </router-view>
+      </div>
+    </Transition>
 
     <Transition name="fade">
       <div v-if="isUnloading" class="absolute inset-0 z-40 bg-white"></div>

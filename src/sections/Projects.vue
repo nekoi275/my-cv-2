@@ -13,7 +13,6 @@ import skiiVideo from "@/assets/projects/project_skii.mp4";
 import weddingImage from "@/assets/projects/project_wedding.webp";
 import motionImage from "@/assets/projects/project_motion.webp";
 
-const props = defineProps<{ isOverlay?: boolean }>();
 const emit = defineEmits<{ (e: 'back'): void }>();
 
 interface SlideConfig {
@@ -198,10 +197,7 @@ onUnmounted(() => {
     id="projects-section"
     class="fixed inset-0 w-screen h-screen overflow-hidden z-[999999]"
   >
-    <Teleport to="body" v-if="props.isOverlay">
-      <ReturnButton @back="emit('back')" />
-    </Teleport>
-    <ReturnButton v-else @back="emit('back')" />
+    <ReturnButton @back="emit('back')" />
 
     <div 
       ref="slidesTrackRef" 

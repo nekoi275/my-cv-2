@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 const emit = defineEmits<{
   (e: 'click', event: MouseEvent): void;
   (e: 'back', event: MouseEvent): void;
@@ -7,6 +11,7 @@ const emit = defineEmits<{
 const handleClick = (e: MouseEvent) => {
   emit('click', e);
   emit('back', e);
+  router.push('/');
 };
 </script>
 

@@ -5,7 +5,6 @@ import Teapot from "@/components/Teapot.vue";
 import MouseScroll from "@/components/MouseScroll.vue";
 import ReturnButton from "@/components/ReturnButton.vue";
 
-const props = defineProps<{ isOverlay?: boolean }>();
 const emit = defineEmits(['back']);
 
 const sectionRef = ref<HTMLElement | null>(null);
@@ -14,7 +13,6 @@ const pourRef = ref<HTMLElement | null>(null);
 const words1Ref = ref<HTMLElement[]>([]);
 const words2Ref = ref<HTMLElement[]>([]);
 const words3Ref = ref<HTMLElement[]>([]);
-const words4Ref = ref<HTMLElement[]>([]);
 
 const addToRefs = (el: any, arr: HTMLElement[]) => {
   if (el && !arr.includes(el)) {
@@ -26,6 +24,10 @@ let ctx: gsap.Context;
 
 onMounted(() => {
   nextTick(() => {
+    if (sectionRef.value) gsap.set(sectionRef.value, { y: 0 });
+    if (teapotRef.value) gsap.set(teapotRef.value, { rotation: 0 });
+    if (pourRef.value) gsap.set(pourRef.value, { height: "0%", width: "0%" });
+
     ctx = gsap.context(() => {
       const tl = gsap.timeline({
         defaults: { ease: "power1.inOut" },
@@ -50,7 +52,7 @@ onMounted(() => {
         tl.add(pourTl, 2.5);
       }
 
-      const wordGroups = [words1Ref, words2Ref, words3Ref, words4Ref];
+      const wordGroups = [words1Ref, words2Ref, words3Ref];
 
       wordGroups.forEach((group, index) => {
         if (group.value && group.value.length > 0) {
@@ -83,10 +85,7 @@ onMounted(() => {
         }, 4);
       }
 
-      if (props.isOverlay) {
-        tl.timeScale(2.0).play();
-      }
-
+      tl.timeScale(2.0).play();
     }, sectionRef.value!);
   });
 });
@@ -97,43 +96,43 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section 
-    id="teapot-section" 
-    ref="sectionRef" 
-    class="bg-[#e4cbce] pt-20 relative text-dark h-[200vh] w-full overflow-hidden"
-  >
-    <Teleport to="body" v-if="props.isOverlay">
-      <ReturnButton @back="emit('back')" />
-    </Teleport>
+  <div class="fixed inset-0 z-[999999] bg-[#e4cbce] w-screen h-screen overflow-hidden">
+    <ReturnButton @back="emit('back')" />
 
-    <div ref="teapotRef" class="relative left-1/2 z-20 will-change-transform origin-center inline-block">
-      <Teapot />
-    </div>
+    <section 
+      id="teapot-section" 
+      ref="sectionRef" 
+      class="absolute inset-0 w-screen h-[200vh] pt-20 overflow-hidden"
+    >
+      <div ref="teapotRef" class="relative left-1/2 z-20 will-change-transform origin-center inline-block">
+        <Teapot />
+      </div>
 
-    <div id="tea-pouring" ref="pourRef" class="rounded-full bg-green-dark relative m-auto z-0 w-0 h-0"></div>
+      <div id="tea-pouring" ref="pourRef" class="rounded-full bg-green-dark relative m-auto z-0 w-0 h-0"></div>
 
-    <div id="tea-poured" class="absolute bg-green-dark left-0 right-0 bottom-0 h-[70vh] p-6 z-0">
-      <p ref="textContainerRef" class="block z-10 will-change-transform transform-gpu origin-top-left text-[clamp(0.7rem,2.5vw,1.5rem)]">
-        <span
-          v-for="(text, index) in ['Hi,', 'I’m', 'Valeria', '(a.k.a Nekoi),', 'a web-developer', 'with a passion', 'for crafting', 'interactive and', 'visually', 'appealing', 'websites.']"
-          :key="'w1-' + index" :ref="(el: any) => addToRefs(el, words1Ref)"
-          class="inline-block opacity-0 will-change-transform transform-gpu mr-[1ch]">{{ text }}</span>
+      <div id="tea-poured" class="absolute bg-green-dark left-0 right-0 bottom-0 h-[70vh] p-6 z-0">
+        <p ref="textContainerRef" class="block z-10 will-change-transform transform-gpu origin-top-left text-[clamp(0.7rem,2.5vw,1.5rem)]">
+          <span
+            v-for="(text, index) in ['Hi,', 'I’m', 'Valeria', '(a.k.a Nekoi),', 'a web-developer', 'with a passion', 'for crafting', 'interactive and', 'visually', 'appealing', 'websites.']"
+            :key="'w1-' + index" :ref="(el: any) => addToRefs(el, words1Ref)"
+            class="inline-block opacity-0 will-change-transform transform-gpu mr-[1ch]">{{ text }}</span>
 
-        <br />
+          <br />
 
-        <span
-          v-for="(text, index) in ['I enjoy', 'blending', 'technical', 'skills with', 'artistic', 'expression', 'to build', 'unique', 'digital', 'experiences.']"
-          :key="'w2-' + index" :ref="(el: any) => addToRefs(el, words2Ref)"
-          class="inline-block opacity-0 will-change-transform transform-gpu mr-[1ch]">{{ text }}</span>
+          <span
+            v-for="(text, index) in ['I enjoy', 'blending', 'technical', 'skills with', 'artistic', 'expression', 'to build', 'unique', 'digital', 'experiences.']"
+            :key="'w2-' + index" :ref="(el: any) => addToRefs(el, words2Ref)"
+            class="inline-block opacity-0 will-change-transform transform-gpu mr-[1ch]">{{ text }}</span>
 
-        <br />
+          <br />
 
-        <span
-          v-for="(text, index) in ['When', 'I’m not', 'coding,', 'you’ll', 'find me', 'drawing or', 'capturing', 'moments', 'through', 'photography —', 'two hobbies', 'that fuel', 'my creativity.']"
-          :key="'w3-' + index" :ref="(el: any) => addToRefs(el, words3Ref)"
-          class="inline-block opacity-0 will-change-transform transform-gpu mr-[1ch]">{{ text }}</span>
-      </p>
-      <MouseScroll class="absolute bottom-18 right-1/2 translate-x-1/2 landscape:hidden" />
-    </div>
-  </section>
+          <span
+            v-for="(text, index) in ['When', 'I’m not', 'coding,', 'you’ll', 'find me', 'drawing or', 'capturing', 'moments', 'through', 'photography —', 'two hobbies', 'that fuel', 'my creativity.']"
+            :key="'w3-' + index" :ref="(el: any) => addToRefs(el, words3Ref)"
+            class="inline-block opacity-0 will-change-transform transform-gpu mr-[1ch]">{{ text }}</span>
+        </p>
+        <MouseScroll class="absolute bottom-18 right-1/2 translate-x-1/2 landscape:hidden" />
+      </div>
+    </section>
+  </div>
 </template>

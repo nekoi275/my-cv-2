@@ -15,7 +15,8 @@
     "@tailwindcss/postcss": "^4.1.17",
     "gsap": "^3.13.0",
     "three": "^0.181.2",
-    "vue": "^3.3.11"
+    "vue": "^3.3.11",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@types/node": "^20.11.5",
