@@ -11,7 +11,6 @@ export const cameraWaypoints = [
     { pos: { x: 9, z: -17 }, rot: { y: 1 } },
     { pos: { x: 4, z: -20 } },
     { pos: { x: 1.5, z: -24 }, rot: { y: 0.75 } },
-    { pos: { x: 1.5, z: -24 }, rot: { y: 0.75 } },
     { pos: { x: -1, z: -28 }, rot: { y: 0.5 } },
     { pos: { x: -3, y: 1.2, z: -32 }, rot: { y: 1.2 } },
     { pos: { x: -6, y: 2, z: -32 }, rot: { y: 1.4 } },
@@ -44,6 +43,8 @@ export function useCameraTrack() {
     const prevPointer = { x: 0, y: 0 };
     let wasPointerDrag = false;
     let mm: gsap.MatchMedia | null = null;
+    let activeTimeline: gsap.core.Timeline | null = null;
+    let activeCamera: THREE.Camera | null = null;
     let isSceneUnloaded = false;
 
     const onPointerDown = (e: PointerEvent, camera: THREE.Camera, container: HTMLElement | null) => {
@@ -135,12 +136,7 @@ export function useCameraTrack() {
                         onSceneUnload();
                     }
                 },
-                onLeave: (self) => {
-                    if (self.progress >= 0.95 && !isSceneUnloaded) {
-                        isSceneUnloaded = true;
-                        onSceneUnload();
-                    }
-                },
+
                 onLeaveBack: () => {
                     canLookAround.value = false;
                     gsap.to(camera.rotation, { y: 0, duration: 0.5, overwrite: true });
@@ -156,6 +152,8 @@ export function useCameraTrack() {
                 tl.to(cameraRig.rotation, step.rot, step.pos ? "<" : undefined);
             }
         });
+
+        activeTimeline = tl;
     };
 
     const initCameraTrack = (
@@ -164,6 +162,7 @@ export function useCameraTrack() {
         camera: THREE.Camera,
         onSceneUnload: () => void
     ) => {
+        activeCamera = camera;
         mm = gsap.matchMedia();
         mm.add("(min-width: 800px)", () => setupTimeline(container, cameraRig, camera, "+=10000", onSceneUnload));
         mm.add("(max-width: 799px)", () => setupTimeline(container, cameraRig, camera, "+=4000", onSceneUnload));
@@ -174,6 +173,29 @@ export function useCameraTrack() {
             mm.revert();
             mm = null;
         }
+        activeTimeline = null;
+        activeCamera = null;
+    };
+
+    const resetToStart = () => {
+        isSceneUnloaded = false;
+        canLookAround.value = false;
+        isDragging.value = false;
+
+        window.scrollTo({ top: 0, behavior: 'instant' });
+
+        if (activeTimeline) {
+            activeTimeline.progress(0, true);
+            if (activeTimeline.scrollTrigger) {
+                activeTimeline.scrollTrigger.scroll(0);
+                activeTimeline.scrollTrigger.update();
+            }
+        }
+
+        if (activeCamera) {
+            gsap.killTweensOf(activeCamera.rotation);
+            activeCamera.rotation.set(0, 0, 0);
+        }
     };
 
     return {
@@ -183,6 +205,8 @@ export function useCameraTrack() {
         onPointerMove,
         onPointerUp,
         initCameraTrack,
-        disposeCameraTrack
+        disposeCameraTrack,
+        resetToStart
     };
 }
+

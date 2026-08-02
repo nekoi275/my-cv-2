@@ -53,23 +53,18 @@ let camera: THREE.PerspectiveCamera;
 let cameraRig: THREE.Group;
 let renderer: THREE.WebGLRenderer;
 let animationId: number;
-let animateRef: (() => void) | null = null;
-let isPaused = false;
-let wasMusicPlayingBeforePause = false;
+let animate: (() => void) | undefined;
 
 const hoverPointer = new THREE.Vector2();
 let hoverCheckScheduled = false;
 
 watch(() => props.paused, (paused) => {
-    isPaused = paused;
     if (paused) {
         cancelAnimationFrame(animationId);
-        wasMusicPlayingBeforePause = audio.pauseAudio();
+        audio.pauseAudio();
     } else {
-        if (animateRef) animateRef();
-        if (wasMusicPlayingBeforePause) {
-            audio.resumeAudio();
-        }
+        animate?.();
+        audio.resumeIfWasPlaying();
     }
 });
 
@@ -141,7 +136,7 @@ onMounted(async () => {
     cameraRig.add(camera);
     scene.add(cameraRig);
 
-    audio.initAudio(camera, MUSIC_URL, isModelReady.value);
+    audio.initAudio(camera, MUSIC_URL);
 
     renderer = new THREE.WebGLRenderer({
         antialias: window.devicePixelRatio < 2,
@@ -194,9 +189,9 @@ onMounted(async () => {
     particles.createPondFog(scene);
     particles.createPotSmoke(scene);
 
-    const animate = () => {
-        if (isPaused) return;
-        animationId = requestAnimationFrame(animate);
+    animate = () => {
+        if (props.paused) return;
+        animationId = requestAnimationFrame(animate!);
 
         particles.update(camera.position);
         renderer.render(scene, camera);
@@ -206,7 +201,6 @@ onMounted(async () => {
             indicators.checkHover(hoverPointer, camera, container.value, cameraTrack.isDragging.value);
         }
     };
-    animateRef = animate;
     animate();
 
     cameraTrack.initCameraTrack(container.value, cameraRig, camera, () => {
@@ -247,23 +241,37 @@ onUnmounted(() => {
     cancelAnimationFrame(animationId);
 
     if (scene) {
+        const texProps = ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap', 'aoMap', 'lightMap', 'alphaMap', 'envMap'] as const;
         scene.traverse((object) => {
             if ((object as THREE.Mesh).isMesh) {
                 const mesh = object as THREE.Mesh;
                 mesh.geometry.dispose();
-                if (Array.isArray(mesh.material)) mesh.material.forEach((m) => m.dispose());
-                else mesh.material.dispose();
+                const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                mats.forEach((m) => {
+                    texProps.forEach(prop => {
+                        const tex = (m as unknown as Record<string, unknown>)[prop];
+                        if (tex instanceof THREE.Texture) tex.dispose();
+                    });
+                    m.dispose();
+                });
             }
         });
     }
 
     if (renderer) {
         renderer.dispose();
-        if (renderer.domElement && renderer.domElement.parentNode) {
-            renderer.domElement.parentNode.removeChild(renderer.domElement);
-        }
+        renderer.domElement.remove();
     }
 });
+
+const resetScene = () => {
+    isSceneUnloaded.value = false;
+    cameraTrack.resetToStart();
+};
+
+
+defineExpose({ resetScene });
+
 </script>
 
 <template>

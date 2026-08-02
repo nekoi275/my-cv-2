@@ -3,9 +3,10 @@ import * as THREE from "three";
 
 export function use3DAudio() {
     let sound: THREE.Audio | null = null;
+    let wasPlayingBeforePause = false;
     const isMusicPlaying = ref(false);
 
-    const initAudio = (camera: THREE.PerspectiveCamera, musicUrl: string, autoPlayIfReady: boolean = false) => {
+    const initAudio = (camera: THREE.PerspectiveCamera, musicUrl: string) => {
         const listener = new THREE.AudioListener();
         camera.add(listener);
 
@@ -17,11 +18,6 @@ export function use3DAudio() {
             sound.setBuffer(buffer);
             sound.setLoop(true);
             sound.setVolume(0.5);
-
-            if (autoPlayIfReady && !sound.isPlaying) {
-                sound.play();
-                isMusicPlaying.value = true;
-            }
         });
     };
 
@@ -38,18 +34,23 @@ export function use3DAudio() {
     };
 
     const pauseAudio = () => {
-        const wasPlaying = !!(sound && sound.isPlaying);
+        wasPlayingBeforePause = !!(sound && sound.isPlaying);
         if (sound && sound.isPlaying) {
             sound.pause();
             isMusicPlaying.value = false;
         }
-        return wasPlaying;
     };
 
     const resumeAudio = () => {
         if (sound && sound.buffer && !sound.isPlaying) {
             sound.play();
             isMusicPlaying.value = true;
+        }
+    };
+
+    const resumeIfWasPlaying = () => {
+        if (wasPlayingBeforePause) {
+            resumeAudio();
         }
     };
 
@@ -73,6 +74,7 @@ export function use3DAudio() {
         toggleMusic,
         pauseAudio,
         resumeAudio,
+        resumeIfWasPlaying,
         playIfLoaded,
         stopAudio
     };

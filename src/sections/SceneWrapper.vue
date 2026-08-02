@@ -19,6 +19,8 @@ const isFinished = ref(false);
 const instructionRows = ref<HTMLElement[]>([]);
 let savedScrollY = 0;
 
+const gardenRef = ref<{ resetScene: () => void } | null>(null);
+
 const isSubRouteActive = computed(() => route.path !== '/');
 
 watch(() => route.path, (newPath, oldPath) => {
@@ -29,9 +31,16 @@ watch(() => route.path, (newPath, oldPath) => {
     document.body.style.overflow = 'hidden';
   } else {
     document.body.style.overflow = '';
-    nextTick(() => {
-      window.scrollTo({ top: savedScrollY, behavior: 'instant' });
-    });
+
+    if (isFinished.value) {
+      isFinished.value = false;
+      savedScrollY = 0;
+      gardenRef.value?.resetScene();
+    } else {
+      nextTick(() => {
+        window.scrollTo({ top: savedScrollY, behavior: 'instant' });
+      });
+    }
   }
 }, { immediate: true });
 
@@ -177,7 +186,6 @@ const handleSceneUnload = () => {
   if (isUnloading.value) return;
   isUnloading.value = true;
   setTimeout(() => {
-    isSceneActive.value = false;
     isFinished.value = true;
     isUnloading.value = false;
     router.push('/contact');
@@ -199,11 +207,7 @@ const closeOverlay = () => {
 };
 
 onMounted(() => {
-  nextTick(() => {
-    setTimeout(() => {
-      playEmergeAnimation();
-    }, 300);
-  });
+  setTimeout(playEmergeAnimation, 300);
 });
 
 onUnmounted(() => {
@@ -215,7 +219,6 @@ onUnmounted(() => {
 
 <template>
   <section 
-    ref="sectionRef" 
     id="projects" 
     class="bg-pink-dark relative w-full min-h-screen overflow-x-hidden"
   >
@@ -301,6 +304,7 @@ onUnmounted(() => {
     </Transition>
 
     <Garden3D 
+      ref="gardenRef"
       v-if="isSceneActive" 
       :targets="interactiveTargets"
       :paused="isSubRouteActive"

@@ -3,6 +3,7 @@ import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 
 export class ParticleSystemsManager {
     private dummy = new THREE.Object3D();
+    private readonly _up = new THREE.Vector3(0, 1, 0);
     
     private sakuraMesh?: THREE.InstancedMesh;
     private petalCount = 1500;
@@ -151,6 +152,7 @@ export class ParticleSystemsManager {
     }
 
     update(cameraPosition: THREE.Vector3) {
+        const now = Date.now();
         this.fishList.forEach((fishInfo) => {
             const { mesh, velocity } = fishInfo;
             mesh.position.add(velocity);
@@ -161,7 +163,7 @@ export class ParticleSystemsManager {
             if (mesh.position.z < -17.5 || mesh.position.z > -2.5) { velocity.z = -velocity.z; bounced = true; }
 
             if (!bounced && Math.random() < 0.005) {
-                velocity.applyAxisAngle(new THREE.Vector3(0, 1, 0), (Math.random() - 0.5) * 0.5);
+                velocity.applyAxisAngle(this._up, (Math.random() - 0.5) * 0.5);
             }
         });
 
@@ -169,8 +171,8 @@ export class ParticleSystemsManager {
             for (let i = 0; i < this.petalCount; i++) {
                 const info = this.petalInfo[i];
                 info.position.add(info.velocity);
-                info.position.x += Math.sin(Date.now() * 0.001 + i) * 0.002;
-                info.position.z += Math.cos(Date.now() * 0.001 + i) * 0.002;
+                info.position.x += Math.sin(now * 0.001 + i) * 0.002;
+                info.position.z += Math.cos(now * 0.001 + i) * 0.002;
 
                 if (info.position.y < -5) {
                     info.position.y = 15;
@@ -193,7 +195,7 @@ export class ParticleSystemsManager {
                 this.dummy.rotation.x = -Math.PI / 2;
                 this.dummy.rotation.z = info.rotationZ; 
                 
-                const time = Date.now() * 0.0002;
+                const time = now * 0.0002;
                 this.dummy.position.x = info.position.x + Math.sin(time + i) * 0.2;
                 this.dummy.position.z = info.position.z + Math.cos(time + i * 0.5) * 0.2;
 
@@ -225,26 +227,45 @@ export class ParticleSystemsManager {
 
     dispose(scene: THREE.Scene) {
         if (this.sakuraMesh) {
-            this.sakuraMesh.geometry.dispose();
-            if (Array.isArray(this.sakuraMesh.material)) this.sakuraMesh.material.forEach(m => m.dispose());
-            else this.sakuraMesh.material.dispose();
             scene.remove(this.sakuraMesh);
+            this.sakuraMesh.geometry.dispose();
+            (this.sakuraMesh.material as THREE.Material).dispose();
+            this.sakuraMesh = undefined;
         }
+
         if (this.fogMesh) {
-            this.fogMesh.geometry.dispose();
-            if (Array.isArray(this.fogMesh.material)) this.fogMesh.material.forEach(m => m.dispose());
-            else this.fogMesh.material.dispose();
             scene.remove(this.fogMesh);
+            this.fogMesh.geometry.dispose();
+            const fogMat = this.fogMesh.material as THREE.MeshBasicMaterial;
+            fogMat.map?.dispose();
+            fogMat.dispose();
+            this.fogMesh = undefined;
         }
+
         if (this.potSmokeMesh) {
-            this.potSmokeMesh.geometry.dispose();
-            if (Array.isArray(this.potSmokeMesh.material)) this.potSmokeMesh.material.forEach(m => m.dispose());
-            else this.potSmokeMesh.material.dispose();
             scene.remove(this.potSmokeMesh);
+            this.potSmokeMesh.geometry.dispose();
+            const smokeMat = this.potSmokeMesh.material as THREE.MeshBasicMaterial;
+            smokeMat.map?.dispose();
+            smokeMat.dispose();
+            this.potSmokeMesh = undefined;
         }
-        this.fishList.forEach(fish => {
-            scene.remove(fish.mesh);
+
+        this.fishList.forEach(({ mesh }) => {
+            scene.remove(mesh);
+            mesh.traverse(child => {
+                const m = child as THREE.Mesh;
+                if (m.isMesh) {
+                    m.geometry?.dispose();
+                    const mats = Array.isArray(m.material) ? m.material : [m.material];
+                    mats.forEach(mat => mat?.dispose());
+                }
+            });
         });
+
         this.fishList = [];
+        this.petalInfo = [];
+        this.fogInfo = [];
+        this.potSmokeInfo = [];
     }
 }

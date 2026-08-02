@@ -62,17 +62,7 @@ export function createTextSprite(text: string): THREE.Sprite {
 }
 
 export function getIndicatorTitle(target: InteractiveTarget): string {
-    if (target.title) return target.title;
-
-    switch (target.id) {
-        case 'teapot':
-            return 'About me';
-        case 'games':
-            return 'Games';
-        case 'projects':
-        default:
-            return 'Projects, case studies, demos';
-    }
+    return target.title ?? target.id;
 }
 
 export class IndicatorManager {
@@ -81,6 +71,20 @@ export class IndicatorManager {
     public hoveredSprite: THREE.Sprite | null = null;
     public gardenModel: THREE.Object3D | null = null;
     private raycaster = new THREE.Raycaster();
+
+    private filterRaycastHits(hits: THREE.Intersection[]): THREE.Intersection[] {
+        return hits.filter(hit => {
+            const obj = hit.object;
+            if (obj instanceof THREE.Sprite || obj instanceof THREE.Points || obj instanceof THREE.Line) return false;
+            if (!obj.visible) return false;
+            const mat = (obj as THREE.Mesh).material;
+            if (mat) {
+                const m = Array.isArray(mat) ? mat[0] : mat;
+                if (!m.visible && !this.allIndicatorMeshes.includes(obj)) return false;
+            }
+            return true;
+        });
+    }
 
     setGardenModel(model: THREE.Object3D) {
         this.gardenModel = model;
@@ -143,19 +147,7 @@ export class IndicatorManager {
             ? [this.gardenModel, ...this.allIndicatorMeshes] 
             : this.allIndicatorMeshes;
 
-        const hits = this.raycaster.intersectObjects(objectsToTest, true);
-
-        const validHits = hits.filter(hit => {
-            const obj = hit.object;
-            if (obj instanceof THREE.Sprite || obj instanceof THREE.Points || obj instanceof THREE.Line) return false;
-            if (!obj.visible) return false;
-            const mat = (obj as THREE.Mesh).material;
-            if (mat) {
-                const m = Array.isArray(mat) ? mat[0] : mat;
-                if (!m.visible && !this.allIndicatorMeshes.includes(obj)) return false;
-            }
-            return true;
-        });
+        const validHits = this.filterRaycastHits(this.raycaster.intersectObjects(objectsToTest, true));
 
         if (validHits.length > 0) {
             const firstHitObj = validHits[0].object;
@@ -194,19 +186,7 @@ export class IndicatorManager {
             ? [this.gardenModel, ...this.allIndicatorMeshes] 
             : this.allIndicatorMeshes;
 
-        const hits = this.raycaster.intersectObjects(objectsToTest, true);
-
-        const validHits = hits.filter(hit => {
-            const obj = hit.object;
-            if (obj instanceof THREE.Sprite || obj instanceof THREE.Points || obj instanceof THREE.Line) return false;
-            if (!obj.visible) return false;
-            const mat = (obj as THREE.Mesh).material;
-            if (mat) {
-                const m = Array.isArray(mat) ? mat[0] : mat;
-                if (!m.visible && !this.allIndicatorMeshes.includes(obj)) return false;
-            }
-            return true;
-        });
+        const validHits = this.filterRaycastHits(this.raycaster.intersectObjects(objectsToTest, true));
 
         if (validHits.length > 0) {
             const firstHitObj = validHits[0].object;
@@ -233,8 +213,12 @@ export class IndicatorManager {
                 gsap.killTweensOf(c.scale);
                 if ((c as THREE.Mesh).material) {
                     const mat = (c as THREE.Mesh).material;
-                    if (Array.isArray(mat)) mat.forEach(m => { gsap.killTweensOf(m); m.dispose(); });
-                    else { gsap.killTweensOf(mat); mat.dispose(); }
+                    const mats = Array.isArray(mat) ? mat : [mat];
+                    mats.forEach(m => {
+                        gsap.killTweensOf(m);
+                        (m as THREE.MeshBasicMaterial | THREE.SpriteMaterial).map?.dispose();
+                        m.dispose();
+                    });
                 }
                 if ((c as THREE.Mesh).geometry) {
                     (c as THREE.Mesh).geometry.dispose();
