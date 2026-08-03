@@ -1,9 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import SceneWrapper from '@/sections/SceneWrapper.vue';
-import TeapotSection from '@/sections/TeapotSection.vue';
-import Projects from '@/sections/Projects.vue';
-import Games from '@/sections/Games.vue';
-import Contact from '@/sections/Contact.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -14,22 +10,22 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/about',
     name: 'about',
-    component: TeapotSection
+    component: () => import('@/sections/TeapotSection.vue')
   },
   {
     path: '/projects',
     name: 'projects',
-    component: Projects
+    component: () => import('@/sections/Projects.vue')
   },
   {
     path: '/games',
     name: 'games',
-    component: Games
+    component: () => import('@/sections/Games.vue')
   },
   {
     path: '/contact',
     name: 'contact',
-    component: Contact
+    component: () => import('@/sections/Contact.vue')
   },
   {
     path: '/:pathMatch(.*)*',

@@ -17,5 +17,16 @@ export default defineConfig({
   },
   assetsInclude: [
     '**/*glb'
-  ]
+  ],
+  build: {
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          three: ['three'],
+          gsap: ['gsap']
+        }
+      }
+    }
+  }
 })

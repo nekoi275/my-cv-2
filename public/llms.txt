@@ -13,12 +13,12 @@ I am a Front-End Web Developer passionate about building interactive, user-frien
 
 ## Contact & Social Links
 - **GitHub:** [github.com/nekoi275](https://github.com/nekoi275)
-- **LinkedIn:** [linkedin.com/in/Ваш_Профиль](https://www.linkedin.com/in/valeriia-drozdova-81761a380/)
-- **Email:** valeriiadrozdova90@gmail.com (valeriiadrozdova90@gmail.com)
+- **LinkedIn:** [linkedin.com/in/valeriia-drozdova-81761a380](https://www.linkedin.com/in/valeriia-drozdova-81761a380/)
+- **Email:** valeriiadrozdova90@gmail.com
 
 ## Core Tech Stack
 - JavaScript (ES6+) / TypeScript
 - Vue.js
 - HTML5, CSS3, SCSS, Tailwind CSS
 - Three.js / WebGL (for immersive experiences)
-- Git, Webpack, Vite
+- Git, Vite

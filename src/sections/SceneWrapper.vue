@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick, markRaw, computed, watch } from "vue";
+import { ref, onMounted, onUnmounted, nextTick, markRaw, computed, watch, defineAsyncComponent } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import Garden3D, { type InteractiveTarget } from "@/components/3DGarden.vue";
+import type { InteractiveTarget } from "@/components/3DGarden.vue";
 import TeapotSection from "@/sections/TeapotSection.vue";
 import Projects from "@/sections/Projects.vue";
 import Games from "@/sections/Games.vue";
-import * as THREE from "three";
 import { gsap } from "gsap";
 import scenePlaceholder from "@/assets/scene_placeholder.webp";
+
+const Garden3D = defineAsyncComponent(() => import("@/components/3DGarden.vue"));
 
 const route = useRoute();
 const router = useRouter();
@@ -47,19 +48,19 @@ watch(() => route.path, (newPath, oldPath) => {
 const interactiveTargets: InteractiveTarget[] = [
   {
     id: "teapot",
-    position: new THREE.Vector3(7.2, 0.1, -4.5),
+    position: { x: 7.2, y: 0.1, z: -4.5 },
     component: markRaw(TeapotSection),
     title: "About me"
   },
   {
     id: "projects",
-    position: new THREE.Vector3(-13, 1.5, -33.0),
+    position: { x: -13, y: 1.5, z: -33.0 },
     component: markRaw(Projects),
     title: "Projects, case studies, demos"
   },
   {
     id: "games",
-    position: new THREE.Vector3(-22.0, 0.2, -14.0),
+    position: { x: -22.0, y: 0.2, z: -14.0 },
     component: markRaw(Games),
     title: "Mini-games"
   }
