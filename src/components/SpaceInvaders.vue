@@ -37,18 +37,18 @@
       <div class="direction-controls">
         <button class="control-btn left-btn" @touchstart.prevent="control.left = true"
           @touchend.prevent="control.left = false" @mousedown.prevent="control.left = true"
-          @mouseup.prevent="control.left = false">
+          @mouseup.prevent="control.left = false" @mouseleave.prevent="control.left = false">
           ⬅️
         </button>
         <button class="control-btn right-btn" @touchstart.prevent="control.right = true"
           @touchend.prevent="control.right = false" @mousedown.prevent="control.right = true"
-          @mouseup.prevent="control.right = false">
+          @mouseup.prevent="control.right = false" @mouseleave.prevent="control.right = false">
           ➡️
         </button>
       </div>
       <button class="control-btn fire-btn" @touchstart.prevent="control.fire = true"
         @touchend.prevent="control.fire = false" @mousedown.prevent="control.fire = true"
-        @mouseup.prevent="control.fire = false">
+        @mouseup.prevent="control.fire = false" @mouseleave.prevent="control.fire = false">
         🔴
       </button>
     </div>
@@ -367,15 +367,34 @@ const isCollision = (objectA, objectB) => {
 };
 
 const handleKeydown = (event) => {
-  if (event.key === 'a' || event.key === 'ArrowLeft') control.left = true;
-  if (event.key === 'd' || event.key === 'ArrowRight') control.right = true;
-  if (event.key === 'w' || event.key === 'ArrowUp' || event.key === ' ') control.fire = true;
+  const k = event.key ? event.key.toLowerCase() : '';
+  const code = event.code;
+  if (code === 'KeyA' || k === 'a' || k === 'arrowleft' || k === 'ф') {
+    control.left = true;
+    event.preventDefault();
+  }
+  if (code === 'KeyD' || k === 'd' || k === 'arrowright' || k === 'в') {
+    control.right = true;
+    event.preventDefault();
+  }
+  if (code === 'KeyW' || k === 'w' || k === 'arrowup' || k === ' ' || k === 'spacebar' || k === 'ц') {
+    control.fire = true;
+    event.preventDefault();
+  }
 };
 
 const handleKeyup = (event) => {
-  if (event.key === 'a' || event.key === 'ArrowLeft') control.left = false;
-  if (event.key === 'd' || event.key === 'ArrowRight') control.right = false;
-  if (event.key === 'w' || event.key === 'ArrowUp' || event.key === ' ') control.fire = false;
+  const k = event.key ? event.key.toLowerCase() : '';
+  const code = event.code;
+  if (code === 'KeyA' || k === 'a' || k === 'arrowleft' || k === 'ф') {
+    control.left = false;
+  }
+  if (code === 'KeyD' || k === 'd' || k === 'arrowright' || k === 'в') {
+    control.right = false;
+  }
+  if (code === 'KeyW' || k === 'w' || k === 'arrowup' || k === ' ' || k === 'spacebar' || k === 'ц') {
+    control.fire = false;
+  }
 };
 
 onMounted(() => {

@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick, markRaw, computed, watch, defineAsyncComponent } from "vue";
+import { ref, onMounted, onUnmounted, nextTick, computed, watch, defineAsyncComponent } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import type { InteractiveTarget } from "@/components/3DGarden.vue";
-import TeapotSection from "@/sections/TeapotSection.vue";
-import Projects from "@/sections/Projects.vue";
-import Games from "@/sections/Games.vue";
 import { gsap } from "gsap";
 import scenePlaceholder from "@/assets/scene_placeholder.webp";
 
@@ -49,19 +46,16 @@ const interactiveTargets: InteractiveTarget[] = [
   {
     id: "teapot",
     position: { x: 7.2, y: 0.1, z: -4.5 },
-    component: markRaw(TeapotSection),
     title: "About me"
   },
   {
     id: "projects",
     position: { x: -13, y: 1.5, z: -33.0 },
-    component: markRaw(Projects),
     title: "Projects, case studies, demos"
   },
   {
     id: "games",
     position: { x: -22.0, y: 0.2, z: -14.0 },
-    component: markRaw(Games),
     title: "Mini-games"
   }
 ];
@@ -253,7 +247,7 @@ onUnmounted(() => {
         v-if="(!isSceneActive || !isModelLoaded) && !isFinished" 
         class="absolute top-0 left-0 w-full h-screen z-10 flex items-center justify-center overflow-hidden"
       >
-        <img :src="scenePlaceholder" alt="Scene Placeholder" class="absolute top-0 left-0 w-full h-screen object-cover" />
+        <img :src="scenePlaceholder" alt="Scene Placeholder" class="absolute top-0 left-0 w-full h-screen object-cover" fetchpriority="high" loading="eager" decoding="async" />
         <div class="absolute top-0 left-0 w-full h-screen bg-black/20"></div>
         
         <div 
