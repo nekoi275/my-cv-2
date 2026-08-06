@@ -244,7 +244,7 @@ onUnmounted(() => {
 
     <Transition name="fade">
       <div 
-        v-if="(!isSceneActive || !isModelLoaded) && !isFinished" 
+        v-if="(!isSceneActive || !isModelLoaded) && !isFinished && !isSubRouteActive" 
         class="absolute top-0 left-0 w-full h-screen z-10 flex items-center justify-center overflow-hidden"
       >
         <img :src="scenePlaceholder" alt="Scene Placeholder" class="absolute top-0 left-0 w-full h-screen object-cover" fetchpriority="high" loading="eager" decoding="async" />

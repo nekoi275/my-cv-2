@@ -31,6 +31,7 @@ function inlineCssPlugin(): Plugin {
 }
 
 export default defineConfig({
+  base: '/',
   plugins: [vue(), inlineCssPlugin()],
   resolve: {
     alias: {
