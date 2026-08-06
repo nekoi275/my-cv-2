@@ -45,8 +45,14 @@ export default defineConfig({
   assetsInclude: [
     '**/*glb'
   ],
+  esbuild: {
+    drop: ['console', 'debugger']
+  },
   build: {
     sourcemap: true,
+    modulePreload: {
+      polyfill: true
+    },
     rollupOptions: {
       output: {
         manualChunks: {
