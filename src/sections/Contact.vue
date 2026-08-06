@@ -25,7 +25,7 @@ const bodyParagraphs = [
 const links = [
   {
     label: "Download résumé",
-    href: "https://docs.google.com/document/d/1xcALkYF9U2flC6naGoAQtBuERRoRbpLxqMtDjlvRV4g/export?format=pdf",
+    href: "https://docs.google.com/document/d/119fAqoqfT31GLi3BfYNuwdlnDJ2H4TsAI86Dk4vwsOA/export?format=pdf",
     icon: "pdf",
     external: true,
     download: true,
